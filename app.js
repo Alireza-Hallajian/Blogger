@@ -23,6 +23,10 @@ mongoose.connect('mongodb://localhost:27017/blogger',
   useCreateIndex: true
 });
 
+//create Admin if NOT exists
+require('./tools/initialization')(); 
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
