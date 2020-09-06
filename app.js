@@ -3,13 +3,14 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const mongoose = require('mongoose');
 const express = require('express');
+const colors = require('colors');
 const path = require('path');
 
 const app = express();
 
 
 //routers
-const apiRouter = require('./routes/api.js');
+// const apiRouter = require('./routes/api.js');
 
 
 
@@ -41,12 +42,12 @@ app.use(express.urlencoded({ extended: true }));  // parse application/x-www-for
 
 
 
-app.use('/', apiRouter);
+// app.use('/', apiRouter);
 
 
 
 
 
 app.listen(3000, 
-    console.log("\n**************************************************\n\n<--- Server started listening on Port 3000 --->\n\n**************************************************\n")
+    console.log(`\n**************************************************\n\n${colors.bgYellow.black("<--- Server started listening on Port 3000 --->")}\n\n**************************************************\n`)
 );

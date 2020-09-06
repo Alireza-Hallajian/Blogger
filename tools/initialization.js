@@ -1,4 +1,5 @@
 const User = require("../models/user.js");
+const colors = require('colors');
 
 
 const intialization = async function() 
@@ -10,7 +11,7 @@ const intialization = async function()
         
         //if Admin exists
         if (EXIST_ADMIN) {
-            return console.log('Admin already created.');
+            return console.log(colors.bgGreen('Admin already created.\n'));
         };
         
         
@@ -26,7 +27,7 @@ const intialization = async function()
         });
 
         
-        console.log('Admin created.\n');
+        console.log(colors.bgGreen('Admin created.\n'));
 
     } catch (err) {
         console.log('Error in intialization function: ' + err);
