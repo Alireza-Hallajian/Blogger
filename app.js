@@ -10,8 +10,7 @@ const app = express();
 
 
 //routers
-// const apiRouter = require('./routes/api.js');
-
+const apiRouter = require('./routes/api.js');
 
 
 //connect to Mongoose Data-Base
@@ -40,9 +39,29 @@ app.use(express.json());  // parse application/json
 app.use(express.json({type: 'application/vnd.api+json'}));  // parse application/vnd.api+json as json
 app.use(express.urlencoded({ extended: true }));  // parse application/x-www-form-urlencoded
 
+app.use(cookieParser());
 
 
-// app.use('/', apiRouter);
+// initialize express-session to allow us track the logged-in user across sessions.
+app.use(session({
+	key: 'user_sid',
+	secret: 'somerandonstuffs',
+	resave: false,
+	saveUninitialized: false,
+	cookie: {
+		expires: 1800000
+	}
+}));
+
+// app.use((req, res, next) => {
+// 	console.log(req.cookies);
+// 	console.log(req.session);
+// 	next();
+// });
+
+
+
+app.use('/', apiRouter);
 
 
 

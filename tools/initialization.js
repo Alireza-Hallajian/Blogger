@@ -19,7 +19,7 @@ const intialization = async function()
         await User.create({
             firstName: 'Alireza',
             lastName: 'Hallajian',
-            userName: 'Alireza.HN',
+            username: 'Alireza.HN',
             mobile: '09190360972',
             sex: 'male',
             role: 'admin',

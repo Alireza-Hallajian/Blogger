@@ -20,7 +20,7 @@ const UserShema = new Schema(
         maxlength: 20
     },
 
-    userName: {
+    username: {
         type: String,
         required: true,
         trim: true,
@@ -41,7 +41,8 @@ const UserShema = new Schema(
     sex: {
         type: String,
         required: true,
-        enum: ['male', 'female']
+        enum: ['male', 'female'],
+        default: 'male',
     },
 
     mobile: {
