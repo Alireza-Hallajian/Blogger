@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="stylesheets/navbar.css">
+    <link rel="stylesheet" href="stylesheets/signup-signin.css">
+
+    <script src="https://kit.fontawesome.com/0b9430af26.js" crossorigin="anonymous"></script>
+
+    <title>Sign-in</title>
+</head>
+
+<body>
+
+    <%- include('./partials/navbar.ejs') -%>
+
+    
+    <div id="container">
+
+        <h1 id="title">Sign-in</h1>
+
+        
+        <sec id="personal-info">
+
+            <input id="username-box" class="inputs" type="text" placeholder="Username">
+            <div id="uname-length-warning" class="warning-box">
+                &emsp;&emsp;&emsp;*Username must long at least 3 and at last 10
+            </div>
+
+            
+            <input id="password-box" class="inputs" type="text" placeholder="Password">
+            <div id="password-length-warning" class="warning-box">
+                &emsp;&emsp;&emsp;*Password must long at least 6 and at last 12
+            </div>
+
+
+            <div id="SignInButton"><p>Sign-in</p></div>
+
+        </sec>
+
+    </div>
+
+</body>
+
+</html>

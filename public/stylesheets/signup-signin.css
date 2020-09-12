@@ -1,0 +1,81 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #2a93f5;
+}
+
+
+#container {
+    background-color: white;
+    text-align: center;
+    
+    width: 400px;
+    height: auto;
+    margin: 40px auto;
+    padding: 15px;
+    padding-bottom: 30px;
+
+    border-radius: 15px;
+}
+
+
+#title {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #a0a0a0cc;
+}
+
+
+.inputs, #SignUpButton, #SignInButton {
+    text-align: center;
+    background-color: #8080802d;
+    border-radius: 7px;
+
+    margin: 10px auto 0 auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 300px;
+    height: 40px;
+
+    border-style: none;
+    outline: none;
+}
+
+.gender {
+    margin: 20px 5px 0 20px;
+}
+
+.warning-box {
+    color: red;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: start;
+
+    margin: 5px auto 10px 2px;
+
+    visibility: hidden;
+}
+
+
+#SignUpButton, #SignInButton {   
+    background-color: rgb(23, 114, 199);
+    
+    color: whitesmoke;
+    font-weight: bold;
+    font-size: 25px;
+    font-family: Arial, Helvetica, sans-serif;
+    
+    margin-top: 25px;
+    height: 60px;
+    cursor: pointer;
+}
+
+#SignUpButton p, #SignInButton p {
+    margin: auto;
+    margin-top: 5px;
+}
+
+#SignUpButton:hover, #SignInButton:hover {
+    background-color: rgb(16, 89, 156);
+}
