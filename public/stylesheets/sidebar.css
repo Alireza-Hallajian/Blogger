@@ -12,6 +12,10 @@ aside {
     padding: 0;
 
     border-radius: 15px;
+
+    box-shadow: 2px 3px 10px #111111;
+
+    float: left;
 }
 
 aside ul {
@@ -20,11 +24,13 @@ aside ul {
 
 
 #top-aside-item {
+    margin-top: -17px;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
 }
 
 .last-aside-item {
+    margin-bottom: -17px;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
 }

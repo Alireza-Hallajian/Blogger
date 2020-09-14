@@ -25,33 +25,36 @@
         
         <sec id="personal-info">
 
-            <input id="firstname-box" class="inputs" type="text" placeholder="First Name">
+            <input id="firstname-box" class="inputs" type="text" placeholder="First Name" required>
             <div id="fname-length-warning" class="warning-box">
                 &emsp;&emsp;&emsp;*First Name must long at least 2 and at last 15
             </div>
 
 
-            <input id="lastname-box" class="inputs" type="text" placeholder="Last Name">
+            <input id="lastname-box" class="inputs" type="text" placeholder="Last Name" required>
             <div id="lname-length-warning" class="warning-box">
                 &emsp;&emsp;&emsp;*Last Name must long at least 3 and at last 20
             </div>
 
 
-            <input id="username-box" class="inputs" type="text" placeholder="Username">
+            <input id="username-box" class="inputs" type="text" placeholder="Username" required>
             <div id="uname-length-warning" class="warning-box">
                 &emsp;&emsp;&emsp;*Username must long at least 3 and at last 10
             </div>
 
             
-            <input id="password-box" class="inputs" type="text" placeholder="Password">
+            <input id="password-box" class="inputs" type="text" placeholder="Password" required>
             <div id="password-length-warning" class="warning-box">
                 &emsp;&emsp;&emsp;*Password must long at least 6 and at last 12
             </div>
 
 
-            <input id="phone-box" class="inputs" type="text" placeholder="Phone Number">
+            <input id="phone-box" class="inputs" type="text" placeholder="Phone Number" required>
             <div id="phone-length-warning" class="warning-box">
                 &emsp;&emsp;&emsp;*Phone Number Must long 11
+            </div>
+            <div id="number-validation-warning" class="warning-box">
+                &emsp;&emsp;&emsp;*Only enter numbers
             </div>
 
 
@@ -59,11 +62,15 @@
             <input id="female" class="gender" type="radio" name="gender">Female
 
 
-            <div id="SignUpButton"><p>Sign-Up</p></div>
+            <div id="signup-button"><p>Sign-Up</p></div>
 
         </sec>
 
     </div>
+
+
+    <script src="javascripts/jQuery-Uncompressed.v3.4.1.js"></script>
+    <script src="javascripts/signup.js"></script>
 
 </body>
 

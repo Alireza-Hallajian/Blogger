@@ -26,7 +26,6 @@ const User = require('../models/user.js');
 //                                     Sign-in
 //******************************************************************************** */
 
-
 // GET Sign-in page
 router.get("/signin", function (req, res) 
 {
@@ -75,7 +74,6 @@ router.post('/signin', async function (req, res)
 //******************************************************************************** */
 //                                     Sign-Up
 //******************************************************************************** */
-
 
 // GET Sign-Up page
 router.get("/signup", function (req, res) 
