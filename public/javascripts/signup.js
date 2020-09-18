@@ -1,12 +1,17 @@
 // *********************************************************************************
-//                                     Functions
+//                                     Validation
 // *********************************************************************************
 
 function input_validator(data) 
 {
     // empty field check
-    if (!data.fname || !data.lname || !data.username || !data.password || !data.phone) {
-        alert("All fields Must be filled.")
+    if (!data.fname || !data.lname || !data.username || !data.password || !data.mobile) 
+    {
+        $("#error-alert").html("<b>*All fields</b> Must be filled.");
+        $("#error-alert").show();
+        $("html").scrollTop(210);
+    } else {
+        $("#error-alert").hide();
     }
 
     // *****************************************************
@@ -41,11 +46,11 @@ function input_validator(data)
         $("#password-length-warning").css("visibility", "hidden");
     }
 
-    //Phone Number length check
-    if (data.phone.length !== 11) {
-        $("#phone-length-warning").css("visibility", "visible");
+    //Mobile Number length check
+    if (data.mobile.length !== 11) {
+        $("#mobile-length-warning").css("visibility", "visible");
     } else {
-        $("#phone-length-warning").css("visibility", "hidden");
+        $("#mobile-length-warning").css("visibility", "hidden");
     }
 
 
@@ -53,10 +58,10 @@ function input_validator(data)
     //                     Warning Check
     // *****************************************************
 
-    //check if there is anything than number in 'Phone Number' Box
-    for (let i = 0; i < data.phone.length; i++) 
+    //check if there is anything than number in 'Mobile Number' Box
+    for (let i = 0; i < data.mobile.length; i++) 
     {
-        if (isNaN(Number(data.phone.charAt(i))) === true) 
+        if (isNaN(Number(data.mobile.charAt(i))) === true) 
         {
             $("#number-validation-warning").css("visibility", "visible");
             return false;   //incorrect data input.
@@ -68,10 +73,10 @@ function input_validator(data)
     }
 
 
-    //data input (pre)-IDs 
-    let input_boxes_arr = ["firstname", "lastname", "username", "password", "phone"];
+    //data input (pre)-IDs (css ID)
+    let input_boxes_arr = ["firstname", "lastname", "username", "password", "mobile"];
 
-    //send name of the data inputs to check if there is any warning
+    //check if there is any input warning
     for (let i = 0; i < input_boxes_arr.length; i++) 
     {
         if (warning_checker(input_boxes_arr[i]) === true) {
@@ -114,6 +119,11 @@ $("#female").on("click", function () {
 });
 
 
+//click on 'Great' button
+$("#great-btn").on("click", function (target) {
+    window.location.assign("/signin");
+});
+
 
 //click on 'sign-up' button
 $("#signup-button").on("click", function () {
@@ -122,51 +132,49 @@ $("#signup-button").on("click", function () {
         lname: $("#lastname-box").val(),
         username: $("#username-box").val(),
         password: $("#password-box").val(),
-        phone: $("#phone-box").val()
+        mobile: $("#mobile-box").val()
     }
+    
 
-    // console.log(inputs_data);
-
-
-    console.log(input_validator(inputs_data));
-
-    //check 'fields not to be empty
-    // if (!fname || !lname || !username || !password || !phone) {
-    //     return alert("All fields Must be filled.")
-    // }
+    //send data to the server if there is no errors
+    if (input_validator(inputs_data) === true) 
+    {
+        //add gender to the data
+        inputs_data.sex = $(".gender[checked]").attr("id");
 
 
-
-    //save user info in an Object to be sent
-    // let new_user_info = {
-    //     fname,
-    //     lname,
-    //     username,
-    //     password,
-    //     phone,
-    //     gender: $(".gender[checked]").attr("id")
-    //     // isLoggedIn: false
-    // };
+        //hide 'user-existence-alert' box before sending data to the server
+        $("#user-existence-alert").hide();
 
 
-    //send data to be saved
-    // $.ajax({
-    //     type: "POST",
-    //     url: "/usersInfo",
-    //     data: {"user": new_user_info},
+        //send data to the server
+        $.ajax({
+            type: "POST",
+            url: "/signup",
+            data: inputs_data,
 
-    //     success: function (response) 
-    //     {
-    //         //if an error occured, alert it
-    //         if (response === 'Username Exists!' || response === 'Email Exists!') {
-    //             alert(response);
-    //         }
+            success: function (result,status,xhr) {
+                $("#modal-btn").trigger("click");
+                // window.location.assign(result);
+            },
 
-    //         //go to '/signIn' page
-    //         else {
-    //             window.location.assign(response);
-    //         }
-    //     }
-    // });
+            //show error ine alert-box
+            error: function (xhr, status, error) 
+            {
+                //user exists
+                if (xhr.status === 400) {
+                    $("#user-existence-alert").html(xhr.responseText);
+                    $("#user-existence-alert").show();
+                    $("html").scrollTop(210);
+                }
+                
+                //server error
+                else if (xhr.status === 500) {
+                    $("#error-alert").html(xhr.responseText);
+                    $("#error-alert").show();
+                    $("html").scrollTop(210);
+                }
+            }
+        });
+    }
 });
-

@@ -1,24 +1,14 @@
-* {
-    box-sizing: border-box;
-}
-
-body {
-    background-color: #2a93f5;
-}
-
-
 #container {
     background-color: white;
     text-align: center;
     
     width: 400px;
     height: auto;
-    margin: 40px auto;
+    margin: 40px auto 10px auto;
     padding: 15px;
     padding-bottom: 30px;
 
     border-radius: 15px;
-
     box-shadow: 2px 3px 10px #111111;
 }
 
@@ -45,7 +35,7 @@ body {
 }
 
 .gender {
-    margin: 20px 5px 0 20px;
+    margin: 0px 5px 0 20px;
 }
 
 .warning-box {
@@ -80,4 +70,22 @@ body {
 
 #signup-button:hover, #SignInButton:hover {
     background-color: rgb(16, 89, 156);
+}
+
+
+.alert-box {
+    width: 400px;
+    margin: 20px auto;
+
+    box-shadow: 2px 3px 10px #111111;
+
+    display: none;
+}
+
+#error-alert {
+    border-left: 6px solid #be5050;
+}
+
+#user-existence-alert {
+    border-left: 6px solid #dfdf31;
 }

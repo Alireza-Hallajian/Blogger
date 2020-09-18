@@ -1,10 +1,13 @@
 //node_modules
 const express = require('express');
 const router = express.Router();
+const colors = require('colors');
 
 //models
 const User = require('../models/user.js');
 
+//tools
+const VALIDATOR = require('../tools/validator.js');
 
 
 
@@ -27,11 +30,8 @@ const User = require('../models/user.js');
 //******************************************************************************** */
 
 // GET Sign-in page
-router.get("/signin", function (req, res) 
-{
-    res.render('./signin.ejs', {
-        message: 'Please insert your information to signin.'
-    })
+router.get("/signin", function (req, res) {
+    res.render('./signin.ejs');
 });
 
 
@@ -76,11 +76,8 @@ router.post('/signin', async function (req, res)
 //******************************************************************************** */
 
 // GET Sign-Up page
-router.get("/signup", function (req, res) 
-{
-    res.render('./signup.ejs', {
-        message: 'Please insert your information to signup.'
-    })
+router.get("/signup", function (req, res) {
+    res.render('./signup.ejs');
 });
 
 
@@ -90,82 +87,68 @@ router.post('/signup', async function (req, res)
     try
     {
         //************************************************************** */
-        //                          input check
+        //                        Input Validation     
         //************************************************************** */
 
-        // empty input check
-        if (!req.body.username || !req.body.password || !req.body.firstName || !req.body.lastName || !req.body.sex || !req.body.mobile) {
-            throw ("You have empty input(s).")
-        };
-
-        // firstName length check
-        if (req.body.firstName.length < 2 || req.body.firstName.length > 15) {
-            throw ("firstName length is not proper.");
-        };
-
-        // lastName length check
-        if (req.body.lastName.length < 3 || req.body.lastName.length > 20) {
-            throw ("lastName length is not proper.");
-        };
-
-        // username length check
-        if (req.body.username.length < 3 || req.body.username.length > 10) {
-            throw ("username length is not proper.");
-        };
-
-        // password length check
-        if (req.body.password.length < 6 || req.body.password.length > 12) {
-            throw ("Password length is not proper.");
-        };
-
-        // mobile length check
-        if (req.body.mobile.length < 11 || req.body.mobile.length > 11) {
-            throw ("mobile length is not proper.");
-        };
-
-
-        let sexEnum = ["male", "female"];
-        // sex-enum check
-        if (sexEnum.includes(req.body.sex) === false) {
-            throw ("Sex is not accepted");
+        //result of input-validation --> 'true' if there is no error
+        let signup_validation_result = VALIDATOR.signup_input(req.body);
+    
+        //if sign-up data has any errors
+        if (signup_validation_result !== true) {
+            return res.send(signup_validation_result);
         }
 
-        //************************************************************** */
-        //                          
-        //************************************************************** */
 
-        
+        //************************************************************** */
+        //                  Data Base duplicate data check  
+        //************************************************************** */
+    
         // user existence check
-        const blogger = await User.findOne({
+        const blogger_username = await User.findOne({
             username: req.body.username.trim().toLowerCase()
         });
 
-        if (blogger) {
-            throw (`${req.body.username} already exists.`);
+        if (blogger_username) {
+            return res.status(400).send(`${req.body.username} already exists.`);
         }
 
 
-        // create the user and save to DB
-        await User.create({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            username: req.body.username,
-            password: req.body.password,
-            sex: req.body.sex,
-            mobile: req.body.mobile
-        
-        }, (err, user) => {
-            if (err) console.log(err);;
-            console.log(user);
+        //mobile number existence check
+        const blogger_mobile = await User.findOne({
+            mobile: req.body.mobile.trim().toLowerCase()
         });
 
+        if (blogger_mobile) {
+            return res.status(400).send("This mobile number already exists.");
+        }
 
-        res.send("Sign-Up successful.")
+
+        //************************************************************** */
+        //                  save new user to data base  
+        //************************************************************** */
+
+
+        const new_blogger = new User({
+            firstName: req.body.fname,
+            lastName: req.body.lname,
+            username: req.body.username,
+            password: req.body.password,
+            mobile: req.body.mobile,
+            sex: req.body.sex
+        });
+
+        new_blogger.save((err) => 
+        {
+            if (err) return res.status(500).send("Something went wrong! Try again");
+
+            console.log(`${colors.bgYellow.black('\nNew User:')} ` + new_blogger + "\n");
+            // res.write("Sign-Up was successful.")
+            return res.send("/signin");
+        });
     }
 
     catch(err) {
-        console.log(err);
-        res.send(err);
+        console.log(colors.brightRed("\n" + err + "\n"));
     }
 });
 

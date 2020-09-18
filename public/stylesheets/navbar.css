@@ -1,36 +1,33 @@
-* {
-    box-sizing: border-box;
-}
-
-
 nav {
     background-color: white;
 
     width: 97%;
     height: auto;
     margin: auto;
+    margin-top: 20px;
+    padding: 5px;
 
     border-radius: 15px;
+    box-shadow: 2px 3px 10px #111111;
 
     display: flex;
     justify-content: space-between;
-
-    box-shadow: 2px 3px 10px #111111;
 }
 
 nav ul {
     display: flex;
     padding-left: 20px;
+    margin-top: 10px;
 }
 
 
 /* li tags */
 .nav-items-container {
     text-align: center;
-    font: bold 1.1rem Arial;
+    font: bold 18px Arial;
 
     height: 100%;
-    margin: 0px 10px;
+    margin: 5px 10px 0px 10px;
     padding: 15px 8px;
 
     border-radius: 7px;
@@ -41,18 +38,20 @@ nav ul {
 
 .nav-items-container:hover {
     background-color: #2ee766;
+    box-shadow: 2px 3px 10px #111111;
 }
 
 .nav-items-container:hover .nav-items, .nav-items-container:hover .icons-navbar {
     color: white;
+    text-decoration: none;
 }
 
 
 .nav-items {
     color: black;
     text-decoration: none;
-    font-size: 1.3rem;
-    vertical-align: middle;
+    font-size: 21px;
+    vertical-align: bottom;
 }
 
 .icons-navbar { 
@@ -64,7 +63,7 @@ nav ul {
 #search-box-container {
     width: 350px;
     height: 40px;
-    padding: 7px 10px;
+    padding: 3px 10px;
     margin-right: 20px;
 
     border: 1px solid gray;

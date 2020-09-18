@@ -10,7 +10,8 @@ const app = express();
 
 
 //routers
-const apiRouter = require('./routes/api.js');
+const api_router = require('./routes/api.js');
+const user_router = require('./routes/user.js');
 
 
 //connect to Mongoose Data-Base
@@ -60,9 +61,15 @@ app.use(session({
 // });
 
 
+app.get('/', function (req, res) {  
+	// if (!req.session.user) res.render('dashboard.ejs');
+	// res.render('signin.ejs');
+	res.render('signup.ejs');
+});
 
-app.use('/', apiRouter);
 
+app.use('/', api_router);
+app.use('/user', user_router);
 
 
 

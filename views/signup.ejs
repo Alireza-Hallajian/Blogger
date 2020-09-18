@@ -5,10 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    
+    <%- include('./partials/bootstrap-css.ejs') -%>
+    
+    <link rel="stylesheet" href="stylesheets/main.css">
     <link rel="stylesheet" href="stylesheets/navbar.css">
     <link rel="stylesheet" href="stylesheets/signup-signin.css">
-
-    <script src="https://kit.fontawesome.com/0b9430af26.js" crossorigin="anonymous"></script>
+    
 
     <title>Sign-up</title>
 </head>
@@ -49,12 +52,12 @@
             </div>
 
 
-            <input id="phone-box" class="inputs" type="text" placeholder="Phone Number" required>
-            <div id="phone-length-warning" class="warning-box">
-                &emsp;&emsp;&emsp;*Phone Number Must long 11
+            <input id="mobile-box" class="inputs" type="text" placeholder="Mobile Number" required>
+            <div id="mobile-length-warning" class="warning-box">
+                &emsp;&emsp;&emsp;*mobile Number Must long 11
             </div>
             <div id="number-validation-warning" class="warning-box">
-                &emsp;&emsp;&emsp;*Only enter numbers
+                &emsp;&emsp;&emsp;*Only numbers are accepted for mobile number
             </div>
 
 
@@ -68,6 +71,46 @@
 
     </div>
 
+
+    <div id="error-alert" class="alert alert-danger alert-box" role="alert"></div>
+
+    <div id="user-existence-alert" class="alert alert-warning alert-box" role="alert"></div>
+    
+
+    
+    <!-- Button trigger modal -->
+    <button type="button" id="modal-btn" class="btn btn-primary" data-toggle="modal"
+        data-target="#staticBackdrop" style="display: none;">
+            Launch static backdrop modal
+    </button>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+                
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Congratulations!</h5>
+                </div>
+
+                <div class="modal-body" style="text-align:center;">
+                    <b>Sign-Up was seccessful!</b>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" id="great-btn" class="btn btn-primary">Great</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <%- include('./partials/fontawsome-js.ejs') -%>
+    <%- include('./partials/bootstrap-js.ejs') -%>
 
     <script src="javascripts/jQuery-Uncompressed.v3.4.1.js"></script>
     <script src="javascripts/signup.js"></script>
