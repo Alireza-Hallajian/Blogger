@@ -18,6 +18,8 @@ body {
     padding-bottom: 30px;
 
     border-radius: 15px;
+
+    box-shadow: 2px 3px 10px #111111;
 }
 
 
@@ -27,7 +29,7 @@ body {
 }
 
 
-.inputs, #SignUpButton, #SignInButton {
+.inputs, #signup-button, #SignInButton {
     text-align: center;
     background-color: #8080802d;
     border-radius: 7px;
@@ -58,7 +60,7 @@ body {
 }
 
 
-#SignUpButton, #SignInButton {   
+#signup-button, #SignInButton {   
     background-color: rgb(23, 114, 199);
     
     color: whitesmoke;
@@ -71,11 +73,11 @@ body {
     cursor: pointer;
 }
 
-#SignUpButton p, #SignInButton p {
+#signup-button p, #SignInButton p {
     margin: auto;
     margin-top: 5px;
 }
 
-#SignUpButton:hover, #SignInButton:hover {
+#signup-button:hover, #SignInButton:hover {
     background-color: rgb(16, 89, 156);
 }
