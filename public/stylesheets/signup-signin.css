@@ -19,7 +19,7 @@
 }
 
 
-.inputs, #signup-button, #SignInButton {
+.inputs, #signup-button, #signin-button {
     text-align: center;
     background-color: #8080802d;
     border-radius: 7px;
@@ -50,7 +50,7 @@
 }
 
 
-#signup-button, #SignInButton {   
+#signup-button, #signin-button {   
     background-color: rgb(23, 114, 199);
     
     color: whitesmoke;
@@ -63,12 +63,12 @@
     cursor: pointer;
 }
 
-#signup-button p, #SignInButton p {
+#signup-button p, #signin-button p {
     margin: auto;
     margin-top: 5px;
 }
 
-#signup-button:hover, #SignInButton:hover {
+#signup-button:hover, #signin-button:hover {
     background-color: rgb(16, 89, 156);
 }
 

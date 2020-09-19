@@ -1,6 +1,39 @@
 const VALIDATOR = {
-    signup_input: signup_validator
+    signin: signin_validator,
+    signup: signup_validator
 };
+
+
+function signin_validator(data) 
+{
+    // *****************************************************
+    //                     Warning Check
+    // *****************************************************
+
+    // empty field check
+    if (!data.username || !data.password) {
+        return ("Empty field error!");
+    } 
+    
+    // *****************************************************
+    //                     Length Check
+    // *****************************************************
+
+    //Username length check
+    if (data.username.length < 3 || data.username.length > 10) {
+        return ("*Username length is not valid");
+    } 
+
+    //Password length check
+    if (data.password.length < 6 || data.password.length > 12) {
+        return ("*Password length is not valid");
+    } 
+
+    
+
+    //no errors in data input
+    return true;
+}
 
 
 function signup_validator(data) 

@@ -40,10 +40,22 @@ router.post('/signin', async function (req, res)
 {  
     try
     {
-        // empty input warning
-        if (!req.body.username || !req.body.password) {
-            throw ("You have empty input(s)!");
+        //************************************************************** */
+        //                        Input Validation     
+        //************************************************************** */
+
+        //result of input-validation --> 'true' if there is no error
+        let signin_validation_result = VALIDATOR.signin(req.body);
+    
+        //if sign-in data has any errors
+        if (signin_validation_result !== true) {
+            return res.send(signin_validation_result);
         }
+
+
+        //************************************************************** */
+        //                          Data Base check  
+        //************************************************************** */
 
         // find user
         const blogger = await User.findOne({
@@ -53,20 +65,22 @@ router.post('/signin', async function (req, res)
 
         // user not found
         if (!blogger) {
-            throw ("User does not exist!")
+            return res.status(404).send
+                ("User <b>NOT exists</b> or <b>Username/Password</b> is not correct.");
         }
+
 
         // save user info to a session
         req.session.user = blogger;
-        console.log(req.session);
+        console.log("\n" + req.session.user + "\n");
 
-
-        res.redirect('/user/dashboard');
+        res.locals.user = req.session.user;
+        res.send("/user")
     }
 
     catch(err) {
-        console.log(err);
-        res.send(err);
+        console.log(colors.brightRed("\n" + err + "\n"));
+        res.status(500).send("Something went wrong! Try again.");
     }
 });
 
@@ -91,7 +105,7 @@ router.post('/signup', async function (req, res)
         //************************************************************** */
 
         //result of input-validation --> 'true' if there is no error
-        let signup_validation_result = VALIDATOR.signup_input(req.body);
+        let signup_validation_result = VALIDATOR.signup(req.body);
     
         //if sign-up data has any errors
         if (signup_validation_result !== true) {
@@ -139,7 +153,7 @@ router.post('/signup', async function (req, res)
 
         new_blogger.save((err) => 
         {
-            if (err) return res.status(500).send("Something went wrong! Try again");
+            if (err) return res.status(500).send("Something went wrong! Try again.");
 
             console.log(`${colors.bgYellow.black('\nNew User:')} ` + new_blogger + "\n");
             // res.write("Sign-Up was successful.")

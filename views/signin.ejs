@@ -29,26 +29,32 @@
 
             <input id="username-box" class="inputs" type="text" placeholder="Username" required>
             <div id="uname-length-warning" class="warning-box">
-                &emsp;&emsp;&emsp;*Username must long at least 3 and at last 10
+                &emsp;&emsp;&emsp;*Username length is not valid
             </div>
 
             
             <input id="password-box" class="inputs" type="text" placeholder="Password" required>
             <div id="password-length-warning" class="warning-box">
-                &emsp;&emsp;&emsp;*Password must long at least 6 and at last 12
+                &emsp;&emsp;&emsp;*Password length is not valid
             </div>
 
 
-            <div id="SignInButton"><p>Sign-in</p></div>
+            <button type="submit" id="signin-button"><p>Sign-in</p></button type="submit">
 
-        </sec>
+        </form>
 
     </div>
+
+
+    <div id="error-alert" class="alert alert-danger alert-box" role="alert"></div>
 
 
 
     <%- include('./partials/fontawsome-js.ejs') -%>
     <%- include('./partials/bootstrap-js.ejs') -%>
+
+    <script src="javascripts/jQuery-Uncompressed.v3.4.1.js"></script>
+    <script src="javascripts/signin.js"></script>
 
 </body>
 
