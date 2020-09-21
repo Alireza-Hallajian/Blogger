@@ -5,22 +5,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
-    <%- include('./partials/bootstrap-css.ejs') -%>
-
     <link rel="stylesheet" href="stylesheets/main.css">
     <link rel="stylesheet" href="stylesheets/navbar.css">
     <link rel="stylesheet" href="stylesheets/sidebar.css">
+
     <link rel="stylesheet" href="stylesheets/dashboard.css">
 
+    <script src="https://kit.fontawesome.com/0b9430af26.js" crossorigin="anonymous"></script>
+
     <title>Dashboard</title>
+
 </head>
 
 <body>
 
-    <%- include('./partials/navbar.ejs') -%>
+    <nav>
 
-    <%- include('./partials/sidebar-blogger.ejs') -%>
+        <ul>
+    
+            <li class="nav-items-container">
+                <i class="fas fa-home icons-navbar"></i>
+                <a href="#" class="nav-items">&nbspHome</a>
+            </li>
+            
+            <li class="nav-items-container">
+                <i class="fas fa-phone-square-alt icons-navbar"></i>
+                <a href="#" class="nav-items">&nbsp;Contact Us</a>
+            </li>
+            
+            <li class="nav-items-container">
+                <i class="fas fa-exclamation-circle icons-navbar"></i>
+                <a href="#" class="nav-items" class="icons8-info">&nbspAbout</a>
+            </li>
+        </ul>
+        
+    </nav>
+
+
+    <aside>
+    
+        <ul>
+    
+            <li class="side-items-container blue-hover" id="top-aside-item">
+                <i class="fas fa-plus icons-sidebar"></i>
+                <a href="#" class="side-items">&emsp;New Article</a>
+            </li>
+            
+            <li class="side-items-container blue-hover">
+                <i class="fas fa-scroll icons-sidebar"></i>
+                <a href="#" class="side-items">&ensp;&nbsp;Your Articles</a>
+            </li>
+            
+            <li class="side-items-container blue-hover">
+                <i class="fas fa-tachometer-alt icons-sidebar"></i>
+                <a href="#" class="side-items">&emsp;Dashboard</a>
+            </li>
+    
+    
+            <li style="list-style-type: none; height: 60px;"></li>
+    
+            
+    
+            <li class="side-items-container last-aside-item">
+                <i class="fas fa-power-off icons-sidebar"></i>
+                <a href="#" class="side-items">&emsp;Log Out</a>
+            </li>
+    
+        </ul>        
+    
+    </aside>
+
 
 
     <section id="dashboard">
@@ -36,8 +90,8 @@
                 <div class="info-container">
                     <p>
                         <b>First Name:</b>&emsp;
-                        <span><%= fname %></span>
-                        <input type="text" value="<%= fname %>" id="fname-box" class="edit-box">
+                        <span><%= fname -%></span>
+                        <input type="text" value="fname" id="fname-box" class="edit-box">
                     </p>
                 </div>
     
@@ -45,8 +99,8 @@
                 <div class="info-container">
                     <p>
                         <b>Last Name:</b>&emsp;
-                        <span><%= lname %></span>
-                        <input type="text" value="<%= lname %>" id="lname-box" class="edit-box">
+                        <span><%= lname -%></span>
+                        <input type="text" value="lname" id="lname-box" class="edit-box">
                     </p>
                 </div>
     
@@ -54,24 +108,24 @@
                 <div class="info-container">
                     <p>
                         <b>Username:</b>&emsp;
-                        <span><%= username %></span>
-                        <input type="text" value="<%= username %>" id="username-box" class="edit-box">
+                        <span><%= uname -%></span>
+                        <input type="text" value="username" id="username-box" class="edit-box">
                     </p>
                 </div>
 
                 <div class="info-container">
                     <p>
                         <b>Gender:</b>&emsp;
-                        <span><%= gender %></span>
-                        <input type="text" value="<%= gender %>" id="gender-box" class="edit-box">
+                        <span><%= gender -%></span>
+                        <input type="text" value="gender" id="gender-box" class="edit-box">
                     </p>
                 </div>
     
                 <div class="info-container">
                     <p>
                         <b>Phone Number:</b>&emsp;
-                        <span><%= phone %></span>
-                        <input type="text" value="<%= phone %>" id="phone-box" class="edit-box">
+                        <span><%= mobile -%></span>
+                        <input type="text" value="phone" id="phone-box" class="edit-box">
                     </p>
                 </div>
 
@@ -99,10 +153,6 @@
         </section>
     
     </section>
-
-
-    <%- include('./partials/fontawsome-js.ejs) -%>
-    <%- include('./partials/bootstrap-js.ejs') -%>
 
 </body>
 

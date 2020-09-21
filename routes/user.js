@@ -7,9 +7,16 @@ const User = require('../models/user.js');
 
 
 
-router.get('/', async function (req, res) 
+router.get('/', function (req, res) 
 {  
-    res.render("dashboard-test.ejs");
+    res.render("dashboard.ejs", 
+    {
+        fname: req.session.user.firstName,
+        lname: req.session.user.lastName,
+        uname: req.session.user.username,
+        gender: req.session.user.sex,
+        mobile: req.session.user.mobile
+    });
 });
 
 

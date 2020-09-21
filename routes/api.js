@@ -70,11 +70,9 @@ router.post('/signin', async function (req, res)
         }
 
 
-        // save user info to a session
+        // save user info in a session if found
         req.session.user = blogger;
-        console.log("\n" + req.session.user + "\n");
 
-        res.locals.user = req.session.user;
         res.send("/user")
     }
 
