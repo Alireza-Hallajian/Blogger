@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="stylesheets/main.css">
+    <link rel="stylesheet" href="stylesheets/navbar.css">
+    <link rel="stylesheet" href="stylesheets/sidebar.css">
+
+    <link rel="stylesheet" href="stylesheets/dashboard.css">
+
+    <script src="https://kit.fontawesome.com/0b9430af26.js" crossorigin="anonymous"></script>
+
+    <title>Dashboard</title>
+
+</head>
+
+<body>
+
+    <%- include('./partials/navbar.ejs') -%>
+
+    <%- include('./partials/sidebar-blogger.ejs') -%>
+
+
+
+    <section id="dashboard">
+    
+        <h1 id="pro-info">Dashboard</h1>
+    
+    
+        <section id="seperator-section">
+    
+
+            <section id="text-section">
+    
+                <div class="info-container">
+                    <p>
+                        <b>First Name:</b>&emsp;
+                        <span><%= fname -%></span>
+                        <input type="text" value="fname" id="fname-box" class="edit-box">
+                    </p>
+                </div>
+    
+    
+                <div class="info-container">
+                    <p>
+                        <b>Last Name:</b>&emsp;
+                        <span><%= lname -%></span>
+                        <input type="text" value="lname" id="lname-box" class="edit-box">
+                    </p>
+                </div>
+    
+    
+                <div class="info-container">
+                    <p>
+                        <b>Username:</b>&emsp;
+                        <span><%= uname -%></span>
+                        <input type="text" value="username" id="username-box" class="edit-box">
+                    </p>
+                </div>
+
+                <div class="info-container">
+                    <p>
+                        <b>Gender:</b>&emsp;
+                        <span><%= gender -%></span>
+                        <input type="text" value="gender" id="gender-box" class="edit-box">
+                    </p>
+                </div>
+    
+                <div class="info-container">
+                    <p>
+                        <b>Phone Number:</b>&emsp;
+                        <span><%= mobile -%></span>
+                        <input type="text" value="phone" id="phone-box" class="edit-box">
+                    </p>
+                </div>
+
+    
+    
+                <div id="editContainer">
+                    <div id="edit">Edit</div>
+                    <div id="cancelBtn"></div>
+                    <div id="applyBtn"></div>
+                </div>
+
+
+                <br>
+                <a href="#">Change Password</a>
+    
+            </section>
+
+            <section id="picture-section">
+
+                <img src="./images/default-pic.jpg" alt="default-pic">
+
+            </section>
+    
+    
+        </section>
+    
+    </section>
+
+</body>
+
+</html>
