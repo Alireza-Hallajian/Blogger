@@ -5,14 +5,17 @@
 function input_validator(data) 
 {
     // empty field check
-    if (!data.fname || !data.lname || !data.username || !data.password || !data.mobile) 
+    if (!data.fname || !data.lname || !data.username || !data.password || !data.password_repeat || !data.mobile) 
     {
         $("#error-alert").html("<b>*All fields</b> Must be filled.");
         $("#error-alert").show();
-        $("html").scrollTop(210);
+        $("html").scrollTop(290);
     } else {
         $("#error-alert").hide();
     }
+
+
+    $("#user-existence-alert").hide();
 
     // *****************************************************
     //                     Length Check
@@ -58,6 +61,14 @@ function input_validator(data)
     //                     Warning Check
     // *****************************************************
 
+    //passwrod repeat check
+    if ($("#password-box").val() === "" || $("#password-box").val() !== $("#password-repeat-box").val()){
+        $("#password-repeat-warning").css("visibility", "visible");
+    } else {
+        $("#password-repeat-warning").css("visibility", "hidden");
+    }
+
+
     //check if there is anything than number in 'Mobile Number' Box
     for (let i = 0; i < data.mobile.length; i++) 
     {
@@ -74,7 +85,7 @@ function input_validator(data)
 
 
     //data input (pre)-IDs (css ID)
-    let input_boxes_arr = ["firstname", "lastname", "username", "password", "mobile"];
+    let input_boxes_arr = ["firstname", "lastname", "username", "password", "password-repeat", "mobile"];
 
     //check if there is any input warning
     for (let i = 0; i < input_boxes_arr.length; i++) 
@@ -132,6 +143,7 @@ $("#signup-button").on("click", function ()
         lname: $("#lastname-box").val(),
         username: $("#username-box").val(),
         password: $("#password-box").val(),
+        password_repeat: $("#password-repeat-box").val(),
         mobile: $("#mobile-box").val()
     }
     
@@ -139,6 +151,9 @@ $("#signup-button").on("click", function ()
     //send data to the server if there is no errors
     if (input_validator(inputs_data) === true) 
     {
+        //no need to send password to server twice
+        delete inputs_data.password_repeat;
+
         //add gender to the data
         inputs_data.sex = $(".gender[checked]").attr("id");
 
@@ -164,14 +179,14 @@ $("#signup-button").on("click", function ()
                 if (xhr.status === 400) {
                     $("#user-existence-alert").html(xhr.responseText);
                     $("#user-existence-alert").show();
-                    $("html").scrollTop(210);
+                    $("html").scrollTop(290);
                 }
                 
                 //server error
                 else if (xhr.status === 500) {
                     $("#error-alert").html(xhr.responseText);
                     $("#error-alert").show();
-                    $("html").scrollTop(210);
+                    $("html").scrollTop(290);
                 }
             }
         });
