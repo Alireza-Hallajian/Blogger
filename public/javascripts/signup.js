@@ -117,15 +117,15 @@ function warning_checker (input_box)
 //                                     Operations
 // *********************************************************************************
 
-//change gender from 'female' to 'male'
-$("#male").on("click", function () {
-    $("#female").removeAttr("checked");
+//change gender from 'Female' to 'Male'
+$("#Male").on("click", function () {
+    $("#Female").removeAttr("checked");
     $(this).attr("checked", "");
 });
 
-//change gender from 'male' to 'female'
-$("#female").on("click", function () {
-    $("#male").removeAttr("checked");
+//change gender from 'Male' to 'Female'
+$("#Female").on("click", function () {
+    $("#Male").removeAttr("checked");
     $(this).attr("checked", "");
 });
 
@@ -169,12 +169,19 @@ $("#signup-button").on("click", function ()
             data: inputs_data,
 
             success: function (result,status,xhr) {
+                //show success message and go to 'sign-in' page
                 $("#modal-btn").trigger("click");
             },
 
             //show error ine alert-box
             error: function (xhr, status, error) 
             {
+                //user is already logged-in
+                if (xhr.status === 303) {
+                    alert("You are already logged-in");
+                    return window.location.assign("/user/dashboard");
+                }
+
                 //user exists
                 if (xhr.status === 400) {
                     $("#user-existence-alert").html(xhr.responseText);

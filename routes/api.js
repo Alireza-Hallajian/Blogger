@@ -3,40 +3,71 @@ const express = require('express');
 const router = express.Router();
 const colors = require('colors');
 
+//routers
+const user_router = require('./user.js');
+
 //models
 const User = require('../models/user.js');
 
 //tools
 const VALIDATOR = require('../tools/validator.js');
+// const AUTH = require('../tools/auth.js');
 
 
 
-// const checkSession = function (req, res, next) {  
-//     if (!req.session.user) return res.redirect('/signin')
+//******************************************************************************** */
+//                                   Authentication
+//******************************************************************************** */
 
-//     next();
-// }
+const check_session = function (req, res, next) 
+{  
+    //for requests wtih method GET
+    if (!req.session.user && req.method === "GET") {     
+        return res.redirect('/signin');
+    }
+
+    //for AJAX requests with methods rather than GET
+    else if (!req.session.user) {
+        return res.sendStatus(403);
+    }
+
+    next();
+}
+
+router.use('/user', check_session , user_router);
+// router.use('/article', check_session, user_router);
+// router.use('/comment', check_session, user_router);
 
 
-// const isLogin = function (req, res, next) {  
-//     if (req.session.user) { return res.redirect('/user/dashboard'); }
+
+//check if user is already logged-in
+const is_login = function (req, res, next) 
+{  
+    //for requests wtih method GET
+    if (req.session.user && req.method === "GET") {     
+        return res.redirect('/user/dashboard');
+    }
+
+    //for AJAX requests with methods rather than GET
+    else if (req.session.user) {
+        return res.sendStatus(303);
+    }
     
-//     next();
-// }
-
+    next();
+}
 
 //******************************************************************************** */
 //                                     Sign-in
 //******************************************************************************** */
 
 // GET Sign-in page
-router.get("/signin", function (req, res) {
-    res.render('./signin.ejs');
+router.get("/signin", is_login,  (req, res) => {
+    res.render('signin.ejs');
 });
 
 
 // Sign-in operation
-router.post('/signin', async function (req, res) 
+router.post('/signin', is_login, async (req, res) =>
 {  
     try
     {
@@ -73,7 +104,7 @@ router.post('/signin', async function (req, res)
         // save user info in a session if found
         req.session.user = blogger;
 
-        res.send("/user")
+        res.send("/user/dashboard");
     }
 
     catch(err) {
@@ -88,13 +119,13 @@ router.post('/signin', async function (req, res)
 //******************************************************************************** */
 
 // GET Sign-Up page
-router.get("/signup", function (req, res) {
-    res.render('./signup.ejs');
+router.get("/signup", is_login, (req, res) => {
+    res.render('signup.ejs');
 });
 
 
 // Sign-up operation
-router.post('/signup', async function (req, res) 
+router.post('/signup', is_login, async (req, res) =>
 {  
     try
     {

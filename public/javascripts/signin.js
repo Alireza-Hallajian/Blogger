@@ -79,7 +79,6 @@ $("#signin-button").on("click", function ()
         password: $("#password-box").val()
     }
 
-    console.log(inputs_data);
 
     //send data to the server if there is no errors
     if (input_validator(inputs_data) === true) 
@@ -91,12 +90,19 @@ $("#signin-button").on("click", function ()
             data: inputs_data,
 
             success: function (result,status,xhr) {
+                //go to 'dashboard' page
                 window.location.assign(result);
             },
 
             //show error ine alert-box
             error: function (xhr, status, error) 
             {
+                //user is already logged-in
+                if (xhr.status === 303) {
+                    alert("You are already logged-in");
+                    return window.location.assign("/user/dashboard");
+                }
+
                 //user does not exist or username/password is not correct
                 if (xhr.status === 404) {
                     $("#error-alert").html(xhr.responseText);

@@ -41,8 +41,8 @@ const UserShema = new Schema(
     sex: {
         type: String,
         required: true,
-        enum: ['male', 'female'],
-        default: 'male',
+        enum: ['Male', 'Female'],
+        default: 'Male',
     },
 
     mobile: {

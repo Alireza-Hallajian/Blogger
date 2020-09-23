@@ -4,7 +4,7 @@
 
     margin-left: 400px;
     margin-top: 20px;
-    padding: 10px 30px 20px 30px;
+    padding: 20px 30px;
     width: 900px;
     height: auto;
 
@@ -56,14 +56,28 @@ p {
 }
 
 
-#editContainer {
+#genders-container {
+    width: 200px;
+    margin-bottom: 15px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.gender {
+   width: 80px !important;
+}
+
+
+#edit-container {
     margin: 30px auto 7.5px auto;
     text-align: center;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
-#edit {
+#edit-btn {
     background-color: #1d71c0;
     color: white;
     display: inline-block;
@@ -74,7 +88,7 @@ p {
     cursor: pointer;
 }
 
-#edit:hover {
+#edit-btn:hover {
     background-color: #2181db;
 }
 
@@ -84,8 +98,8 @@ p {
     margin: -3px auto;
 }
 
-#applyBtn {
-    background-color: greenyellow;
+#apply-btn {
+    background-color: #14f00c;
     width: 25px;
     height: 25px;
     display: none;
@@ -94,7 +108,7 @@ p {
     clip-path: polygon(0% 59%, 39% 99%, 100% 0%, 36% 77%);
 }
 
-#cancelBtn {
+#cancel-btn {
     background-color: red;
     width: 20px;
     height: 20px;

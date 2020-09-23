@@ -9,7 +9,7 @@ const User = require('../models/user.js');
 
 
 
-router.get('/', function (req, res) 
+router.get('/dashboard', (req, res) =>
 {
     //blogger login
     if (req.session.user.role === "blogger")
@@ -26,20 +26,44 @@ router.get('/', function (req, res)
 
 
     //admin login
-    res.render("dashboard-admin.ejs",
+    else if (req.session.user.role === "admin")
     {
-        fname: req.session.user.firstName,
-        lname: req.session.user.lastName,
-        uname: req.session.user.username,
-        gender: req.session.user.sex,
-        mobile: req.session.user.mobile
-    });
+        return res.render("dashboard-admin.ejs",
+        {
+            fname: req.session.user.firstName,
+            lname: req.session.user.lastName,
+            uname: req.session.user.username,
+            gender: req.session.user.sex,
+            mobile: req.session.user.mobile
+        });
+    }
+
+
+    else {
+        res.redirect('/signin');
+    }
 });
 
 
 
+//duplicate data check
+router.post('/edit', async (req, res) => 
+{
+    // find user with duplicate 'username'
+    const blogger_username = await User.findOne(
+        {username: req.body.username},
+        { _id: {$ne: req.session.user._id}}
+    );
+
+    // find user with duplicate 'mobile'
+    const blogger_mobile = await User.findOne({
+        mobile: req.body.mobile
+    });
+});
+
+
 //destroy user session and clear cookie
-router.delete('/', function (req, res) 
+router.delete('/', (req, res) =>
 {  
     req.session.destroy((err) => 
     {

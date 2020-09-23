@@ -57,7 +57,7 @@ function signup_validator(data)
     }
 
     //gender check
-    if (data.sex !== "male" && data.sex !== "female") {
+    if (data.sex !== "Male" && data.sex !== "Female") {
         return ("Gender must be 'male' or 'female'");
     }
 
