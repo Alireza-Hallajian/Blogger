@@ -22,21 +22,21 @@ function input_validator(data)
     // *****************************************************
 
     //First Name length check
-    if (data.fname.length < 2 || data.fname.length > 15) {
+    if (data.fname.trim().length < 2 || data.fname.trim().length > 15) {
         $("#fname-length-warning").css("visibility", "visible");
     } else {
         $("#fname-length-warning").css("visibility", "hidden");
     }
 
     //Last Name length check
-    if (data.lname.length < 3 || data.lname.length > 20) {
+    if (data.lname.trim().length < 3 || data.lname.trim().length > 20) {
         $("#lname-length-warning").css("visibility", "visible");
     } else {
         $("#lname-length-warning").css("visibility", "hidden");
     }
 
     //Username length check
-    if (data.username.length < 3 || data.username.length > 10) {
+    if (data.username.trim().length < 3 || data.username.trim().length > 10) {
         $("#uname-length-warning").css("visibility", "visible");
     } else {
         $("#uname-length-warning").css("visibility", "hidden");
@@ -50,7 +50,7 @@ function input_validator(data)
     }
 
     //Mobile Number length check
-    if (data.mobile.length !== 11) {
+    if (data.mobile.trim().length !== 11) {
         $("#mobile-length-warning").css("visibility", "visible");
     } else {
         $("#mobile-length-warning").css("visibility", "hidden");

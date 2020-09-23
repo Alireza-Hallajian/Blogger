@@ -19,14 +19,14 @@ function input_validator(data)
     // *****************************************************
 
     //Username length check
-    if (data.username.length < 3 || data.username.length > 10) {
+    if (data.username.trim().length < 3 || data.username.trim().length > 10) {
         $("#uname-length-warning").css("visibility", "visible");
     } else {
         $("#uname-length-warning").css("visibility", "hidden");
     }
 
     //Password length check
-    if (data.password.length < 6 || data.password.length > 12) {
+    if (data.password.trim().length < 6 || data.password.trim().length > 12) {
         $("#password-length-warning").css("visibility", "visible");
     } else {
         $("#password-length-warning").css("visibility", "hidden");

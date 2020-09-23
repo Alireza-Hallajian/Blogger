@@ -20,7 +20,7 @@ function signin_validator(data)
     // *****************************************************
 
     //Username length check
-    if (data.username.length < 3 || data.username.length > 10) {
+    if (data.username.trim().length < 3 || data.username.trim().length > 10) {
         return ("*Username length is not valid");
     } 
 
@@ -49,7 +49,7 @@ function signup_validator(data)
     
 
     //check if there is anything than number in 'Mobile Number' Box
-    for (let i = 0; i < data.mobile.length; i++) 
+    for (let i = 0; i < data.mobile.trim().length; i++) 
     {
         if (isNaN(Number(data.mobile.charAt(i))) === true) {
             return ("*Only numbers are accepted for mobile number");
@@ -67,17 +67,17 @@ function signup_validator(data)
     // *****************************************************
 
     //First Name length check
-    if (data.fname.length < 2 || data.fname.length > 15) {
+    if (data.fname.trim().length < 2 || data.fname.trim().length > 15) {
         return ("*First Name must long at least 2 and at last 15");
     } 
 
     //Last Name length check
-    if (data.lname.length < 3 || data.lname.length > 20) {
+    if (data.lname.trim().length < 3 || data.lname.trim().length > 20) {
         return ("*Last Name must long at least 3 and at last 20");
     } 
 
     //Username length check
-    if (data.username.length < 3 || data.username.length > 10) {
+    if (data.username.trim().length < 3 || data.username.trim().length > 10) {
         return ("*Username must long at least 3 and at last 10");
     } 
 
@@ -87,7 +87,7 @@ function signup_validator(data)
     } 
 
     //Mobile Number length check
-    if (data.mobile.length !== 11) {
+    if (data.mobile.trim().length !== 11) {
         return ("*Mobile Number Must long 11");
     } 
 
