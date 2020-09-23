@@ -66,8 +66,18 @@
                 <div class="info-container">
                     <p>
                         <b>Gender:</b>&emsp;
-                        <span><%= gender -%></span>
-                        <input type="text" value="gender" id="gender-box" class="edit-box">
+                        <span id="gender"><%= gender -%></span>
+
+                        <div id="genders-container">
+
+                            <span class="gender edit-box">
+                                <input id="Male" type="radio" name="gender"> Male
+                            </span>
+                            <span class="gender edit-box">
+                                <input id="Female" type="radio" name="gender"> Female
+                            </span>
+                            
+                        </div>
                     </p>
                 </div>
     
@@ -93,6 +103,7 @@
     
             </section>
 
+            
             <section id="picture-section">
 
                 <img src="../images/default-pic.jpg" alt="default-pic">
