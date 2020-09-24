@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="../stylesheets/sidebar.css">
 
     <link rel="stylesheet" href="../stylesheets/dashboard.css">
+    <link rel="stylesheet" href="../stylesheets/loading1.css">
 
     <script src="https://kit.fontawesome.com/0b9430af26.js" crossorigin="anonymous"></script>
 
@@ -92,9 +93,22 @@
     
     
                 <div id="edit-container">
+
                     <div id="edit-btn">Edit</div>
-                    <div id="cancel-btn"></div>
-                    <div id="apply-btn"></div>
+                    <i id="cancel-btn" class="far fa-times-circle"></i>
+
+                    <!-- Loading Animation -->
+                    <div id="loading1" class="sk-chase">
+                        <div class="sk-chase-dot"></div>
+                        <div class="sk-chase-dot"></div>
+                        <div class="sk-chase-dot"></div>
+                        <div class="sk-chase-dot"></div>
+                        <div class="sk-chase-dot"></div>
+                        <div class="sk-chase-dot"></div>
+                      </div>
+
+                    <i id="apply-btn" class="far fa-check-circle"></i>
+
                 </div>
 
 
@@ -112,6 +126,8 @@
     
     
         </section>
+
+        <div id="error-alert" class="alert alert-danger alert-box" role="alert">Username and Mobile are duplicate to another user(s).</div>
     
     </section>
 

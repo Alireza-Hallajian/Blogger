@@ -10,8 +10,9 @@
     <link rel="stylesheet" href="../stylesheets/main.css">
     <link rel="stylesheet" href="../stylesheets/navbar.css">
     <link rel="stylesheet" href="../stylesheets/sidebar.css">
-
+    
     <link rel="stylesheet" href="../stylesheets/dashboard.css">
+    <link rel="stylesheet" href="../stylesheets/loading1.css">
 
     <script src="https://kit.fontawesome.com/0b9430af26.js" crossorigin="anonymous"></script>
 
@@ -41,7 +42,7 @@
                     <p>
                         <b>First Name:</b>&emsp;
                         <span><%= fname -%></span>
-                        <input type="text" value="fname" id="fname-box" class="edit-box">
+                        <input type="text" value="<%= fname -%>" id="fname-box" class="edit-box">
                     </p>
                 </div>
     
@@ -50,7 +51,7 @@
                     <p>
                         <b>Last Name:</b>&emsp;
                         <span><%= lname -%></span>
-                        <input type="text" value="lname" id="lname-box" class="edit-box">
+                        <input type="text" value="<%= lname -%>" id="lname-box" class="edit-box">
                     </p>
                 </div>
     
@@ -59,7 +60,7 @@
                     <p>
                         <b>Username:</b>&emsp;
                         <span><%= uname -%></span>
-                        <input type="text" value="username" id="username-box" class="edit-box">
+                        <input type="text" value="<%= uname -%>" id="username-box" class="edit-box">
                     </p>
                 </div>
 
@@ -85,16 +86,29 @@
                     <p>
                         <b>Phone Number:</b>&emsp;
                         <span><%= mobile -%></span>
-                        <input type="text" value="phone" id="phone-box" class="edit-box">
+                        <input type="text" value="<%= mobile -%>" id="phone-box" class="edit-box">
                     </p>
                 </div>
 
     
     
                 <div id="edit-container">
+
                     <div id="edit-btn">Edit</div>
-                    <div id="cancel-btn"></div>
-                    <div id="apply-btn"></div>
+                    <i id="cancel-btn" class="far fa-times-circle"></i>
+
+                    <!-- Loading Animation -->
+                    <div id="loading1" class="sk-chase">
+                        <div class="sk-chase-dot"></div>
+                        <div class="sk-chase-dot"></div>
+                        <div class="sk-chase-dot"></div>
+                        <div class="sk-chase-dot"></div>
+                        <div class="sk-chase-dot"></div>
+                        <div class="sk-chase-dot"></div>
+                      </div>
+
+                    <i id="apply-btn" class="far fa-check-circle"></i>
+
                 </div>
 
 
@@ -113,6 +127,7 @@
 
             
         </section>
+        
         <div id="error-alert" class="alert alert-danger alert-box" role="alert">Username and Mobile are duplicate to another user(s).</div>
     
     </section>

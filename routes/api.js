@@ -44,7 +44,7 @@ router.use('/user', check_session , user_router);
 const is_login = function (req, res, next) 
 {  
     //for requests wtih method GET
-    if (req.session.user && req.method === "GET") {     
+    if (req.session.user && req.method === "GET") {   
         return res.redirect('/user/dashboard');
     }
 
