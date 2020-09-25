@@ -1,6 +1,8 @@
 const VALIDATOR = {
     signin: signin_validator,
-    signup: signup_validator
+    signup: signup_validator,
+    edit: edit_validator,
+    duplicate: duplicate_validator
 };
 
 
@@ -38,6 +40,7 @@ function signin_validator(data)
     //no errors in data input
     return true;
 }
+
 
 
 // *********************************************************************************
@@ -101,6 +104,109 @@ function signup_validator(data)
     
 
     //no errors in data input
+    return true;
+}
+
+
+
+// *********************************************************************************
+//                                    Edit Profile
+// *********************************************************************************
+
+//duplicate username' and 'mobile' check
+function duplicate_validator (data) 
+{  
+    // empty field check
+    if (!data.username || !data.mobile) {
+        return ("Empty field error!");
+    }
+
+    // *****************************************************
+    //                     Length Check
+    // *****************************************************
+
+    //Username length check
+    if (data.username.trim().length < 3 || data.username.trim().length > 10) {
+        return ("*Username must long at least 3 and at last 10");
+    }
+
+    //Mobile Number length check
+    if (data.mobile.length !== 11) {
+        return ("*mobile Number Must long 11");
+    }
+
+    
+    //no input error
+    return true;
+}
+
+
+//length and warning check for inputs while editing
+function edit_validator(data) 
+{
+    // empty field check
+    if (!data.fname || !data.lname || !data.username || !data.mobile) {
+        return ("Empty field error!");
+    }
+
+    // *****************************************************
+    //                     Length Check
+    // *****************************************************
+
+    //First Name length check
+    if (data.fname.trim().length < 2 || data.fname.trim().length > 15) {
+        return ("*First Name must long at least 2 and at last 15");
+    }
+
+    //Last Name length check
+    if (data.lname.trim().length < 3 || data.lname.trim().length > 20) {
+        return ("*Last Name must long at least 3 and at last 20");
+    }
+
+    //Username length check
+    if (data.username.trim().length < 3 || data.username.trim().length > 10) {
+        return ("*Username must long at least 3 and at last 10");
+    }
+
+    //Mobile Number length check
+    if (data.mobile.length !== 11) {
+        return ("*mobile Number Must long 11");
+    }
+
+
+    // *****************************************************
+    //                     Warning Check
+    // *****************************************************
+
+    let mobile_check_result = warning_checker(data.mobile);
+
+    //check if there is anything than number in 'Mobile Number' Box
+    if (mobile_check_result !== true) {
+        return mobile_check_result;
+    }
+
+
+    
+    //no errors in data input
+    return true;
+}
+
+
+
+// *********************************************************************************
+//                                 Minor Operations
+// *********************************************************************************
+
+//check if there is anything than number in 'Mobile Number' Box
+function warning_checker (mobile) 
+{  
+    for (let i = 0, len = mobile.trim().length; i < len; i++) 
+    {
+        if (isNaN(Number(mobile.charAt(i))) === true) {
+            return ("*Only numbers are accepted for mobile number");
+        }
+    }
+
     return true;
 }
 

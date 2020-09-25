@@ -10,7 +10,7 @@ const user_router = require('./user.js');
 const User = require('../models/user.js');
 
 //tools
-const VALIDATOR = require('../tools/input-validator-server.js');
+const INPUT_VALIDATOR = require('../tools/input-validator-server.js');
 
 
 
@@ -88,7 +88,7 @@ router.post('/signin', is_login, async (req, res) =>
         //************************************************************** */
 
         //result of input-validation --> 'true' if there is no error
-        let signin_validation_result = VALIDATOR.signin(req.body);
+        let signin_validation_result = INPUT_VALIDATOR.signin(req.body);
     
         //if sign-in data has any errors
         if (signin_validation_result !== true) {
@@ -146,7 +146,7 @@ router.post('/signup', is_login, async (req, res) =>
         //************************************************************** */
 
         //result of input-validation --> 'true' if there is no error
-        let signup_validation_result = VALIDATOR.signup(req.body);
+        let signup_validation_result = INPUT_VALIDATOR.signup(req.body);
     
         //if sign-up data has any errors
         if (signup_validation_result !== true) {

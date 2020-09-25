@@ -73,7 +73,7 @@ $("#apply-btn").on("click", async function ()
     if (VALIDATOR.edit(inputs_data) === true)
     {
         //if no duplicate
-        if (duplicate_check(inputs_data.username, inputs_data.mobile) === false) 
+        if (await duplicate_check(inputs_data.username, inputs_data.mobile) === false) 
         {
             inputs_data.sex = $("input[type=radio][checked]").attr("id");  
 
@@ -120,11 +120,19 @@ async function save_changes (user_info)
         },
 
         //show error in alert-box
-        error: function (xhr, status, error) {
+        error: function (xhr, status, error) 
+        {
+            //session timed out
+            if (xhr.status === 403) {
+                window.location.assign('/signin');
+            }
+
             //server error
-            alert("Something went wrong in saving! Try again.");
-            $("#loading1").hide();
-            $("#cancel-btn").trigger("click");
+            else if (xhr.status === 500) {
+                alert("Something went wrong in saving! Try again.");
+                $("#loading1").hide();
+                $("#cancel-btn").trigger("click");
+            }
         }
     }); 
 }
@@ -137,7 +145,7 @@ async function save_changes (user_info)
 //'Username' and 'Mobile' duplicate check
 async function duplicate_check (username, mobile) 
 {
-    let duplicate_check_result = false;     //No duplicate
+    // let duplicate_check_result = false;     //No duplicate
 
     //show loading
     $("#loading1").show();
@@ -166,29 +174,38 @@ async function duplicate_check (username, mobile)
         error: function (xhr, status, error) 
         {
             //duplicate error
-            if (xhr.status === 409) {
+            if (xhr.status === 409) 
+            {
                 $("#error-alert").html(xhr.responseText);
                 $("#error-alert").show();
                 $("html").scrollTop(290);
 
                 $("#loading1").hide();
                 $("#apply-btn").show();
-                return $("#cancel-btn").show();
+                $("#cancel-btn").show();
 
-                //for returning the result
-                duplicate_check_result = true;
+                //duplicate found
+                // return false;
+            }
+
+            //session timed out
+            else if (xhr.status === 403) {
+                window.location.assign('/signin');
             }
             
             //server error
-            if (xhr.status === 500) {
+            else if (xhr.status === 500) {
                 alert("Something went wrong in duplicate check! Try again.");
+                
+                //server error
+                // return false;
             }
         }
     });
 
 
-    //true or false
-    return duplicate_check_result;
+    //no duplicate
+    return false;
 }
 
 
