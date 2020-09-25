@@ -1,138 +1,9 @@
 // *********************************************************************************
-//                                     Validation
+//                                  Sign-up Operation
 // *********************************************************************************
 
-function input_validator(data) 
-{
-    // empty field check
-    if (!data.fname || !data.lname || !data.username || !data.password || !data.password_repeat || !data.mobile) 
-    {
-        $("#error-alert").html("<b>*All fields</b> Must be filled.");
-        $("#error-alert").show();
-        $("html").scrollTop(290);
-    } else {
-        $("#error-alert").hide();
-    }
-
-
-    $("#user-existence-alert").hide();
-
-    // *****************************************************
-    //                     Length Check
-    // *****************************************************
-
-    //First Name length check
-    if (data.fname.trim().length < 2 || data.fname.trim().length > 15) {
-        $("#fname-length-warning").css("visibility", "visible");
-    } else {
-        $("#fname-length-warning").css("visibility", "hidden");
-    }
-
-    //Last Name length check
-    if (data.lname.trim().length < 3 || data.lname.trim().length > 20) {
-        $("#lname-length-warning").css("visibility", "visible");
-    } else {
-        $("#lname-length-warning").css("visibility", "hidden");
-    }
-
-    //Username length check
-    if (data.username.trim().length < 3 || data.username.trim().length > 10) {
-        $("#uname-length-warning").css("visibility", "visible");
-    } else {
-        $("#uname-length-warning").css("visibility", "hidden");
-    }
-
-    //Password length check
-    if (data.password.length < 6 || data.password.length > 12) {
-        $("#password-length-warning").css("visibility", "visible");
-    } else {
-        $("#password-length-warning").css("visibility", "hidden");
-    }
-
-    //Mobile Number length check
-    if (data.mobile.trim().length !== 11) {
-        $("#mobile-length-warning").css("visibility", "visible");
-    } else {
-        $("#mobile-length-warning").css("visibility", "hidden");
-    }
-
-
-    // *****************************************************
-    //                     Warning Check
-    // *****************************************************
-
-    //passwrod repeat check
-    if ($("#password-box").val() === "" || $("#password-box").val() !== $("#password-repeat-box").val()){
-        $("#password-repeat-warning").css("visibility", "visible");
-    } else {
-        $("#password-repeat-warning").css("visibility", "hidden");
-    }
-
-
-    //check if there is anything than number in 'Mobile Number' Box
-    for (let i = 0; i < data.mobile.length; i++) 
-    {
-        if (isNaN(Number(data.mobile.charAt(i))) === true) 
-        {
-            $("#number-validation-warning").css("visibility", "visible");
-            return false;   //incorrect data input.
-        }
-
-        else {
-            $("#number-validation-warning").css("visibility", "hidden");
-        }
-    }
-
-
-    //data input (pre)-IDs (css ID)
-    let input_boxes_arr = ["firstname", "lastname", "username", "password", "password-repeat", "mobile"];
-
-    //check if there is any input warning
-    for (let i = 0; i < input_boxes_arr.length; i++) 
-    {
-        if (warning_checker(input_boxes_arr[i]) === true) {
-            return false;   //incorrect data input.
-        }
-    }
-
-    //no errors in data input
-    return true;
-}
-
-
-//checks if there is any incorrect data input.
-function warning_checker (input_box) 
-{  
-    if ($(`#${input_box}-box + div`).css("visibility") == "visible") {
-        return true;    //incorrect data input.
-    }
-
-    else {
-        return false;   //no errors in data input
-    }
-}
-
-
-// *********************************************************************************
-//                                     Operations
-// *********************************************************************************
-
-//change gender from 'Female' to 'Male'
-$("#Male").on("click", function () {
-    $("#Female").removeAttr("checked");
-    $(this).attr("checked", "");
-});
-
-//change gender from 'Male' to 'Female'
-$("#Female").on("click", function () {
-    $("#Male").removeAttr("checked");
-    $(this).attr("checked", "");
-});
-
-//click on 'Great' button
-$("#great-btn").on("click", function (target) {
-    window.location.assign("/signin");
-});
+//client-side input validator
+import {VALIDATOR} from './input-validator-client.js';
 
 
 //click on 'sign-up' button
@@ -149,7 +20,7 @@ $("#signup-button").on("click", function ()
     
 
     //send data to the server if there is no errors
-    if (input_validator(inputs_data) === true) 
+    if (VALIDATOR.signup(inputs_data) === true) 
     {
         //no need to send password to server twice
         delete inputs_data.password_repeat;
@@ -198,4 +69,26 @@ $("#signup-button").on("click", function ()
             }
         });
     }
+});
+
+
+// *********************************************************************************
+//                                 Minor Operations
+// *********************************************************************************
+
+//change gender from 'Female' to 'Male'
+$("#Male").on("click", function () {
+    $("#Female").removeAttr("checked");
+    $(this).attr("checked", "");
+});
+
+//change gender from 'Male' to 'Female'
+$("#Female").on("click", function () {
+    $("#Male").removeAttr("checked");
+    $(this).attr("checked", "");
+});
+
+//click on 'Great' button
+$("#great-btn").on("click", function (target) {
+    window.location.assign("/signin");
 });
