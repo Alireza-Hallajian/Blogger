@@ -20,7 +20,7 @@ mongoose.connect('mongodb://localhost:27017/blogger',
   //handle mongoose collection.ensureIndex warn
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useFindAndModify: true,
+  useFindAndModify: false,
   useCreateIndex: true
 });
 
@@ -43,7 +43,7 @@ app.use(express.urlencoded({ extended: true }));  // parse application/x-www-for
 app.use(cookieParser());
 
 
-// initialize express-session to allow us track the logged-in user across sessions.
+//initialize express-session to allow us track the logged-in user across sessions.
 app.use(session({
 	key: 'user_sid',
 	secret: 'somerandonstuffs',
@@ -54,22 +54,18 @@ app.use(session({
 	}
 }));
 
-// app.use((req, res, next) => {
-// 	console.log(req.cookies);
-// 	console.log(req.session);
-// 	next();
-// });
 
 
 app.get('/', function (req, res) {  
 	// if (!req.session.user) res.render('dashboard.ejs');
 	// res.render('signin.ejs');
-	res.render('signup.ejs');
+	// res.render('signup.ejs');
+	res.render('home-guest.ejs');
 });
 
 
+// app.use('/user', user_router);
 app.use('/', api_router);
-app.use('/user', user_router);
 
 
 

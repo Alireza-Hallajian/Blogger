@@ -10,8 +10,7 @@ const user_router = require('./user.js');
 const User = require('../models/user.js');
 
 //tools
-const VALIDATOR = require('../tools/validator.js');
-// const AUTH = require('../tools/auth.js');
+const VALIDATOR = require('../tools/input-validator-server.js');
 
 
 
@@ -19,6 +18,11 @@ const VALIDATOR = require('../tools/validator.js');
 //                                   Authentication
 //******************************************************************************** */
 
+// *****************************************************
+//                        Check Session
+// *****************************************************
+
+//check if user is logged-in to access non-permitted sections for non-registered users
 const check_session = function (req, res, next) 
 {  
     //for requests wtih method GET
@@ -34,13 +38,21 @@ const check_session = function (req, res, next)
     next();
 }
 
+
+// *****************************************************
+//             accessing login-based sections
+// *****************************************************
+
 router.use('/user', check_session , user_router);
 // router.use('/article', check_session, user_router);
 // router.use('/comment', check_session, user_router);
 
 
+// *****************************************************
+//                        Is Login?
+// *****************************************************
 
-//check if user is already logged-in
+//check if user is already logged-in (not to redirect to 'signin' and 'signup' pages)
 const is_login = function (req, res, next) 
 {  
     //for requests wtih method GET

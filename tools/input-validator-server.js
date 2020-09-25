@@ -4,6 +4,10 @@ const VALIDATOR = {
 };
 
 
+// *********************************************************************************
+//                                    Sign-in
+// *********************************************************************************
+
 function signin_validator(data) 
 {
     // *****************************************************
@@ -35,6 +39,10 @@ function signin_validator(data)
     return true;
 }
 
+
+// *********************************************************************************
+//                                    Sign-up
+// *********************************************************************************
 
 function signup_validator(data) 
 {
@@ -90,7 +98,6 @@ function signup_validator(data)
     if (data.mobile.trim().length !== 11) {
         return ("*Mobile Number Must long 11");
     } 
-
     
 
     //no errors in data input

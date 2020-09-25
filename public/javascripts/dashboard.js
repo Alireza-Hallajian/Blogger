@@ -54,6 +54,9 @@ $("#cancel-btn").on("click", function ()
 });
 
 
+//client-side input validator
+import {VALIDATOR} from './input-validator-client.js';
+
 
 //'Apply' button
 $("#apply-btn").on("click", async function () 
@@ -67,7 +70,7 @@ $("#apply-btn").on("click", async function ()
     }
 
     //if there is no length error or warning
-    if (input_validator(inputs_data) === true)
+    if (VALIDATOR.edit(inputs_data) === true)
     {
         //if no duplicate
         if (duplicate_check(inputs_data.username, inputs_data.mobile) === false) 
@@ -127,80 +130,9 @@ async function save_changes (user_info)
 }
 
 
-
 // *********************************************************************************
 //                                    Check Ups
 // *********************************************************************************
-
-//length and warning check for inputs while editing
-function input_validator(data) 
-{
-    // empty field check
-    if (!data.fname || !data.lname || !data.username || !data.mobile) 
-    {
-        $("#error-alert").html("<b>*All fields</b> Must be filled.");
-        $("#error-alert").show();
-        return $("html").scrollTop(290);
-    } else {
-        $("#error-alert").hide();
-    }
-
-    // *****************************************************
-    //                     Length Check
-    // *****************************************************
-
-    //errors container for showing in error
-    let errors_text = "";
-
-    //First Name length check
-    if (data.fname.trim().length < 2 || data.fname.trim().length > 15) {
-        errors_text += "<br>*First Name must long at least 2 and at last 15";
-    }
-
-    //Last Name length check
-    if (data.lname.trim().length < 3 || data.lname.trim().length > 20) {
-        errors_text += "<br>*Last Name must long at least 3 and at last 20";
-    }
-
-    //Username length check
-    if (data.username.trim().length < 3 || data.username.trim().length > 10) {
-        errors_text += "<br>*Username must long at least 3 and at last 10";
-    }
-
-    //Mobile Number length check
-    if (data.mobile.length !== 11) {
-        errors_text += "<br>*mobile Number Must long 11";
-    }
-
-
-    // *****************************************************
-    //                     Warning Check
-    // *****************************************************
-
-    //check if there is anything than number in 'Mobile Number' Box
-    for (let i = 0; i < data.mobile.trim().length; i++) 
-    {
-        if (isNaN(Number(data.mobile.charAt(i))) === true) {
-            errors_text += "<br>*Only numbers are accepted for mobile number";
-        }
-    }
-
-
-    //if there is any error, show it in error box
-    if (errors_text !== "") {
-        $("#error-alert").show();
-        $("html").scrollTop(500);
-        return $("#error-alert").html(`<p>${errors_text}</p>`);
-    }
-    else {
-        $("#error-alert").hide();
-    }
-
-    
-    //no errors in data input
-    return true;
-}
-
 
 //'Username' and 'Mobile' duplicate check
 async function duplicate_check (username, mobile) 
