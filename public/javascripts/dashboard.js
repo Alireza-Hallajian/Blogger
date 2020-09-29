@@ -75,13 +75,19 @@ $("#apply-btn").on("click", async function ()
     //if there is no length error or warning
     if (VALIDATOR.edit(inputs_data) === true)
     {
-        //if no duplicate
-        if (await duplicate_check(inputs_data.username, inputs_data.mobile) === false) 
-        {
-            inputs_data.sex = $("input[type=radio][checked]").attr("id");  
+        try {
+            //if no duplicate
+            if (await duplicate_check(inputs_data.username, inputs_data.mobile) === "No Conflict") 
+            {
+                inputs_data.sex = $("input[type=radio][checked]").attr("id");
 
-            //save chnges to database
-            save_changes(inputs_data);
+                //save chnges to database
+                save_changes(inputs_data);
+            }
+        }
+
+        catch (err) {
+            console.log(err);
         }
     }
 });
@@ -92,7 +98,7 @@ $("#apply-btn").on("click", async function ()
 // *********************************************************************************
 
 //save chnges to database
-async function save_changes (user_info) 
+function save_changes (user_info) 
 {  
     //show loading
     $("#loading1").show();
@@ -100,7 +106,7 @@ async function save_changes (user_info)
     $("#apply-btn").hide();
 
 
-    await $.ajax({
+    $.ajax({
         type: "PUT",
         url: "/user/edit",
         data: user_info,
@@ -146,21 +152,19 @@ async function save_changes (user_info)
 // *********************************************************************************
 
 //'Username' and 'Mobile' duplicate check
-async function duplicate_check (username, mobile) 
+function duplicate_check (username, mobile) 
 {
-    // let duplicate_check_result = false;     //No duplicate
-
     //show loading
     $("#loading1").show();
     $("#cancel-btn").hide();
     $("#apply-btn").hide();
 
-
+    
     //send duplicate check request to the server
-    await $.ajax({
+    return $.ajax({
         type: "POST",
         url: "/user/edit",
-        data: {username, mobile},
+        data: { username, mobile },
 
         //no duplicate
         success: function (result, status, xhr) 
@@ -186,34 +190,23 @@ async function duplicate_check (username, mobile)
                 $("#loading1").hide();
                 $("#apply-btn").show();
                 $("#cancel-btn").show();
-
-                //duplicate found
-                // return false;
             }
 
             //session timed out
             else if (xhr.status === 403) {
                 window.location.assign('/signin');
             }
-            
+
             //server error
-            else if (xhr.status === 500) 
-            {
+            else if (xhr.status === 500) {
                 alert("Something went wrong in duplicate check! Try again.");
 
                 $("#loading1").hide();
                 $("#apply-btn").show();
                 $("#cancel-btn").show();
-                
-                //server error
-                // return false;
             }
         }
     });
-
-
-    //no duplicate
-    return false;
 }
 
 
