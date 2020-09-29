@@ -42,12 +42,16 @@ $("#cancel-btn").on("click", function ()
     //                    DOES NOT WORK                      
     //******************************************************
     if ($("#gender").html() === 'Male') {
-        $("#Female").removeAttr("checked");
+        // $("#Female").removeAttr("checked");
         $("#Male").attr("checked", "");
+
+        // $(".gender gender").val("M")
     }
     else {
-        $("#Male").removeAttr("checked");
+        // $("#Male").removeAttr("checked");
         $("#Feale").attr("checked", "");
+
+        // $(".gender gender").val("F")
     }
 
     button_and_boxes_changes();
@@ -194,8 +198,13 @@ async function duplicate_check (username, mobile)
             }
             
             //server error
-            else if (xhr.status === 500) {
+            else if (xhr.status === 500) 
+            {
                 alert("Something went wrong in duplicate check! Try again.");
+
+                $("#loading1").hide();
+                $("#apply-btn").show();
+                $("#cancel-btn").show();
                 
                 //server error
                 // return false;
@@ -232,13 +241,13 @@ function button_and_boxes_changes ()
 //change gender from 'Female' to 'Male'
 $("#Male").on("click", function () {
     $("#Female").removeAttr("checked");
-    $(this).attr("checked", "");
+    $(this).attr("checked", true);
 });
 
 //change gender from 'Male' to 'Female'
 $("#Female").on("click", function () {
     $("#Male").removeAttr("checked");
-    $(this).attr("checked", "");
+    $(this).attr("checked", true);
 });
 
 

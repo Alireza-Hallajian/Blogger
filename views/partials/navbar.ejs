@@ -2,17 +2,17 @@
 
     <ul>
 
-        <li class="nav-items-container">
+        <li class="nav-items-container" onclick="navbar_links(this)">
             <i class="fas fa-home icons-navbar"></i>
             <a href="/" class="nav-items">&nbsp;Home</a>
         </li>
         
-        <li class="nav-items-container">
+        <li class="nav-items-container" onclick="navbar_links(this)">
             <i class="fas fa-phone-square-alt icons-navbar"></i>
-            <a href="#" class="nav-items">&nbsp;Contact Us</a>
+            <a href="/" class="nav-items">&nbsp;Contact Us</a>
         </li>
         
-        <li class="nav-items-container">
+        <li class="nav-items-container" onclick="navbar_links(this)">
             <i class="fas fa-exclamation-circle icons-navbar"></i>
             <a href="#" class="nav-items" class="icons8-info">&nbsp;About</a>
         </li>
@@ -20,5 +20,13 @@
     
 
     <%- include('./searchBox.ejs') -%>
+
+
+    <script>
+        //when clicked on background of navbar links
+        function navbar_links (elem) {
+            window.location = elem.children[1].href;
+        }
+    </script>
     
 </nav>

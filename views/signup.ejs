@@ -27,7 +27,8 @@
         
         <sec id="personal-info">
 
-            <input id="firstname-box" class="inputs" type="text" placeholder="First Name" required>
+            <!-- <label for="fname">First Name:</label> -->
+            <input id="firstname-box" class="inputs" type="text" name="fname" placeholder="First Name" required>
             <div id="fname-length-warning" class="warning-box">
                 &emsp;&emsp;&emsp;*First Name must long at least 2 and at last 15
             </div>
@@ -65,8 +66,11 @@
             </div>
 
 
-            <input id="Male" class="gender" type="radio" name="gender" checked>Male
-            <input id="Female" class="gender" type="radio" name="gender">Female
+            <input id="Male" class="gender" type="radio" name="gender" checked>
+            <label for="Male">Male</label>
+
+            <input id="Female" class="gender" type="radio" name="gender">
+            <label for="Female">Female</label>
 
 
             <button id="signup-button"><p>Sign-Up</p></button>

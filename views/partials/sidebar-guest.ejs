@@ -21,13 +21,13 @@
         <li style="list-style-type: none; height: 60px;"></li>
 
         
-        <li class="side-items-container green-hover">
+        <li class="side-items-container green-hover" onclick="sidebar_links(this)">
             <i class="fas fa-sign-in-alt icons-sidebar"></i>
             <a href="/signin" class="side-items">&emsp;Sign-in</a>
         </li>
 
         <!-- + .lastAsideItem -->
-        <li class="side-items-container green-hover last-aside-item"> 
+        <li class="side-items-container green-hover last-aside-item" onclick="sidebar_links(this)"> 
             <i class="fas fa-user-plus icons-sidebar"></i>
             <a href="/signup" class="side-items">&ensp;&nbsp;Sign-up</a>
         </li>
@@ -35,3 +35,11 @@
     </ul>        
 
 </aside>
+
+
+<script>
+    //when clicked on background of sidebar links
+    function sidebar_links (elem) {
+        window.location = elem.children[1].href;
+    }
+</script>
