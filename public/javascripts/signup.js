@@ -79,13 +79,13 @@ $("#signup-button").on("click", function ()
 //change gender from 'Female' to 'Male'
 $("#Male").on("click", function () {
     $("#Female").removeAttr("checked");
-    $(this).attr("checked", "");
+    $(this).attr("checked", true);
 });
 
-//change gender from 'Male' to 'Female'
+// change gender from 'Male' to 'Female'
 $("#Female").on("click", function () {
     $("#Male").removeAttr("checked");
-    $(this).attr("checked", "");
+    $(this).attr("checked", true);
 });
 
 //click on 'Great' button

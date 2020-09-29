@@ -14,11 +14,11 @@ $("#edit-btn").on("click", function ()
    //put right check-mark for gender box
    if ($("#gender").html() === "Male") {
        $("#Female").removeAttr("checked");
-       $("#Male").attr("checked", "");
+       $("#Male").attr("checked", true);
    }
    else {
        $("#Male").removeAttr("checked");
-       $("#Female").attr("checked", "");
+       $("#Female").attr("checked", true);
    }
 
 
@@ -38,22 +38,21 @@ $("#cancel-btn").on("click", function ()
     $("#username-box").val($("#username-box").prev().html());
     $("#phone-box").val($("#phone-box").prev().html());
 
-    //******************************************************
-    //                    DOES NOT WORK                      
-    //******************************************************
+
+    //assign previous gender to gender box
     if ($("#gender").html() === 'Male') {
-        // $("#Female").removeAttr("checked");
-        $("#Male").attr("checked", "");
-
-        // $(".gender gender").val("M")
+        $("#Female").removeAttr("checked");
+        $("#Male").attr("checked", true);
+        $("#Male").prop("checked", true);
     }
+
     else {
-        // $("#Male").removeAttr("checked");
-        $("#Feale").attr("checked", "");
-
-        // $(".gender gender").val("F")
+        $("#Male").removeAttr("checked");
+        $("#Female").attr("checked", true);
+        $("#Female").prop("checked", true);
     }
 
+    
     button_and_boxes_changes();
 });
 
