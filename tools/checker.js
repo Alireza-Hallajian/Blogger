@@ -1,5 +1,6 @@
 const CHECKER = {
-    duplicate: duplicate_validator
+    duplicate_signup: duplicate_signup_validator,
+    duplicate_edit: duplicate_edit_validator
 };
 
 //models
@@ -7,20 +8,50 @@ const User = require('../models/user.js');
 
 
 //******************************************************************************** */
-//                      duplicate username' and 'mobile' check
+//              duplicate 'username' and 'mobile' check - Sign-up
 //******************************************************************************** */
 
-async function duplicate_validator (username, mobile, session)
+async function duplicate_signup_validator (username, mobile)
+{
+    // user existence check
+    const blogger_username = await User.findOne({username});
+
+    if (blogger_username) {
+        return (`${username} already exists.`);
+    }
+
+
+    //mobile number existence check
+    const blogger_mobile = await User.findOne({mobile});
+
+    if (blogger_mobile) {
+        return ("This mobile number already exists.");
+    }
+
+
+    //No conflict
+    else {
+        return ("No Conflict");
+    }
+}
+
+
+
+//******************************************************************************** */
+//              duplicate 'username' and 'mobile' check - Editing Profile
+//******************************************************************************** */
+
+async function duplicate_edit_validator (username, mobile, session)
 {
     // find user with duplicate 'username'
     const blogger_username = await User.findOne({ 
-        username: username,  
+        username,  
         _id: { $ne: session._id } 
     });
 
     // find user with duplicate 'mobile'
     const blogger_mobile = await User.findOne({ 
-        mobile: mobile,  
+        mobile,  
         _id: { $ne: session._id  } 
     });
 

@@ -11,6 +11,7 @@ const User = require('../models/user.js');
 
 //tools
 const INPUT_VALIDATOR = require('../tools/input-validator-server.js');
+const CHECKER = require('../tools/checker.js');
 
 
 
@@ -157,24 +158,15 @@ router.post('/signup', is_login, async (req, res) =>
         //************************************************************** */
         //                  Data Base duplicate data check  
         //************************************************************** */
-    
-        // user existence check
-        const blogger_username = await User.findOne({
-            username: req.body.username.trim().toLowerCase()
-        });
 
-        if (blogger_username) {
-            return res.status(400).send(`${req.body.username} already exists.`);
-        }
+        let duplicate_check_result = await CHECKER.duplicate_signup(
+            req.body.username.trim().toLowerCase(), 
+            req.body.mobile.trim().toLowerCase()
+        );
 
-
-        //mobile number existence check
-        const blogger_mobile = await User.findOne({
-            mobile: req.body.mobile.trim().toLowerCase()
-        });
-
-        if (blogger_mobile) {
-            return res.status(400).send("This mobile number already exists.");
+        //if conflict occured
+        if (duplicate_check_result !== "No Conflict") {
+            return res.status(409).send(`${duplicate_check_result}`);
         }
 
 

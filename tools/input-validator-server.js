@@ -1,8 +1,8 @@
 const VALIDATOR = {
     signin: signin_validator,
     signup: signup_validator,
-    edit: edit_validator,
-    duplicate: duplicate_validator
+    duplicate: duplicate_validator,
+    edit: edit_validator
 };
 
 

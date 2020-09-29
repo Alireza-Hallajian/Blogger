@@ -54,7 +54,7 @@ $("#signup-button").on("click", function ()
                 }
 
                 //user exists
-                if (xhr.status === 400) {
+                if (xhr.status === 409) {
                     $("#user-existence-alert").html(xhr.responseText);
                     $("#user-existence-alert").show();
                     $("html").scrollTop(290);

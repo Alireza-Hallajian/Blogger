@@ -103,7 +103,7 @@ router.post('/edit', check_session, async (req, res) =>
         //                         Data Base Check  
         //************************************************************** */
 
-        let duplicate_check_result = await CHECKER.duplicate(
+        let duplicate_check_result = await CHECKER.duplicate_edit(
             req.body.username, req.body.mobile, req.session.user);
         
         if (duplicate_check_result === "No Conflict") {
@@ -140,10 +140,10 @@ router.put('/edit', check_session, async (req, res) =>
 
 
         //************************************************************** */
-        //              duplicate username' and 'mobile' check    
+        //              duplicate 'username' and 'mobile' check    
         //************************************************************** */
 
-        let duplicate_check_result = await CHECKER.duplicate(
+        let duplicate_check_result = await CHECKER.duplicate_edit(
             req.body.username, req.body.mobile, req.session.user);
         
         if (duplicate_check_result !== "No Conflict") {
