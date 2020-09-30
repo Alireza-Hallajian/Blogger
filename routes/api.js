@@ -102,22 +102,37 @@ router.post('/signin', is_login, async (req, res) =>
         //************************************************************** */
 
         // find user
-        const blogger = await User.findOne({
-            username: req.body.username,
-            password: req.body.password
-        });
+        const blogger = await User.findOne({username: req.body.username });
 
-        // user not found
+
+        // if user not found
         if (!blogger) {
             return res.status(404).send
                 ("User <b>NOT exists</b> or <b>Username/Password</b> is not correct.");
         }
 
+        else 
+        {
+            // check user's password
+            await blogger.compare_password(req.body.password, function(err, is_match) 
+            {
+                if (err) throw err;
+    
+                // if password does NOT match
+                if (is_match === false) {
+                    return res.status(404).send
+                        ("User <b>NOT exists</b> or <b>Username/Password</b> is not correct.");
+                }
 
-        // save user info in a session if found
-        req.session.user = blogger;
+                
+                // user authenticated
+                // save user info in a session
+                req.session.user = blogger;
 
-        res.send("/user/dashboard");
+                res.send("/user/dashboard");
+            });
+
+        }
     }
 
     catch(err) {

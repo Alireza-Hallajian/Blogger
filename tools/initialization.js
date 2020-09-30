@@ -21,7 +21,7 @@ const intialization = async function()
             lastName: 'Hallajian',
             username: 'Alireza.HN',
             mobile: '09190360972',
-            sex: 'male',
+            sex: 'Male',
             role: 'admin',
             password: '12345678'
         });
