@@ -1,3 +1,7 @@
+//client-side input validator
+import {VALIDATOR} from './input-validator-client.js';
+
+
 // *********************************************************************************
 //                                  Buttons Actions
 // *********************************************************************************
@@ -57,9 +61,6 @@ $("#cancel-btn").on("click", function ()
 });
 
 
-//client-side input validator
-import {VALIDATOR} from './input-validator-client.js';
-
 
 //'Apply' button
 $("#apply-btn").on("click", async function () 
@@ -90,6 +91,92 @@ $("#apply-btn").on("click", async function ()
             console.log(err);
         }
     }
+});
+
+
+// *********************************************************************************
+//                                Change Password
+// *********************************************************************************
+
+//Change Password button
+$("#change-password").on('click', function () {  
+    $("#modal-btn").trigger("click");
+});
+
+
+//close button
+$("#close-btn-top, #close-btn-bottom").on('click', function () 
+{  
+    //clear fields (for security)
+    $("#old-p-box").val('');
+    $("#new-p-box").val('');
+    $("#repeat-p-box").val('');
+
+    //hide alerts
+    $("#old-password-length-warning").css("visibility", "hidden");
+    $("#new-password-length-warning").css("visibility", "hidden");
+    $("#repeat-password-length-warning").css("visibility", "hidden");
+    $("#error-alert-modal").hide();
+});
+
+
+//Apply button (in change password page)
+$("#apply-password-change").on('click', function () 
+{  
+    // //show loading
+    // $("#loading1").show();
+    // $("#cancel-btn").hide();
+    // $("#apply-btn").hide();
+
+
+    //values of password boxes
+    let passwords = {
+        old: $("#old-p-box").val(),
+        new: $("#new-p-box").val(),
+        repeat: $("#repeat-p-box").val()
+    }
+    VALIDATOR.p_change(passwords);
+    // if (VALIDATOR.p_change(passwords) === true) 
+    // {
+    //     $.ajax({
+    //         type: "PUT",
+    //         url: "/user/password",
+    //         data: passwords,
+    
+    //     //     success: function (result, status, xhr) 
+    //     //     {
+    //     //         //assign new values to fields
+    //     //         $("#fname-box").prev().html(user_info.fname);
+    //     //         $("#lname-box").prev().html(user_info.lname);
+    //     //         $("#username-box").prev().html(user_info.username);
+    //     //         $("#gender").html(user_info.sex);
+    //     //         $("#phone-box").prev().html(user_info.mobile);
+    
+    //     //         button_and_boxes_changes();
+    
+    //     //         //changes were successful
+    //     //         alert("Changes Applied.");
+    //     //         $("#loading1").hide();
+    //     //         $("#edit-btn").show();
+    //     //     },
+    
+    //     //     //show error in alert-box
+    //     //     error: function (xhr, status, error) 
+    //     //     {
+    //     //         //session timed out
+    //     //         if (xhr.status === 403) {
+    //     //             window.location.assign('/signin');
+    //     //         }
+    
+    //     //         //server error
+    //     //         else if (xhr.status === 500) {
+    //     //             alert("Something went wrong in saving! Try again.");
+    //     //             $("#loading1").hide();
+    //     //             $("#cancel-btn").trigger("click");
+    //     //         }
+    //     //     }
+    //     // }); 
+    // }
 });
 
 
@@ -258,6 +345,11 @@ $("#logout-btn").on("click", function ()
         //show error ine alert-box
         error: function (xhr, status, error) 
         {
+            //forbidden error (when server restarts and sessions are cleared)
+            if (xhr.status === 403) {
+                window.location.assign("/");
+            }
+
             //server error
             if (xhr.status === 500) {
                 alert("Something went wrong logging out! Try again.");
