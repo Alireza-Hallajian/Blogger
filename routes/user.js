@@ -41,6 +41,12 @@ const check_session = function (req, res, next)
 //                                  Show Dashboard
 //******************************************************************************** */
 
+//redirect to 'dashboard' if '/user' requested
+router.get('/', (req, res) => {
+    res.redirect('/user/dashboard');
+});
+
+
 router.get('/dashboard', check_session, (req, res) =>
 {
     //blogger login
