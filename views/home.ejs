@@ -19,11 +19,30 @@
 
     <%- include('./partials/navbar.ejs') -%>
 
-    <%- include('./partials/sidebar-admin.ejs') -%>
     
+    <%# guest sidebar %>
+    <% if (role === "guest") { %>
+        <%- include('./partials/sidebar-guest.ejs') -%>
+    <%} %>
+
+    <%# blogger sidebar %>
+    <% if (role === "blogger") { %>
+        <%- include('./partials/sidebar-blogger.ejs') -%>
+    <%} %>
+    
+    <%# admin sidebar %>
+    <% if (role === "admin") { %>
+        <%- include('./partials/sidebar-admin.ejs') -%>
+    <%} %>
+
+
 
     <%- include('./partials/fontawsome-js.ejs') -%>
     <%- include('./partials/bootstrap-js.ejs') -%>
+
+
+    <script src="/javascripts/jQuery-Uncompressed.v3.4.1.js"></script>
+    <script src="/javascripts/dashboard.js" type="module"></script>
 
 </body>
 

@@ -56,11 +56,19 @@ app.use(session({
 
 
 
-app.get('/', function (req, res) {  
-	// if (!req.session.user) res.render('dashboard.ejs');
-	// res.render('signin.ejs');
-	// res.render('signup.ejs');
-	res.render('home-guest.ejs');
+app.get('/', function (req, res) 
+{  
+	if (req.session.user) {
+		res.render('home.ejs', {
+			role: req.session.user.role
+		});
+	}
+
+	else {
+		res.render('home.ejs', {
+			role: "guest"
+		});
+	}
 });
 
 

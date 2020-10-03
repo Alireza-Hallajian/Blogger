@@ -49,33 +49,19 @@ router.get('/', (req, res) => {
 
 router.get('/dashboard', check_session, (req, res) =>
 {
-    //blogger login
-    if (req.session.user.role === "blogger")
+    //user dashboard
+    if (req.session.user)
     {
-        return res.render("dashboard-blogger.ejs", 
+        return res.render("dashboard.ejs", 
         {
             fname: req.session.user.firstName,
             lname: req.session.user.lastName,
             uname: req.session.user.username,
             gender: req.session.user.sex,
-            mobile: req.session.user.mobile
+            mobile: req.session.user.mobile,
+            role: req.session.user.role
         });
     }
-
-
-    //admin login
-    else if (req.session.user.role === "admin")
-    {
-        return res.render("dashboard-admin.ejs",
-        {
-            fname: req.session.user.firstName,
-            lname: req.session.user.lastName,
-            uname: req.session.user.username,
-            gender: req.session.user.sex,
-            mobile: req.session.user.mobile
-        });
-    }
-
 
     else {
         res.redirect('/signin');
@@ -88,7 +74,11 @@ router.get('/dashboard', check_session, (req, res) =>
 //                                  Edit Profile
 //******************************************************************************** */
 
-//duplicate username' and 'mobile' check
+
+//************************************************************** */
+//             duplicate username' and 'mobile' check  
+//************************************************************** */
+
 router.post('/edit', check_session, async (req, res) => 
 {
     try 
@@ -129,7 +119,10 @@ router.post('/edit', check_session, async (req, res) =>
 
 
 
-//update profile
+//************************************************************** */
+//                        update profile
+//************************************************************** */
+
 router.put('/edit', check_session, async (req, res) => 
 {
     try
@@ -182,7 +175,10 @@ router.put('/edit', check_session, async (req, res) =>
 
 
 
-//change password
+//************************************************************** */
+//                       change password 
+//************************************************************** */
+
 router.put('/password', check_session, async (req, res) => 
 {
     try
