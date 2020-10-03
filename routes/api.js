@@ -19,8 +19,9 @@ const CHECKER = require('../tools/checker.js');
 //                                   Authentication
 //******************************************************************************** */
 
+
 // *****************************************************
-//                        Check Session
+//                     Check Session
 // *****************************************************
 
 //check if user is logged-in to access non-permitted sections for non-registered users
@@ -124,7 +125,7 @@ router.post('/signin', is_login, async (req, res) =>
                         ("User <b>NOT exists</b> or <b>Username/Password</b> is not correct.");
                 }
 
-                
+
                 // user authenticated
                 // save user info in a session
                 req.session.user = blogger;

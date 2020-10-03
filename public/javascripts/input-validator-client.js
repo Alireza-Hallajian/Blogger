@@ -1,7 +1,8 @@
 export const VALIDATOR = {
     signin: signin_validator,
     signup: signup_validator,
-    edit: edit_validator
+    edit: edit_validator,
+    p_change: change_password
 };
 
 
@@ -238,6 +239,68 @@ function edit_validator(data)
     return true;
 }
 
+
+
+// *********************************************************************************
+//                                 Change Password
+// *********************************************************************************
+
+function change_password(data) 
+{
+    // empty field check
+    if (!data.old || !data.new || !data.repeat) 
+    {
+        $("#error-alert-modal").html("<b>*All fields</b> Must be filled.");
+        $("#error-alert-modal").show();
+    } else {
+        $("#error-alert-modal").hide();
+    }
+
+    // *****************************************************
+    //                     Length Check
+    // *****************************************************
+
+    //Old-Password length check
+    if (data.old.length < 6 || data.old.length > 12) {
+        $("#old-password-length-warning").css("visibility", "visible");
+    } else {
+        $("#old-password-length-warning").css("visibility", "hidden");
+    }
+
+    //New-Password length check
+    if (data.new.length < 6 || data.new.length > 12) {
+        $("#new-password-length-warning").css("visibility", "visible");
+    } else {
+        $("#new-password-length-warning").css("visibility", "hidden");
+    }
+
+
+    // *****************************************************
+    //                     Warning Check
+    // *****************************************************
+
+    //Repeat-Password length check
+    if (data.repeat !== data.new) {
+        $("#repeat-password-length-warning").css("visibility", "visible");
+    } else {
+        $("#repeat-password-length-warning").css("visibility", "hidden");
+    }
+
+
+    //data input (pre)-IDs (css ID)
+    let input_boxes_arr = ["old-p", "new-p", "repeat-p"];
+
+    //check if there is any input warning
+    for (let i = 0; i < input_boxes_arr.length; i++) 
+    {
+        if (warning_checker(input_boxes_arr[i]) === true) {
+            return false;   //incorrect data input.
+        }
+    }
+
+    //no errors in data input
+    return true;
+}
 
 
 // *********************************************************************************

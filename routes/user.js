@@ -122,6 +122,8 @@ router.post('/edit', check_session, async (req, res) =>
 });
 
 
+
+//update profile
 router.put('/edit', check_session, async (req, res) => 
 {
     try
@@ -173,6 +175,74 @@ router.put('/edit', check_session, async (req, res) =>
 });
 
 
+
+//change password
+router.put('/password', check_session, async (req, res) => 
+{
+    try
+    {
+        //************************************************************** */
+        //                        Input Validation     
+        //************************************************************** */
+
+        //result of input-validation --> 'true' if there is no error
+        let edit_validation_result = INPUT_VALIDATOR.p_change(req.body);
+    
+        //if sign-in data has any errors
+        if (edit_validation_result !== true) {
+            return res.send(edit_validation_result);
+        }
+
+
+        //************************************************************** */
+        //                           Data Base  
+        //************************************************************** */
+
+        //find user
+        const blogger = await User.findById(req.session.user._id, (err, user) => {
+            if (err) throw err;
+        });
+
+        //if user not found or be deleted
+        if (!blogger) {
+            return res.status(404).send("User not found.");
+        }
+
+
+        // check user's previous password
+        await blogger.compare_password(req.body.old, function(err, is_match) 
+        {
+            if (err) throw err;
+
+
+            // if password matches
+            if (is_match === true) 
+            {
+                //change user's password
+                blogger.password = req.body.new;
+
+                //save to db
+                blogger.save((err) => {
+                    if (err) return res.status(500).send("Something went wrong! Try again.");
+
+                    return res.send("Password Changed.");
+                });
+            }
+
+            // if password does NOT match
+            else {
+                return res.status(404).send("Password is not correct.");
+            }
+        });
+    }
+
+    catch (err) {
+        console.log(colors.brightRed("\n" + err + "\n"));
+        res.status(500).send("Something went wrong! Try again.");
+    }
+});
+
+
 //******************************************************************************** */
 //                                      Log Out
 //******************************************************************************** */
@@ -188,7 +258,7 @@ router.delete('/', (req, res) =>
         }
 
         res.clearCookie("user_sid");
-        res.send('/');
+        res.send('/signin');
     });
 });
 

@@ -2,7 +2,8 @@ const VALIDATOR = {
     signin: signin_validator,
     signup: signup_validator,
     duplicate: duplicate_validator,
-    edit: edit_validator
+    edit: edit_validator,
+    p_change: change_password
 };
 
 
@@ -187,6 +188,49 @@ function edit_validator(data)
 
 
     
+    //no errors in data input
+    return true;
+}
+
+
+
+// *********************************************************************************
+//                                 Change Password
+// *********************************************************************************
+
+function change_password(data) 
+{
+    // empty field check
+    if (!data.old || !data.new || !data.repeat) 
+    {
+        return ("*Empty field error!");
+    } 
+
+    // *****************************************************
+    //                     Length Check
+    // *****************************************************
+
+    //Old-Password length check
+    if (data.old.length < 6 || data.old.length > 12) {
+        return ("*Length Error!")
+    } 
+
+    //New-Password length check
+    if (data.new.length < 6 || data.new.length > 12) {
+        return ("*Length Error!")
+    } 
+
+
+    // *****************************************************
+    //                     Warning Check
+    // *****************************************************
+
+    //Repeat-Password length check
+    if (data.new !== data.repeat) {
+        return ("*Both old and new passwords MUST be the same!")
+    } 
+
+
     //no errors in data input
     return true;
 }

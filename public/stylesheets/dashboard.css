@@ -143,3 +143,49 @@ p {
     border-left: 6px solid #be5050;
     display: none;
 }
+
+
+.modal-body {
+    text-align: center;
+}
+
+.change-password-inputs {
+    text-align: center;
+    background-color: #a8a7a72d;
+    border-radius: 7px;
+
+    margin: 10px auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 300px;
+    height: 45px;
+
+    border-style: none;
+    outline: none;
+}
+
+label {
+    font-weight: bold;
+    margin: 0;
+}
+
+.warning-box {
+    color: red;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: start;
+
+    margin: 0 auto 10px 50px;
+
+    visibility: hidden;
+}
+
+#error-alert-modal {
+    width: 400px;
+    margin: 40px auto 10px auto;
+
+    box-shadow: 2px 3px 10px #111111;
+    border-left: 6px solid #be5050;
+
+    display: none;
+}

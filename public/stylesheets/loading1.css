@@ -54,6 +54,7 @@
   }
 
 
-  #loading1 {
+  #loading-edit, #loading-password {
     display: none;
+    margin: auto;
   }
