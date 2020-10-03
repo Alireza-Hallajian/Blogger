@@ -72,7 +72,6 @@ app.get('/', function (req, res)
 });
 
 
-// app.use('/user', user_router);
 app.use('/', api_router);
 
 

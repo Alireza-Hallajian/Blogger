@@ -14,8 +14,6 @@
     <link rel="stylesheet" href="../stylesheets/dashboard.css">
     <link rel="stylesheet" href="../stylesheets/loading1.css">
 
-    <script src="https://kit.fontawesome.com/0b9430af26.js" crossorigin="anonymous"></script>
-
     <title>Dashboard</title>
 
 </head>
@@ -134,9 +132,7 @@
                 <img src="../images/default-pic.jpg" alt="default-pic">
 
             </section>
-    
 
-            
         </section>
         
         <div id="error-alert" class="alert alert-danger alert-box" role="alert">Username and Mobile are duplicate to another user(s).</div>
@@ -144,83 +140,14 @@
     </section>
 
 
+    <!-- change password panel -->
+    <%- include('./partials/dashboard-change-password.ejs') -%>
 
-    <!-- Button trigger modal -->
-    <button type="button" id="modal-btn" class="btn btn-primary" data-toggle="modal" 
-        data-target="#staticBackdrop" style="display: none;">
-        Launch static backdrop modal
-    </button>
     
-    <!-- Modal -->
-    <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        
-        <div class="modal-dialog">
-
-            <div class="modal-content">
-
-                <div class="modal-header">
-
-                    <h5 class="modal-title" id="staticBackdropLabel">
-                        <b>Change Password</b>
-                    </h5>
-
-                    <button type="button" class="close" id="close-btn-top" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-
-                </div>
 
 
-                <div class="modal-body">
-
-                    <label for="old-p-box">Old Password:</label><br>
-                    <input class="change-password-inputs" id="old-p-box" type="password" placeholder="Old Password">
-                    <div id="old-password-length-warning" class="warning-box">
-                        &emsp;&emsp;&emsp;*Length is not valid
-                    </div>
-
-                    <label for="new-p-box">New Password:</label><br>
-                    <input class="change-password-inputs" id="new-p-box" type="password" placeholder="New Password">
-                    <div id="new-password-length-warning" class="warning-box">
-                        &emsp;&emsp;&emsp;*Length is not valid
-                    </div>
-
-                    <label for="repeat-p-box">Repeat Password:</label><br>
-                    <input class="change-password-inputs" id="repeat-p-box" type="password" placeholder=" Repeat New Password">
-                    <div id="repeat-password-length-warning" class="warning-box">
-                        &emsp;&emsp;&emsp;*Both passwords MUST be the same
-                    </div>
-
-
-                    <div id="error-alert-modal" class="alert alert-danger alert-box" role="alert">
-                        Something went wrong! Try again.
-                    </div>
-                   
-                </div>
-
-
-                <div class="modal-footer">
-
-                    <button type="button" class="btn btn-secondary" id="close-btn-bottom" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="apply-password-change">Apply</button>
-                
-                    <!-- Loading Animation -->
-                    <div id="loading-password" class="sk-chase">
-                        <div class="sk-chase-dot"></div>
-                        <div class="sk-chase-dot"></div>
-                        <div class="sk-chase-dot"></div>
-                        <div class="sk-chase-dot"></div>
-                        <div class="sk-chase-dot"></div>
-                        <div class="sk-chase-dot"></div>
-                    </div>
-                    
-                </div>
-            </div>
-        </div>
-    </div>
-
-
+    
+    <%- include('./partials/fontawsome-js.ejs') -%>
     <%- include('./partials/bootstrap-js.ejs') -%>
 
     <script src="../javascripts/jQuery-Uncompressed.v3.4.1.js"></script>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <%- include('./partials/bootstrap-css.ejs') -%>
+
+    <link rel="stylesheet" href="../stylesheets/main.css">
+    <link rel="stylesheet" href="../stylesheets/navbar.css">
+    <link rel="stylesheet" href="../stylesheets/sidebar.css">
+
+    <title>New Article</title>
+
+</head>
+
+<body>
+    
+    <form action="http://localhost:3000/article" method="POST">
+
+      <textarea id="mytextarea" name="article">Hello, World!</textarea>
+
+        <button type="submit">Send</button>
+    </form>
+
+
+
+
+    
+    <%- include('./partials/fontawsome-js.ejs') -%>
+    <%- include('./partials/bootstrap-js.ejs') -%>
+    
+    <%- include('./partials/tiny-cloud.ejs') -%>
+
+    <script>
+        tinymce.init({
+            selector: '#mytextarea'
+        });
+    </script>
+
+</body>
+
+</html>
