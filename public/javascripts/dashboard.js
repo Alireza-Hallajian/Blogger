@@ -172,13 +172,22 @@ reader.onload = function(e) {
 $("#file-input").on("change", function () 
 {   
     //if a file selected
-    if (this.files) 
+    if (this.files[0]) 
     {  
         //hide 'No photo' phrase from preview box
         $("#preview-container p").css("display", "none");
 
         //read the file(photo) for fetching information (like file path)
         reader.readAsDataURL(this.files[0]); // convert to base64 string
+    }
+
+    else 
+    {
+        //remove preview image if deselected
+        $("#preview").attr("src", "").css("display", "none");
+
+        //show 'No photo' phrase in preview box
+        $("#preview-container p").css("display", "block");
     }
 });
 
