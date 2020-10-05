@@ -111,8 +111,13 @@ label {
     height: 200px;
     margin: auto;
     margin-bottom: 20px;
+    
     border: 1px solid black;
     border-radius: 100%;
+}
+
+#preview-container p {
+    margin: 40% auto;
 }
 
 #preview {

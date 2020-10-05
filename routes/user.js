@@ -198,7 +198,7 @@ router.put('/avatar', check_session, (req, res) =>
             {
                 if (err) 
                 {
-                    //remove new photo if could not save in db
+                    //remove new photo if could not save in database
                     fs.unlink(`public/images/profiles/${req.file.filename}`, function (err) {
                         if (err) {
                             console.log(colors.brightRed("\n" + `Something went wrong in removing new ${req.session.user.username}'s avatar!` + "\n"));
@@ -210,7 +210,7 @@ router.put('/avatar', check_session, (req, res) =>
                 }
 
 
-                //remove previous avatar if  is not default
+                //remove previous avatar if is not default
                 if (req.session.user.avatar !== "default-pic.jpg") 
                 {
                     fs.unlink(`public/images/profiles/${user.avatar}`, function (err) {
@@ -284,7 +284,7 @@ router.put('/password', check_session, async (req, res) =>
                 //change user's password
                 blogger.password = req.body.new;
 
-                //save to db
+                //save to database
                 blogger.save((err) => {
                     if (err) return res.status(500).send("Something went wrong! Try again.");
 

@@ -169,8 +169,15 @@ reader.onload = function(e) {
 }
 
 //preview selected image
-$("#file-input").on("change", function () {   
-    if (this.files) {  
+$("#file-input").on("change", function () 
+{   
+    //if a file selected
+    if (this.files) 
+    {  
+        //hide 'No photo' phrase from preview box
+        $("#preview-container p").css("display", "none");
+
+        //read the file(photo) for fetching information (like file path)
         reader.readAsDataURL(this.files[0]); // convert to base64 string
     }
 });
@@ -179,10 +186,18 @@ $("#file-input").on("change", function () {
 //clear preview-image when close button clicked and close the panel
 $(".photo-close-btns").on("click", function () 
 {  
+    //diselect chosen photo
     document.getElementById("file-input-container").reset()
+
+    //remove preview
     $('#preview').attr('src', "");
     $('#preview').css('display', "none");
+
+    //hide alert box
     $("#error-alert-photo").hide();
+
+    //show 'No photo' phrase in preview box
+    $("#preview-container p").css("display", "block");
 });
 
 
