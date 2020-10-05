@@ -22,7 +22,6 @@
 
     <%- include('./partials/bars/navbar.ejs') -%>
 
-
     <%# blogger sidebar %>
     <% if (role === "blogger") { %>
         <%- include('./partials/bars/sidebar-blogger.ejs') -%>
@@ -129,19 +128,38 @@
 
             <section id="picture-section">
 
-                <img src="../images/default-pic.jpg" alt="default-pic">
+                <%# no avatar %>
+                <% if (avatar === "default-pic.jpg") { %>
+                    <img id="avatar" src="../images/profiles/default-pic.jpg" alt="default-pic">
+                <%} %>
+
+                <%# personal avatar %>
+                <% if (avatar !== "default-pic.jpg") { %>
+                    <img id="avatar" src="../images/profiles/<%=avatar-%>" alt="avatar">
+                <%} %>
+
+
+                <div id="add-photo">
+
+                    <i class="fas fa-camera"></i>
+                    <p>Change Photo</p>
+
+                </div>
 
             </section>
 
         </section>
         
-        <div id="error-alert" class="alert alert-danger alert-box" role="alert">Username and Mobile are duplicate to another user(s).</div>
+        <div id="error-alert" class="alert alert-danger alert-box" role="alert"></div>
     
     </section>
 
 
     <!-- change password panel -->
     <%- include('./partials/change-password-panel.ejs') -%>
+
+    <!-- change photo panel -->
+    <%- include('./partials/change-photo-panel.ejs') -%>                    
 
     
 

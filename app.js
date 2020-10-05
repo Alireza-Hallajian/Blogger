@@ -69,6 +69,8 @@ app.get('/', function (req, res)
 			role: "guest"
 		});
 	}
+
+	// res.render('new-article.ejs');
 });
 
 

@@ -54,7 +54,7 @@
   }
 
 
-  #loading-edit, #loading-password {
+  #loading-edit, #loading-password, #loading-photo {
     display: none;
     margin: auto;
   }

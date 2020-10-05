@@ -250,10 +250,11 @@ function change_password(data)
     // empty field check
     if (!data.old || !data.new || !data.repeat) 
     {
-        $("#error-alert-modal").html("<b>*All fields</b> Must be filled.");
-        $("#error-alert-modal").show();
+        $("#error-alert-password").html("<b>*All fields</b> Must be filled.");
+        $("#error-alert-password").show();
+        return false;
     } else {
-        $("#error-alert-modal").hide();
+        $("#error-alert-password").hide();
     }
 
     // *****************************************************
@@ -284,6 +285,15 @@ function change_password(data)
         $("#repeat-password-length-warning").css("visibility", "visible");
     } else {
         $("#repeat-password-length-warning").css("visibility", "hidden");
+    }
+
+    //Repeat-Password length check
+    if (data.old === data.new) {
+        $("#error-alert-password").html("*New password can NOT be the same as old one.");
+        $("#error-alert-password").show();
+        return false;
+    } else {
+        $("#error-alert-password").hide();
     }
 
 

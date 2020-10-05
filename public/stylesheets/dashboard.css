@@ -1,3 +1,21 @@
+/* ************************************************************************* */
+/*                                  Commons                                  */
+/* ************************************************************************* */
+
+p {
+    display: inline-block;
+}
+
+label {
+    font-weight: bold;
+    margin: 0;
+}
+
+
+/* ************************************************************************* */
+/*                                 Background                                */
+/* ************************************************************************* */
+
 #dashboard {
     background-color: white;
     border-radius: 15px;
@@ -26,19 +44,93 @@
     justify-content: space-between;
 }
 
-#picture-section img {
+
+/* ************************************************************************* */
+/*                               Picture Section                             */
+/* ************************************************************************* */
+
+#picture-section {
     width: 350px;
     height: 350px;
+
+    border-radius: 100%;
+
+    position: relative;
+}
+
+#picture-section img {
+    min-width: 350px;
+    max-width: 350px;
+    min-height: 350px;
+    max-height: 350px;
 
     border: 1px solid black;
     border-radius: 100%;
 }
 
+#add-photo {
+    background-color: rgba(42, 42, 42, 0.719);
 
-p {
-    display: inline-block;
+    width: 100%;
+    height: 100%;
+
+    border-radius: 100%;
+
+    position: absolute;
+    top: 0;
+
+    display: none;
+    justify-content: center;
+    flex-direction: column;
+    align-items : center;
+
+    cursor: pointer;
 }
 
+#add-photo i {
+    color: white;
+    font-size: 50px;
+    clear: both;
+}
+
+#add-photo p {
+    color: white;
+}
+
+#picture-section:hover #add-photo {
+    display: flex;
+}
+
+
+/* ************************************************************************* */
+/*                             Change Photo Panel                            */
+/* ************************************************************************* */
+
+#preview-container {
+    width: 200px;
+    height: 200px;
+    margin: auto;
+    margin-bottom: 20px;
+    border: 1px solid black;
+    border-radius: 100%;
+}
+
+#preview {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    border-radius: 100%;
+    display: none;
+}
+
+#loading-photo {
+    display: none;
+}
+
+
+/* ************************************************************************* */
+/*                                 User's Info                               */
+/* ************************************************************************* */
 
 .info-container {
     width: 370px;
@@ -69,6 +161,10 @@ p {
    width: 80px !important;
 }
 
+
+/* ************************************************************************* */
+/*                                 Edit Section                              */
+/* ************************************************************************* */
 
 #edit-container {
     margin: 30px auto 7.5px auto;
@@ -137,6 +233,10 @@ p {
 }
 
 
+/* ************************************************************************* */
+/*                                 Error Boxes                               */
+/* ************************************************************************* */
+
 #error-alert {
     width: 52%;
     margin: 20px auto 0 auto;
@@ -144,6 +244,31 @@ p {
     display: none;
 }
 
+.warning-box {
+    color: red;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: start;
+
+    margin: 0 auto 10px 50px;
+
+    visibility: hidden;
+}
+
+#error-alert-password, #error-alert-photo {
+    width: 400px;
+    margin: 40px auto 10px auto;
+
+    box-shadow: 2px 3px 10px #111111;
+    border-left: 6px solid #be5050;
+
+    display: none;
+}
+
+
+/* ************************************************************************* */
+/*                            Change Password Panel                          */
+/* ************************************************************************* */
 
 .modal-body {
     text-align: center;
@@ -162,30 +287,4 @@ p {
 
     border-style: none;
     outline: none;
-}
-
-label {
-    font-weight: bold;
-    margin: 0;
-}
-
-.warning-box {
-    color: red;
-    font-size: 13px;
-    font-weight: bold;
-    text-align: start;
-
-    margin: 0 auto 10px 50px;
-
-    visibility: hidden;
-}
-
-#error-alert-modal {
-    width: 400px;
-    margin: 40px auto 10px auto;
-
-    box-shadow: 2px 3px 10px #111111;
-    border-left: 6px solid #be5050;
-
-    display: none;
 }

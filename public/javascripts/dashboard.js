@@ -3,10 +3,13 @@ import {VALIDATOR} from './input-validator-client.js';
 
 
 // *********************************************************************************
-//                                  Buttons Actions
+//                                Edit Section Buttons
 // *********************************************************************************
 
-//'Edit' button
+// *****************************************************
+//                     'Edit' button
+// *****************************************************
+
 $("#edit-btn").on("click", function () 
 {  
     //hide field info
@@ -33,7 +36,10 @@ $("#edit-btn").on("click", function ()
 });
 
 
-//'Cancel' button
+// *****************************************************
+//                   'Cancel' button
+// *****************************************************
+
 $("#cancel-btn").on("click", function () 
 {  
     //assign previous values to edit boxes
@@ -61,8 +67,10 @@ $("#cancel-btn").on("click", function ()
 });
 
 
+// *****************************************************
+//                     'Apply' button
+// *****************************************************
 
-//'Apply' button
 $("#apply-btn").on("click", async function () 
 {  
     //values of edit boxes
@@ -83,7 +91,7 @@ $("#apply-btn").on("click", async function ()
                 inputs_data.sex = $("input[type=radio][checked]").attr("id");
 
                 //save chnges to database
-                save_changes(inputs_data);
+                save_profile_changes(inputs_data);
             }
         }
 
@@ -100,12 +108,12 @@ $("#apply-btn").on("click", async function ()
 
 //Change Password button
 $("#change-password").on('click', function () {  
-    $("#modal-btn").trigger("click");
+    $("#password-modal-btn").trigger("click");
 });
 
 
-//close button
-$("#close-btn-top, #close-btn-bottom").on('click', function () 
+//close buttons
+$(".password-close-btns").on('click', function () 
 {  
     //clear fields (for security)
     $("#old-p-box").val('');
@@ -116,7 +124,7 @@ $("#close-btn-top, #close-btn-bottom").on('click', function ()
     $("#old-password-length-warning").css("visibility", "hidden");
     $("#new-password-length-warning").css("visibility", "hidden");
     $("#repeat-password-length-warning").css("visibility", "hidden");
-    $("#error-alert-modal").hide();
+    $("#error-alert-password").hide();
 
     changes_for_password_change("not-loading");
 });
@@ -136,52 +144,64 @@ $("#apply-password-change").on('click', function ()
     {
         changes_for_password_change("is-loading");
  
-
-        //send password change request to the server
-        $.ajax({
-            type: "PUT",
-            url: "/user/password",
-            data: passwords,
-    
-            success: function (result, status, xhr) 
-            {
-                //changes were successful
-                alert("Password changed successfully.");
-
-                //close the change password panel
-                $("#close-btn-bottom").trigger("click");
-
-                changes_for_password_change("not-loading");
+        change_password(passwords);
+    }
+});
 
 
-                //log out the user to sign-in again
-                $("#logout-btn").trigger("click");
-            },
-    
-            //show error in alert-box
-            error: function (xhr, status, error) 
-            {
-                //session timed out
-                if (xhr.status === 403) {
-                    window.location.assign('/signin');
-                }
+// *********************************************************************************
+//                              Change Profile Photo
+// *********************************************************************************
 
-                //password is not correct
-                if (xhr.status === 404) 
-                {
-                    changes_for_password_change("not-loading");
-                    
-                    //show error
-                    $("#error-alert-modal").html(xhr.responseText);
-                    $("#error-alert-modal").show();
-                }
-    
-                //server error
-                else if (xhr.status === 500) {
-                    alert("Something went wrong in saving! Try again.");
-                }
-            }
-        }); 
+//open 'Change Photo' panel when cliked on 'Change Photo' area
+$("#add-photo").on("click", function () {  
+    $("#photo-modal-btn").trigger("click");
+});
+
+
+//FileReader API
+let reader = new FileReader();
+
+//show image preview when loaded (FileReader API)
+reader.onload = function(e) {
+    $('#preview').attr('src', e.target.result);
+    $('#preview').css('display', "block");
+}
+
+//preview selected image
+$("#file-input").on("change", function () {   
+    if (this.files) {  
+        reader.readAsDataURL(this.files[0]); // convert to base64 string
+    }
+});
+
+
+//clear preview-image when close button clicked and close the panel
+$(".photo-close-btns").on("click", function () 
+{  
+    document.getElementById("file-input-container").reset()
+    $('#preview').attr('src', "");
+    $('#preview').css('display', "none");
+    $("#error-alert-photo").hide();
+});
+
+
+
+let file = document.getElementById("file-input");
+
+//Apply button (in photo password page)
+$("#apply-photo-change").on("click", function () 
+{  
+    //send photo to server if chosen
+    if (file.files[0]) {
+        $("#error-alert-photo").hide();
+        change_avatar();
+    }
+
+    //if no photo chosen
+    else {
+        $("#error-alert-photo").html("You should choose a photo.");
+        $("#error-alert-photo").show()
     }
 });
 
@@ -190,8 +210,11 @@ $("#apply-password-change").on('click', function ()
 //                                   Data Base
 // *********************************************************************************
 
-//save chnges to database
-function save_changes (user_info) 
+// *****************************************************
+//           save user-info changes to database
+// *****************************************************
+
+function save_profile_changes (user_info) 
 {  
     //show loading
     $("#loading-edit").show();
@@ -240,11 +263,125 @@ function save_changes (user_info)
 }
 
 
+// *****************************************************
+//              save new password database
+// *****************************************************
+
+function change_password (passwords)
+{
+    //send password change request to the server
+    $.ajax({
+        type: "PUT",
+        url: "/user/password",
+        data: passwords,
+
+        success: function (result, status, xhr) 
+        {
+            //close the change password panel
+            $(".password-close-btns").trigger("click");
+
+            changes_for_password_change("not-loading");
+
+            //changes were successful
+            alert("Password changed successfully.");
+
+            //log out the user to sign-in again
+            $("#logout-btn").trigger("click");
+        },
+
+        //show error in alert-box
+        error: function (xhr, status, error) 
+        {
+            //session timed out
+            if (xhr.status === 403) {
+                alert("You should sign-in again.")
+                window.location.assign('/signin');
+            }
+
+            //password is not correct
+            if (xhr.status === 404) 
+            {
+                changes_for_password_change("not-loading");
+                
+                //show error
+                $("#error-alert-password").html(xhr.responseText);
+                $("#error-alert-password").show();
+            }
+
+            //server error
+            else if (xhr.status === 500) {
+                changes_for_password_change("not-loading");
+                alert("Something went wrong in saving! Try again.");
+            }
+        }
+    }); 
+}
+
+
+// *****************************************************
+//           save user's avatar to database
+// *****************************************************
+
+function change_avatar () 
+{  
+    changes_for_photo_change("is-loading");
+    
+
+    //make a form data for sending image to ther server
+    let form_data = new FormData();
+    let avatar = document.getElementById("file-input").files[0];
+    form_data.append('avatar', avatar);
+
+    
+    $.ajax({
+        type: "PUT",
+        url: "/user/avatar",
+        data: form_data,
+        contentType: false,
+        processData: false,
+
+        success: function (result, status, xhr) 
+        {
+            //change the avatar photo in dashboard to the new one
+            //(use preview-image src)
+            $("#avatar").attr("src", `${$("#preview").attr("src")}`);
+
+            //close the change password panel
+            $(".photo-close-btns").trigger("click");
+
+            changes_for_photo_change("not-loading");
+
+            //changes were successful
+            alert("Photo changed successfully.");
+        },
+
+        //show error in alert-box
+        error: function (xhr, status, error) 
+        {
+            //session timed out
+            if (xhr.status === 403) {
+                alert("You should sign-in again.")
+                window.location.assign('/signin');
+            }
+
+            //server error
+            else if (xhr.status === 500) {
+                changes_for_photo_change("not-loading");
+                alert("Something went wrong in saving! Try again.");
+            }
+        }
+    }); 
+}
+
+
 // *********************************************************************************
 //                                    Check Ups
 // *********************************************************************************
 
-//'Username' and 'Mobile' duplicate check
+// *****************************************************
+//       'Username' and 'Mobile' duplicate check
+// *****************************************************
+
 function duplicate_check (username, mobile) 
 {
     //show loading
@@ -363,8 +500,8 @@ function changes_for_password_change (status)
     if (status === "is-loading")
     {
         //hide error box and buttons
-        $("#error-alert-modal").hide();      
-        $("#close-btn-bottom").hide();
+        $("#error-alert-password").hide();      
+        $(".password-close-btns").hide();
         $("#apply-password-change").hide();
 
         //show loading
@@ -377,8 +514,41 @@ function changes_for_password_change (status)
         $("#loading-password").hide();
                     
         //show buttons
-        $("#close-btn-bottom").show();
+        $(".password-close-btns").show();
         $("#apply-password-change").show();
+    }
+}
+
+
+//hiding and showing buttons and boxes when 'apply' or 'cancel' button is clicked
+//for photo change
+function changes_for_photo_change (status) 
+{
+    if (status === "is-loading")
+    {
+        //hide error box and buttons
+        $("#error-alert-photo").hide();      
+        $(".photo-close-btns").hide();
+        $("#apply-photo-change").hide();
+
+        //hide choose file
+        $("#file-input-container").hide();
+
+        //show loading
+        $("#loading-photo").show();
+    }
+
+    else if ("not-loading")
+    {
+        //hide loading
+        $("#loading-photo").hide();
+
+        //show choose file
+        $("#file-input-container").show();
+                    
+        //show buttons
+        $(".photo-close-btns").show();
+        $("#apply-photo-change").show();
     }
 }
 

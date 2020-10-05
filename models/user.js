@@ -73,9 +73,10 @@ const UserShema = new Schema(
         default: Date.now
     },
 
-    // avatar: {
-    //     type: String
-    // }
+    avatar: {
+        type: String,
+        default: "default-pic.jpg"
+    }
 });
 
 

@@ -20,6 +20,10 @@
 }
 
 
+/* ************************************************************************* */
+/*                                  Inputs                                   */
+/* ************************************************************************* */
+
 .inputs, #signup-button, #signin-button {
     text-align: center;
     background-color: #8080802d;
@@ -39,17 +43,9 @@
     margin: 0px 5px 0 20px;
 }
 
-.warning-box {
-    color: red;
-    font-size: 13px;
-    font-weight: bold;
-    text-align: start;
-
-    margin: 5px auto 10px 2px;
-
-    visibility: hidden;
-}
-
+/* ************************************************************************* */
+/*                                  Buttons                                  */
+/* ************************************************************************* */
 
 #signup-button, #signin-button {   
     background-color: rgb(23, 114, 199);
@@ -74,6 +70,21 @@
     background-color: rgb(16, 89, 156);
 }
 
+
+/* ************************************************************************* */
+/*                                 Alert Boxes                               */
+/* ************************************************************************* */
+
+.warning-box {
+    color: red;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: start;
+
+    margin: 5px auto 10px 2px;
+
+    visibility: hidden;
+}
 
 .alert-box {
     width: 400px;

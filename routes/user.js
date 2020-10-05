@@ -3,6 +3,7 @@ const express = require('express');
 const session = require('express-session');
 const router = express.Router();
 const colors = require('colors');
+const fs = require('fs');
 
 //models
 const User = require('../models/user.js');
@@ -10,6 +11,7 @@ const User = require('../models/user.js');
 //tools
 const INPUT_VALIDATOR = require('../tools/input-validator-server.js');
 const CHECKER = require('../tools/checker.js');
+const multer_config = require('../tools/multer-config.js')
 
 
 //******************************************************************************** */
@@ -59,7 +61,8 @@ router.get('/dashboard', check_session, (req, res) =>
             uname: req.session.user.username,
             gender: req.session.user.sex,
             mobile: req.session.user.mobile,
-            role: req.session.user.role
+            role: req.session.user.role,
+            avatar: req.session.user.avatar
         });
     }
 
@@ -173,6 +176,64 @@ router.put('/edit', check_session, async (req, res) =>
     }
 });
 
+
+//************************************************************** */
+//                        update avatar
+//************************************************************** */
+
+router.put('/avatar', check_session, (req, res) =>
+{
+    try
+    {
+        const upload = multer_config.single('avatar');
+
+
+        //replace new avatar
+        upload(req, res, async function (err) 
+        {  
+            if (err) throw err;
+
+            //update user's avatar
+            await User.findByIdAndUpdate(req.session.user._id, {avatar: req.file.filename}, {new: false}, (err, user) => 
+            {
+                if (err) 
+                {
+                    //remove new photo if could not save in db
+                    fs.unlink(`public/images/profiles/${req.file.filename}`, function (err) {
+                        if (err) {
+                            console.log(colors.brightRed("\n" + `Something went wrong in removing new ${req.session.user.username}'s avatar!` + "\n"));
+                            console.log(colors.brightRed(err + "\n"));
+                        }
+                    });
+
+                    return res.status(500).send("Something went wrong in finding user! Try again.");
+                }
+
+
+                //remove previous avatar if  is not default
+                if (req.session.user.avatar !== "default-pic.jpg") 
+                {
+                    fs.unlink(`public/images/profiles/${user.avatar}`, function (err) {
+                        if (err) {
+                            console.log(colors.brightRed("\n" + `Something went wrong in removing privious ${req.session.user.username}'s avatar!` + "\n"));
+                            console.log(colors.brightRed(err + "\n"));
+                        }
+                    });
+                }       
+
+                //update user's session for new avatar
+                req.session.user.avatar = req.file.filename;
+
+                return res.sendStatus(200);
+            });
+        });
+    }
+
+    catch (err) {
+        console.log(colors.brightRed("\n" + err + "\n"));
+        res.status(500).send("Something went wrong! Try again.");
+    }
+});
 
 
 //************************************************************** */
