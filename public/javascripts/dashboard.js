@@ -211,15 +211,35 @@ $(".photo-close-btns").on("click", function ()
 
 
 
+//file-input
 let file = document.getElementById("file-input");
 
-//Apply button (in photo password page)
+//accepted formats for profile photo
+let valid_image_formats = ["image/jpg" , "image/jpeg", "image/png"]
+
+
+//Apply button (in photo change page)
 $("#apply-photo-change").on("click", function () 
 {  
+    console.log(file.files.length);
     //send photo to server if chosen
-    if (file.files[0]) {
-        $("#error-alert-photo").hide();
-        change_avatar();
+    if (file.files[0]) 
+    {
+        //if selected file was OK
+        if (valid_image_formats.includes(file.files[0].type))
+        {
+            //hide error box
+            $("#error-alert-photo").hide();
+
+            change_avatar();
+        }
+        
+        //if selected file was NOT in accepted formats
+        else
+        {
+            $("#error-alert-photo").html("Just <b>JPEG, JPG</b> or <b>PNG</b> files are accepted.");
+            $("#error-alert-photo").show()
+        }
     }
 
     //if no photo chosen

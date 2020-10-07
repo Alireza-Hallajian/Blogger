@@ -4,8 +4,8 @@ const multer = require('multer');
 
 //MIME_TYPES
 const MIME_TYPES = {
-  'image/jpg': '.jpg',
   'image/jpeg': '.jpg',
+  'image/jpg': '.jpg',
   'image/png': '.png'
 };
 
@@ -16,16 +16,30 @@ let d = new Date();
 
 const storage = multer.diskStorage(
 {
-    destination: function (req, file, cb) {  
-        cb(null, 'public/images/profiles');
+    destination: function (req, file, callback) {  
+        callback(null, 'public/images/profiles');
     },
 
-    filename: function (req, file, cb) {  
-        cb(null, Date.now() + "_" + req.session.user.username + MIME_TYPES[file.mimetype]);
+    filename: function (req, file, callback) {  
+        callback(null, Date.now() + "_" + req.session.user.username + MIME_TYPES[file.mimetype]);
     }
 });
 
-const upload_avatar = multer({storage: storage});
+
+const upload_avatar = multer({
+    storage: storage,
+
+    fileFilter: function (req, file, callback) 
+    {     
+        //if no error
+        if (file.mimetype === "image/jpeg" || file.mimetype === "image/jpg" || file.mimetype === "image/png") {
+            return callback(null, true);
+        }
+           
+        //if the extension of the file is NOT accepted
+        return callback("Only JPEG, JPG or PNG files are allowed");
+    }
+});
 
 
 

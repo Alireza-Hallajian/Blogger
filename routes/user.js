@@ -11,7 +11,8 @@ const User = require('../models/user.js');
 //tools
 const INPUT_VALIDATOR = require('../tools/input-validator-server.js');
 const CHECKER = require('../tools/checker.js');
-const multer_config = require('../tools/multer-config.js')
+const multer_config = require('../tools/multer-config.js');
+const multer = require('multer');
 
 
 //******************************************************************************** */
@@ -191,7 +192,17 @@ router.put('/avatar', check_session, (req, res) =>
         //replace new avatar
         upload(req, res, async function (err) 
         {  
-            if (err) throw err;
+            if (err)
+            {
+                //multiple file error (just one file/field is accepted)
+                if (err instanceof multer.MulterError && err.message === "Unexpected field") {
+                    return res.status(400).send("Only one field/file is accepted.");
+                }
+
+                //if NON-acceptable file recieved
+                return res.status(400).send(err);
+            }
+
 
             //update user's avatar
             await User.findByIdAndUpdate(req.session.user._id, {avatar: req.file.filename}, {new: false}, (err, user) => 
@@ -201,12 +212,12 @@ router.put('/avatar', check_session, (req, res) =>
                     //remove new photo if could not save in database
                     fs.unlink(`public/images/profiles/${req.file.filename}`, function (err) {
                         if (err) {
-                            console.log(colors.brightRed("\n" + `Something went wrong in removing new ${req.session.user.username}'s avatar!` + "\n"));
+                            console.log(colors.bgRed("\n" + `Something went wrong in removing new ${req.session.user.username}'s avatar!` + "\n"));
                             console.log(colors.brightRed(err + "\n"));
                         }
                     });
 
-                    return res.status(500).send("Something went wrong in finding user! Try again.");
+                    return res.status(500).send("Something went wrong in finding user!");
                 }
 
 
@@ -215,8 +226,8 @@ router.put('/avatar', check_session, (req, res) =>
                 {
                     fs.unlink(`public/images/profiles/${user.avatar}`, function (err) {
                         if (err) {
-                            console.log(colors.brightRed("\n" + `Something went wrong in removing privious ${req.session.user.username}'s avatar!` + "\n"));
-                            console.log(colors.brightRed(err + "\n"));
+                            console.log(colors.brightRed("\n" + `Something went wrong in removing privious " ${req.session.user.username} " avatar!` + "\n"));
+                            console.log(colors.brightRed(err + "\n\n"));
                         }
                     });
                 }       
@@ -224,6 +235,7 @@ router.put('/avatar', check_session, (req, res) =>
                 //update user's session for new avatar
                 req.session.user.avatar = req.file.filename;
 
+                //user avatar updated
                 return res.sendStatus(200);
             });
         });
