@@ -63,7 +63,7 @@ $("#cancel-btn").on("click", function ()
     }
 
     
-    changes_for_edit();
+    cancel_edit();
 });
 
 
@@ -292,7 +292,7 @@ function save_profile_changes (user_info)
             $("#gender").html(user_info.sex);
             $("#phone-box").prev().html(user_info.mobile);
 
-            changes_for_edit();
+            cancel_edit();
 
             //changes were successful
             alert("Changes Applied.");
@@ -582,12 +582,12 @@ $("#logout-btn").on("click", function ()
 
 
 // *********************************************************************************
-//                                Minor Operations
+//                               Appearance changes
 // *********************************************************************************
 
-//hiding and showing buttons and boxes when 'apply' or 'cancel' button is clicked
+//hiding and showing buttons and boxes when 'cancel' button is clicked
 //for profile edit
-function changes_for_edit () 
+function cancel_edit () 
 {
     //show fields and 'edit' Button
     $(".info-container p span").show();
@@ -596,9 +596,12 @@ function changes_for_edit ()
     //hide edit-textboxes
     $(".edit-box").hide();
 
-    //hide 'cancel; and 'apply' Buttons
+    //hide 'cancel' and 'apply' Buttons
     $("#apply-btn").hide();
     $("#cancel-btn").hide();
+
+    //hide alert box
+    $("#error-alert").hide();
 }
 
 
