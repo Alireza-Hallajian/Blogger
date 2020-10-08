@@ -68,6 +68,7 @@ label {
     border-radius: 100%;
 }
 
+
 #add-photo {
     background-color: rgba(42, 42, 42, 0.719);
 
@@ -97,10 +98,20 @@ label {
     color: white;
 }
 
+
 #picture-section:hover #add-photo {
     display: flex;
 }
 
+
+#photo-change-footer {
+    position: relative;
+}
+
+#remove-photo {
+    position: absolute;
+    left: 16px;
+}
 
 /* ************************************************************************* */
 /*                             Change Photo Panel                            */

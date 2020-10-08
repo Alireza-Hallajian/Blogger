@@ -178,9 +178,9 @@ router.put('/edit', check_session, async (req, res) =>
 });
 
 
-//************************************************************** */
-//                        update avatar
-//************************************************************** */
+//******************************************************************************** */
+//                                  Change Avatar
+//******************************************************************************** */
 
 router.put('/avatar', check_session, (req, res) =>
 {
@@ -248,9 +248,56 @@ router.put('/avatar', check_session, (req, res) =>
 });
 
 
-//************************************************************** */
-//                       change password 
-//************************************************************** */
+//******************************************************************************** */
+//                                  Remove Avatar
+//******************************************************************************** */
+
+router.delete('/avatar', check_session, (req, res, next) =>
+{
+    //if user's avatar is NOT default
+    if (req.session.user.avatar !== "default-pic.jpg") 
+    {
+        //remove user's avatar
+        fs.unlink(`public/images/profiles/${req.session.user.avatar}`, function (err) 
+        {
+            if (err) {
+                console.log(colors.brightRed("\n" + `Something went wrong in removing " ${req.session.user.username} " avatar!` + "\n"));
+                console.log(colors.brightRed(err + "\n\n"));
+
+                return res.status(500).send("Something went wrong in removing photo!");
+            }
+
+
+            //update user's avatar in database (change to default)
+            User.findByIdAndUpdate(req.session.user._id, { avatar: "default-pic.jpg" }, (err, user) => 
+            {
+                //if database error encountered
+                if (err) {
+                    console.log(colors.brightRed("\n" + err + "\n"));
+
+                    return res.status(500).send("Something went wrong in updating or finding the user!");
+                }
+
+
+                //change user's avatar to default
+                req.session.user.avatar = "default-pic.jpg";
+
+                return res.send("User' avatar removed sucessfully");
+            });
+        });
+    }
+
+
+    //if user's avatar is default
+    else {
+        return res.status(400).send("Default avatar can Not be removed.");
+    }
+});
+
+
+//******************************************************************************** */
+//                                 Change Password
+//******************************************************************************** */
 
 router.put('/password', check_session, async (req, res) => 
 {
