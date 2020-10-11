@@ -7,7 +7,7 @@ import {VALIDATOR} from './input-validator-client.js';
 
 
 //click on 'sign-up' button
-$("#signup-button").on("click", function () 
+$("#signup-btn").on("click", function () 
 {
     let inputs_data = {
         fname: $("#firstname-box").val(),

@@ -222,7 +222,7 @@ router.put('/avatar', check_session, (req, res) =>
 
 
                 //remove previous avatar if is not default
-                if (req.session.user.avatar !== "default-pic.jpg") 
+                if (req.session.user.avatar !== "default-profile-pic.jpg") 
                 {
                     fs.unlink(`public/images/profiles/${user.avatar}`, function (err) {
                         if (err) {
@@ -255,7 +255,7 @@ router.put('/avatar', check_session, (req, res) =>
 router.delete('/avatar', check_session, (req, res, next) =>
 {
     //if user's avatar is NOT default
-    if (req.session.user.avatar !== "default-pic.jpg") 
+    if (req.session.user.avatar !== "default-profile-pic.jpg") 
     {
         //remove user's avatar
         fs.unlink(`public/images/profiles/${req.session.user.avatar}`, function (err) 
@@ -269,7 +269,7 @@ router.delete('/avatar', check_session, (req, res, next) =>
 
 
             //update user's avatar in database (change to default)
-            User.findByIdAndUpdate(req.session.user._id, { avatar: "default-pic.jpg" }, (err, user) => 
+            User.findByIdAndUpdate(req.session.user._id, { avatar: "default-profile-pic.jpg" }, (err, user) => 
             {
                 //if database error encountered
                 if (err) {
@@ -280,7 +280,7 @@ router.delete('/avatar', check_session, (req, res, next) =>
 
 
                 //change user's avatar to default
-                req.session.user.avatar = "default-pic.jpg";
+                req.session.user.avatar = "default-profile-pic.jpg";
 
                 return res.send("User' avatar removed sucessfully");
             });

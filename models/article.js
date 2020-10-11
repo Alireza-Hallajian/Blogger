@@ -1,5 +1,6 @@
 //node_modules
 const mongoose = require('mongoose');
+const user = require('./user');
 
 //mongoose schema
 const Schema = mongoose.Schema;
@@ -17,29 +18,32 @@ const ArticleShema = new Schema(
         trim: true,
         unique: true,
         minlength: 2,
-        maxlength: 60
+        maxlength: 70
     },
 
     author: {
-        type: String,
-        required: true,
-        trim: true,
-        minlength: 6,
-        maxlength: 36
+        type: Schema.Types.ObjectId,
+        ref: "User"
     },
 
     content: {
         type: String,
         required: true,
         trim: true,
-        minlength: 100,
-        maxlength: 20000,
+        minlength: 300,
+        maxlength: 15000,
+    },
+
+    articleAvatar: {
+        type: String,
+        required: true,
+        default: "default-article-pic.png"
     },
 
     summary: {
         type: String,
-        minlength: 50,
-        maxlength: 300,
+        minlength: 100,
+        maxlength: 400,
         required: true
     },
 
@@ -48,18 +52,6 @@ const ArticleShema = new Schema(
         required: true,
         default: Date.now
     },
-
-    // articleAvatar: {
-    //     type: String,
-    //     required: true,
-    //     default: 'Male'
-    // },
-
-    // authorAvatar: {
-    //     type: String,
-    //     required: true,
-    //     default: 'Male'
-    // },
 
     // viewsNum: {
     //     type: String,

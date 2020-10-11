@@ -24,7 +24,7 @@
 /*                                  Inputs                                   */
 /* ************************************************************************* */
 
-.inputs, #signup-button, #signin-button {
+.inputs, #signup-btn, #signin-btn {
     text-align: center;
     background-color: #8080802d;
     border-radius: 7px;
@@ -47,7 +47,7 @@
 /*                                  Buttons                                  */
 /* ************************************************************************* */
 
-#signup-button, #signin-button {   
+#signup-btn, #signin-btn {   
     background-color: rgb(23, 114, 199);
     
     color: whitesmoke;
@@ -61,12 +61,12 @@
     cursor: pointer;
 }
 
-#signup-button p, #signin-button p {
+#signup-btn p, #signin-btn p {
     margin: auto;
     margin-top: 5px;
 }
 
-#signup-button:hover, #signin-button:hover {
+#signup-btn:hover, #signin-btn:hover {
     background-color: rgb(16, 89, 156);
 }
 

@@ -58,19 +58,21 @@ app.use(session({
 
 app.get('/', function (req, res) 
 {  
-	if (req.session.user) {
-		res.render('home.ejs', {
-			role: req.session.user.role
-		});
-	}
+	// //bloggers' page
+	// if (req.session.user) {
+	// 	res.render('home.ejs', {
+	// 		role: req.session.user.role
+	// 	});
+	// }
 
-	else {
-		res.render('home.ejs', {
-			role: "guest"
-		});
-	}
+	// //guests' page
+	// else {
+	// 	res.render('home.ejs', {
+	// 		role: "guest"
+	// 	});
+	// }
 
-	// res.render('new-article.ejs');
+	res.render('new-article.ejs');
 });
 
 

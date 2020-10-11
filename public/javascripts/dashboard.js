@@ -102,12 +102,66 @@ $("#apply-btn").on("click", async function ()
 });
 
 
+// *****************************************************
+//           save user-info changes to database
+// *****************************************************
+
+function save_profile_changes (user_info) 
+{  
+    //show loading
+    $("#loading-edit").show();
+    $("#cancel-btn").hide();
+    $("#apply-btn").hide();
+
+
+    $.ajax({
+        type: "PUT",
+        url: "/user/edit",
+        data: user_info,
+
+        success: function (result, status, xhr) 
+        {
+            //assign new values to fields
+            $("#fname-box").prev().html(user_info.fname);
+            $("#lname-box").prev().html(user_info.lname);
+            $("#username-box").prev().html(user_info.username);
+            $("#gender").html(user_info.sex);
+            $("#phone-box").prev().html(user_info.mobile);
+
+            cancel_edit();
+
+            //changes were successful
+            alert("Changes Applied.");
+            $("#loading-edit").hide();
+            $("#edit-btn").show();
+        },
+
+        //show error in alert-box
+        error: function (xhr, status, error) 
+        {
+            //session timed out
+            if (xhr.status === 403) {
+                window.location.assign('/signin');
+            }
+
+            //server error
+            else if (xhr.status === 500) {
+                alert("Something went wrong in saving! Try again.");
+                $("#loading-edit").hide();
+                $("#cancel-btn").trigger("click");
+            }
+        }
+    }); 
+}
+
+
 // *********************************************************************************
 //                                Change Password
 // *********************************************************************************
 
 //Change Password button
 $("#change-password").on('click', function () {  
+    //open change password panel
     $("#password-modal-btn").trigger("click");
 });
 
@@ -148,6 +202,60 @@ $("#apply-password-change").on('click', function ()
     }
 });
 
+
+// *****************************************************
+//              save new password database
+// *****************************************************
+
+function change_password (passwords)
+{
+    //send password change request to the server
+    $.ajax({
+        type: "PUT",
+        url: "/user/password",
+        data: passwords,
+
+        success: function (result, status, xhr) 
+        {
+            //close the change password panel
+            $(".password-close-btns").trigger("click");
+
+            changes_for_password_change("not-loading");
+
+            //changes were successful
+            alert("Password changed successfully.");
+
+            //log out the user to sign-in again
+            $("#logout-btn").trigger("click");
+        },
+
+        //show error in alert-box
+        error: function (xhr, status, error) 
+        {
+            //session timed out
+            if (xhr.status === 403) {
+                alert("You should sign-in again.")
+                window.location.assign('/signin');
+            }
+
+            //password is not correct
+            if (xhr.status === 404) 
+            {
+                changes_for_password_change("not-loading");
+                
+                //show error
+                $("#error-alert-password").html(xhr.responseText);
+                $("#error-alert-password").show();
+            }
+
+            //server error
+            else if (xhr.status === 500) {
+                changes_for_password_change("not-loading");
+                alert("Something went wrong in saving! Try again.");
+            }
+        }
+    }); 
+}
 
 // *********************************************************************************
 //                              Change Profile Photo
@@ -221,7 +329,6 @@ let valid_image_formats = ["image/jpg" , "image/jpeg", "image/png"]
 //Apply button (in photo change page)
 $("#apply-photo-change").on("click", function () 
 {  
-    console.log(file.files.length);
     //send photo to server if chosen
     if (file.files[0]) 
     {
@@ -248,130 +355,6 @@ $("#apply-photo-change").on("click", function ()
         $("#error-alert-photo").show()
     }
 });
-
-
-// *****************************************************
-//                 remove user's avatar
-// *****************************************************
-
-$("#remove-photo").on("click", function () 
-{  
-    if (confirm("Are you sure to remove your avatar?")) {
-        remove_avatar();
-    }
-});
-
-
-// *********************************************************************************
-//                                   Data Base
-// *********************************************************************************
-
-// *****************************************************
-//           save user-info changes to database
-// *****************************************************
-
-function save_profile_changes (user_info) 
-{  
-    //show loading
-    $("#loading-edit").show();
-    $("#cancel-btn").hide();
-    $("#apply-btn").hide();
-
-
-    $.ajax({
-        type: "PUT",
-        url: "/user/edit",
-        data: user_info,
-
-        success: function (result, status, xhr) 
-        {
-            //assign new values to fields
-            $("#fname-box").prev().html(user_info.fname);
-            $("#lname-box").prev().html(user_info.lname);
-            $("#username-box").prev().html(user_info.username);
-            $("#gender").html(user_info.sex);
-            $("#phone-box").prev().html(user_info.mobile);
-
-            cancel_edit();
-
-            //changes were successful
-            alert("Changes Applied.");
-            $("#loading-edit").hide();
-            $("#edit-btn").show();
-        },
-
-        //show error in alert-box
-        error: function (xhr, status, error) 
-        {
-            //session timed out
-            if (xhr.status === 403) {
-                window.location.assign('/signin');
-            }
-
-            //server error
-            else if (xhr.status === 500) {
-                alert("Something went wrong in saving! Try again.");
-                $("#loading-edit").hide();
-                $("#cancel-btn").trigger("click");
-            }
-        }
-    }); 
-}
-
-
-// *****************************************************
-//              save new password database
-// *****************************************************
-
-function change_password (passwords)
-{
-    //send password change request to the server
-    $.ajax({
-        type: "PUT",
-        url: "/user/password",
-        data: passwords,
-
-        success: function (result, status, xhr) 
-        {
-            //close the change password panel
-            $(".password-close-btns").trigger("click");
-
-            changes_for_password_change("not-loading");
-
-            //changes were successful
-            alert("Password changed successfully.");
-
-            //log out the user to sign-in again
-            $("#logout-btn").trigger("click");
-        },
-
-        //show error in alert-box
-        error: function (xhr, status, error) 
-        {
-            //session timed out
-            if (xhr.status === 403) {
-                alert("You should sign-in again.")
-                window.location.assign('/signin');
-            }
-
-            //password is not correct
-            if (xhr.status === 404) 
-            {
-                changes_for_password_change("not-loading");
-                
-                //show error
-                $("#error-alert-password").html(xhr.responseText);
-                $("#error-alert-password").show();
-            }
-
-            //server error
-            else if (xhr.status === 500) {
-                changes_for_password_change("not-loading");
-                alert("Something went wrong in saving! Try again.");
-            }
-        }
-    }); 
-}
 
 
 // *****************************************************
@@ -434,6 +417,18 @@ function change_avatar ()
 //                 remove user's avatar
 // *****************************************************
 
+$("#remove-photo").on("click", function () 
+{  
+    if (confirm("Are you sure to remove your avatar?")) {
+        remove_avatar();
+    }
+});
+
+
+// *****************************************************
+//                 remove user's avatar
+// *****************************************************
+
 function remove_avatar () 
 {  
     changes_for_photo_change("is-loading");
@@ -447,7 +442,7 @@ function remove_avatar ()
         success: function (result, status, xhr) 
         {
             //change the avatar photo in dashboard to the default
-            $("#avatar").attr("src", "/images/profiles/default-pic.jpg");
+            $("#avatar").attr("src", "/images/profiles/default-profile-pic.jpg");
 
             changes_for_photo_change("not-loading");
 

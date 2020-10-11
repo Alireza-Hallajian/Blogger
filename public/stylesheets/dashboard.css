@@ -104,15 +104,6 @@ label {
 }
 
 
-#photo-change-footer {
-    position: relative;
-}
-
-#remove-photo {
-    position: absolute;
-    left: 16px;
-}
-
 /* ************************************************************************* */
 /*                             Change Photo Panel                            */
 /* ************************************************************************* */
@@ -137,6 +128,16 @@ label {
     margin: auto;
     border-radius: 100%;
     display: none;
+}
+
+
+#photo-change-footer {
+    position: relative;
+}
+
+#remove-photo {
+    position: absolute;
+    left: 16px;
 }
 
 #loading-photo {
