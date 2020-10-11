@@ -2,9 +2,11 @@ export const VALIDATOR = {
     signin: signin_validator,
     signup: signup_validator,
     edit: edit_validator,
-    p_change: change_password
+    p_change: change_password,
+    avatar: add_avatar
 };
 
+import {DASHBOARD} from './dashboard.js';
 
 // *********************************************************************************
 //                                      Sign-in
@@ -334,3 +336,125 @@ function warning_checker (input_box)
 //                                   Add Avatar
 // *********************************************************************************
 
+//FileReader API
+let reader = new FileReader();
+
+//show image preview when loaded (FileReader API)
+reader.onload = function(e) {
+    $('#preview, preview-article-photo').attr('src', e.target.result);
+    $('#preview').css('display', "block");  // (profile photo)
+}
+
+
+function add_avatar() 
+{  
+    //preview selected image
+    $("#file-input").on("change", function () 
+    {   
+        //if a file selected
+        if (this.files[0]) 
+        {  
+            //hide error box
+            $("#error-alert-photo").hide()
+
+            //hide 'No photo' phrase from preview box - (profile photo)
+            $("#preview-container p").css("display", "none");
+
+            //read the file(photo) for fetching information (like file path)
+            reader.readAsDataURL(this.files[0]); // convert to base64 string
+        }
+
+        else 
+        {
+            // *****************************************************
+            //                     Profile Photo
+            // *****************************************************
+
+            //remove preview image if deselected
+            $("#preview").attr("src", "").css("display", "none");
+
+            //show 'No photo' phrase in preview box
+            $("#preview-container p").css("display", "block");
+
+
+            // *****************************************************
+            //                     Article Photo
+            // *****************************************************
+
+            //change preview image to the default
+            $("#preview-article-photo").attr("src", "/images/articles/default-article-pic.png");
+        }
+    });
+
+
+    //clear preview-image when close button clicked and close the panel
+    $(".photo-close-btns").on("click", function () 
+    {  
+        // *****************************************************
+        //                     Profile Photo
+        // *****************************************************
+
+        //diselect chosen photo
+        document.getElementById("file-input-container").reset()
+
+        //remove preview
+        $('#preview').attr('src', "");
+        $('#preview').css('display', "none");
+
+        //hide alert box
+        $("#error-alert-photo").hide();
+
+        //show 'No photo' phrase in preview box
+        $("#preview-container p").css("display", "block");
+    });
+
+
+
+    //file-input
+    let file = document.getElementById("file-input");
+
+    //accepted formats for profile photo
+    let valid_image_formats = ["image/jpg" , "image/jpeg", "image/png"]
+
+
+    //Apply & Finish button (in photo panel)
+    $("#apply-photo-change, #finish-btn").on("click", function () 
+    {  
+        //send photo to server if chosen
+        if (file.files[0]) 
+        {
+            //if selected file was OK
+            if (valid_image_formats.includes(file.files[0].type))
+            {
+                //hide error box
+                $("#error-alert-photo").hide();
+
+                DASHBOARD.change_avatar();
+            }
+            
+            //if selected file was NOT in accepted formats
+            else
+            {
+                $("#error-alert-photo").html("Just <b>JPEG, JPG</b> or <b>PNG</b> files are accepted.");
+                $("#error-alert-photo").show();
+            }
+        }
+
+
+        //if article photo was default - (article photo)
+        else if ($("#preview-article-photo").attr("src") === "/images/articles/default-article-pic.png")
+        {
+            //hide error box
+            $("#error-alert-photo").hide();
+
+            // ARTICLE.change_avatar();
+        }
+        
+
+        //if no photo chosen - (profile photo)
+        else {
+            $("#error-alert-photo").html("You should choose a photo.");
+            $("#error-alert-photo").show();
+        }
+    });
+}

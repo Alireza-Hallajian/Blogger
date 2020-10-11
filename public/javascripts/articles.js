@@ -57,10 +57,10 @@ $("#publish-btn").on("click", function (event)
     // *****************************************************
 
     //if characters of the article are less than 300
-    if (get_stats('article-sheet').chars > 300){
+    if (get_stats('article-sheet').chars < 300){
         $("#error-alert-article").show();
         $("html").scrollTop(300);
-        return $("#error-alert-article").html("Min characters allowed is 300");
+        return $("#error-alert-article").html("<b>Min</b> characters allowed is <b>300</b>");
     }
     else {
         $("#error-alert-article").hide();
@@ -70,7 +70,7 @@ $("#publish-btn").on("click", function (event)
     if (get_stats('article-sheet').chars > 10000){
         $("#error-alert-article").show();
         $("html").scrollTop(300);
-        return $("#error-alert-article").html("Max characters allowed is 10000");
+        return $("#error-alert-article").html("<b>Max</b> characters allowed is <b>10000</b>");
     }
     else {
         $("#error-alert-article").hide();
@@ -86,6 +86,7 @@ $("#publish-btn").on("click", function (event)
 
     let char_count = 0;
 
+    //count summary characters
     $("#summary-sheet").keyup(function () 
     { 
         char_count = $(this).val().length;
@@ -94,6 +95,9 @@ $("#publish-btn").on("click", function (event)
         
         if (char_count > 300) {
             $("#char-count").css("color", "red");
+        }
+        else {
+            $("#char-count").css("color", "black");
         }
     });
 
@@ -207,7 +211,7 @@ function add_avatar_to_article()
 
     //make a form data for sending image to ther server
     let form_data = new FormData();
-    let avatar = document.getElementById("file-input-article-photo").files[0];
+    let avatar = document.getElementById("file-input").files[0];
     form_data.append('avatar', avatar);
 
     

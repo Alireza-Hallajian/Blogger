@@ -1,6 +1,7 @@
 //client-side input validator
 import {VALIDATOR} from './input-validator-client.js';
 
+export const DASHBOARD = {change_avatar};
 
 // *********************************************************************************
 //                                Edit Section Buttons
@@ -262,98 +263,12 @@ function change_password (passwords)
 // *********************************************************************************
 
 //open 'Change Photo' panel when cliked on 'Change Photo' area
-$("#add-photo").on("click", function () {  
+$("#add-photo").on("click", function () 
+{  
     $("#photo-modal-btn").trigger("click");
-});
 
-
-//FileReader API
-let reader = new FileReader();
-
-//show image preview when loaded (FileReader API)
-reader.onload = function(e) {
-    $('#preview').attr('src', e.target.result);
-    $('#preview').css('display', "block");
-}
-
-//preview selected image
-$("#file-input").on("change", function () 
-{   
-    //if a file selected
-    if (this.files[0]) 
-    {  
-        //hide 'No photo' phrase from preview box
-        $("#preview-container p").css("display", "none");
-
-        //read the file(photo) for fetching information (like file path)
-        reader.readAsDataURL(this.files[0]); // convert to base64 string
-    }
-
-    else 
-    {
-        //remove preview image if deselected
-        $("#preview").attr("src", "").css("display", "none");
-
-        //show 'No photo' phrase in preview box
-        $("#preview-container p").css("display", "block");
-    }
-});
-
-
-//clear preview-image when close button clicked and close the panel
-$(".photo-close-btns").on("click", function () 
-{  
-    //diselect chosen photo
-    document.getElementById("file-input-container").reset()
-
-    //remove preview
-    $('#preview').attr('src', "");
-    $('#preview').css('display', "none");
-
-    //hide alert box
-    $("#error-alert-photo").hide();
-
-    //show 'No photo' phrase in preview box
-    $("#preview-container p").css("display", "block");
-});
-
-
-
-//file-input
-let file = document.getElementById("file-input");
-
-//accepted formats for profile photo
-let valid_image_formats = ["image/jpg" , "image/jpeg", "image/png"]
-
-
-//Apply button (in photo change page)
-$("#apply-photo-change").on("click", function () 
-{  
-    //send photo to server if chosen
-    if (file.files[0]) 
-    {
-        //if selected file was OK
-        if (valid_image_formats.includes(file.files[0].type))
-        {
-            //hide error box
-            $("#error-alert-photo").hide();
-
-            change_avatar();
-        }
-        
-        //if selected file was NOT in accepted formats
-        else
-        {
-            $("#error-alert-photo").html("Just <b>JPEG, JPG</b> or <b>PNG</b> files are accepted.");
-            $("#error-alert-photo").show()
-        }
-    }
-
-    //if no photo chosen
-    else {
-        $("#error-alert-photo").html("You should choose a photo.");
-        $("#error-alert-photo").show()
-    }
+    //validate selected photo and send to the server (with exporting 'change_avatar' function)
+    VALIDATOR.avatar();
 });
 
 

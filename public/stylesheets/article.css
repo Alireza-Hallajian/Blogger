@@ -67,7 +67,7 @@
     display: none;
 }
 
-#error-alert-summary, #error-alert-article-photo {
+#error-alert-summary, #error-alert-photo {
     margin: 10px auto 0 auto;
     border-left: 6px solid #be5050;
     display: none;
@@ -77,8 +77,8 @@
 /*                              Add Photo Panel                              */
 /* ************************************************************************* */
 
-.modal-body {
-    text-align: center;
+.article-photo-close-btns {
+    display: none;
 }
 
 #preview-article-photo-container {
@@ -96,7 +96,10 @@
     height: 100%;
     margin: auto;
     border-radius: 100%;
-    display: none;
+}
+
+#file-input-container {
+    text-align: center;
 }
 
 
