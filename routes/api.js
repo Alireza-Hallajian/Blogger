@@ -191,7 +191,6 @@ router.post('/signup', is_login, async (req, res) =>
         //                  save new user to data base  
         //************************************************************** */
 
-
         const new_blogger = new User({
             firstName: req.body.fname,
             lastName: req.body.lname,
@@ -211,7 +210,7 @@ router.post('/signup', is_login, async (req, res) =>
         });
     }
 
-    catch(err) {
+    catch (err) {
         console.log(colors.brightRed("\n" + err + "\n"));
     }
 });

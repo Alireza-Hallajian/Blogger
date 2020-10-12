@@ -268,7 +268,7 @@ $("#add-photo").on("click", function ()
     $("#photo-modal-btn").trigger("click");
 
     //validate selected photo and send to the server (with exporting 'change_avatar' function)
-    VALIDATOR.avatar();
+    VALIDATOR.avatar("profile");
 });
 
 

@@ -6,7 +6,12 @@ export const VALIDATOR = {
     avatar: add_avatar
 };
 
+//import 'add_avatar_to_article' function
+import {ARTICLE} from './articles.js';
+
+//import 'change_avatar' function
 import {DASHBOARD} from './dashboard.js';
+
 
 // *********************************************************************************
 //                                      Sign-in
@@ -340,49 +345,63 @@ function warning_checker (input_box)
 let reader = new FileReader();
 
 //show image preview when loaded (FileReader API)
-reader.onload = function(e) {
-    $('#preview, preview-article-photo').attr('src', e.target.result);
-    $('#preview').css('display', "block");  // (profile photo)
+reader.onload = function(event) {
+    $("#preview, #preview-article-photo").attr("src", event.target.result);
+    $("#preview").css("display", "block");  // (profile photo)
 }
 
 
-function add_avatar() 
+function add_avatar(profile_or_article)
 {  
-    //preview selected image
+    //preview selected image (and default image in article avatar)
     $("#file-input").on("change", function () 
     {   
+        //hide error box
+        $("#error-alert-photo").hide()
+
+
         //if a file selected
         if (this.files[0]) 
         {  
-            //hide error box
-            $("#error-alert-photo").hide()
+            //show 'Finish' button when a photo is selected - (Article Photo)
+            $("#finish-btn").show();
 
-            //hide 'No photo' phrase from preview box - (profile photo)
+            //hide 'No photo' phrase from preview box - (Profile Photo)
             $("#preview-container p").css("display", "none");
+
 
             //read the file(photo) for fetching information (like file path)
             reader.readAsDataURL(this.files[0]); // convert to base64 string
         }
 
+        //if photo deselected
         else 
         {
-            // *****************************************************
-            //                     Profile Photo
-            // *****************************************************
-
-            //remove preview image if deselected
-            $("#preview").attr("src", "").css("display", "none");
-
-            //show 'No photo' phrase in preview box
-            $("#preview-container p").css("display", "block");
-
-
             // *****************************************************
             //                     Article Photo
             // *****************************************************
 
-            //change preview image to the default
-            $("#preview-article-photo").attr("src", "/images/articles/default-article-pic.png");
+            if (profile_or_article === "article")
+            {
+                //hide 'Finish' button
+                $("#finish-btn").hide();
+
+                //change preview image to the default
+                $("#preview-article-photo").attr("src", "/images/articles/default-article-pic.png");
+            }
+
+            // *****************************************************
+            //                     Profile Photo
+            // *****************************************************
+
+            else if (profile_or_article === "profile")
+            {
+                //remove preview image if deselected
+                $("#preview").attr("src", "").css("display", "none");
+
+                //show 'No photo' phrase in preview box
+                $("#preview-container p").css("display", "block");
+            }       
         }
     });
 
@@ -420,7 +439,7 @@ function add_avatar()
     //Apply & Finish button (in photo panel)
     $("#apply-photo-change, #finish-btn").on("click", function () 
     {  
-        //send photo to server if chosen
+        //send photo to server if chosen and no error
         if (file.files[0]) 
         {
             //if selected file was OK
@@ -429,7 +448,16 @@ function add_avatar()
                 //hide error box
                 $("#error-alert-photo").hide();
 
-                DASHBOARD.change_avatar();
+
+                //if article avatar change requested
+                if (profile_or_article === "article") {
+                    ARTICLE.add_avatar_to_article();
+                }
+
+                //if profile avatar change requested
+                else if (profile_or_article === "profile") {
+                    DASHBOARD.change_avatar();
+                }
             }
             
             //if selected file was NOT in accepted formats
@@ -440,17 +468,7 @@ function add_avatar()
             }
         }
 
-
-        //if article photo was default - (article photo)
-        else if ($("#preview-article-photo").attr("src") === "/images/articles/default-article-pic.png")
-        {
-            //hide error box
-            $("#error-alert-photo").hide();
-
-            // ARTICLE.change_avatar();
-        }
         
-
         //if no photo chosen - (profile photo)
         else {
             $("#error-alert-photo").html("You should choose a photo.");

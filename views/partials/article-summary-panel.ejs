@@ -16,7 +16,7 @@
             <div class="modal-header">
 
                 <h5 class="modal-title" id="staticBackdropLabel">
-                    <b>Add a summary for your article</b>
+                    <b>Add a Title and Summary for your article</b>
                 </h5>
 
                 <button type="button" class="close summary-close-btns" data-dismiss="modal" aria-label="Close">
@@ -28,8 +28,11 @@
 
             <div class="modal-body">
 
-                <textarea id="summary-sheet" name="summary" cols="58" rows="6"></textarea>
+                <textarea id="article-title" name="article-title" placeholder="Title" cols="58" rows="2" minlength="2" maxlength="70"></textarea>
+                
+                <textarea id="summary-sheet" name="summary" placeholder="Summary" cols="58" rows="6"></textarea>
                 <b><p id="char-count">Chars: <span>0</span></p></b>
+
 
                 <div id="error-alert-summary" class="alert alert-danger alert-box" role="alert"></div>
 

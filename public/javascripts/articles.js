@@ -1,3 +1,8 @@
+//client-side input validator
+import {VALIDATOR} from './input-validator-client.js';
+
+export const ARTICLE = {add_avatar_to_article};
+
 // *********************************************************************************
 //                            TinyMCE Config (Text Editor)
 // *********************************************************************************
@@ -11,6 +16,13 @@ tinymce.init({
     autoresize_overflow_padding: 10,
     max_height: 1000,
     min_height: 480,
+
+    auto_focus : "article-sheet",
+
+    init_instance_callback: function () {  
+        $("#loading-article").css("display", "none");
+        $("#article-container form").css("display", "block");
+    },
 
     add_unload_trigger : true,   //text remains in editor if page unloaded
 
@@ -50,7 +62,6 @@ $("#publish-btn").on("click", function (event)
 { 
     //don't reload page on Submit
     event.preventDefault();
-
 
     // *****************************************************
     //                  Character Limit
@@ -93,7 +104,7 @@ $("#publish-btn").on("click", function (event)
 
         $("#char-count span").text(char_count);
         
-        if (char_count > 300) {
+        if (char_count > 400) {
             $("#char-count").css("color", "red");
         }
         else {
@@ -112,7 +123,7 @@ $("#publish-btn").on("click", function (event)
 
         else if (char_count > 400) {
             $("#error-alert-summary").show();
-            $("#error-alert-summary").html("<b>Max</b> characters allowed is <b>300</b>");
+            $("#error-alert-summary").html("<b>Max</b> characters allowed is <b>400</b>");
         }
 
         else {
@@ -129,16 +140,38 @@ $("#publish-btn").on("click", function (event)
 
 function save_article() 
 {  
+    //article parts
+    let article = {
+        content: $("#article-sheet").val(),
+        title: $("#article-title").val(),
+        summary: $("#summary-sheet").val()
+    }
+
     changes_for_article_publish("is-loading");
+
 
     $.ajax(
     {
         type: "POST",
         url: "/article",
-        data: $("#article-sheet"),
+        data: article,
 
-        success: function (result, status, xhr) {
-            save_summary();
+        success: function (result, status, xhr) 
+        {
+            alert("Article published successfully.")
+
+            //hide loading
+            changes_for_article_publish("not-loading");
+
+            //close the panel
+            $(".summary-close-btns").trigger("click");
+
+
+            //open the add photo panel
+            $("#article-photo-modal-btn").trigger("click");
+
+            //diselect chosen photo
+            document.getElementById("file-input-container").reset()
         },
 
         error: function (xhr, status, error) 
@@ -159,56 +192,27 @@ function save_article()
 
 
 // *****************************************************
-//              send summary to the server
-// *****************************************************
-
-function save_summary() 
-{  
-    $.ajax(
-    {
-        type: "POST",
-        url: "/article/summary",
-        data: $("#summary-sheet"),
-
-        success: function (result, status, xhr) 
-        {
-            //hide loading
-            changes_for_article_publish("not-loading");
-
-            //close the panel
-            $(".summary-close-btns").trigger("click");
-
-            //open add avatar panel
-            add_avatar_to_article()
-        },
-
-        error: function (xhr, status, error) 
-        {
-            //session timed out
-            if (xhr.status === 403) {
-                window.location.assign('/signin');
-            }
-
-            //server error
-            else if (xhr.status === 500) {
-                alert("Something went wrong in saving summary! Try again.");
-                changes_for_article_publish("not-loading");
-            }
-        }
-    });
-}
-
-
-// *****************************************************
 //                 add avatar to article
 // *****************************************************
 
+$("#file-input").on("click", function () 
+{
+    //validate selected photo and send to the server 
+    //(with exporting 'add_avatar_to_article' function)
+    VALIDATOR.avatar("article");
+});
+
+$("#skip-btn").on("click", function () 
+{ 
+    //*******************************************************************************
+    //should go to articles page
+    //*******************************************************************************
+    window.location.assign('/user/dashboard');
+});
+
+
 function add_avatar_to_article() 
 {  
-    //open the add photo panel
-    $("#article-photo-modal-btn").trigger("click");
-
-
     //make a form data for sending image to ther server
     let form_data = new FormData();
     let avatar = document.getElementById("file-input").files[0];
@@ -224,15 +228,18 @@ function add_avatar_to_article()
 
         success: function (result, status, xhr) 
         {
+            //changes were successful
+            alert("Article avatar changed successfully.");
+
             changes_for_article_avatar("not-loading");
 
             //close the change photo panel
-            $(".photo-close-btns").trigger("click");
+            $(".photo-close-btns").trigger("click");   
 
-            //changes were successful
-            alert("Photo changed successfully.");
-
-            //go to the articles page
+            //*******************************************************************************
+            //should go to articles page
+            //*******************************************************************************
+            window.location.assign('/user/dashboard');
         },
 
         //show error in alert-box

@@ -28,9 +28,9 @@
 
     <section id="article-container">
 
-        <form action="http://localhost:3000/article" method="POST">
+        <form>
 
-            <textarea id="article-sheet" name="article">Hello, World!</textarea>
+            <textarea id="article-sheet" name="article"></textarea>
       
             <button id="publish-btn"><p>Publish</p></button>
 
@@ -39,11 +39,24 @@
 
         <div id="error-alert-article" class="alert alert-danger alert-box" role="alert"></div>
         
+
+        <!-- Loading Animation -->
+        <div id="loading-article" class="sk-chase">
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+        </div>
+
     </section>
+
 
 
     <%- include('./partials/article-summary-panel.ejs') -%>  
     <%- include('./partials/article-photo-panel.ejs') -%>  
+
 
 
 
@@ -55,7 +68,7 @@
 
 
     <script src="/javascripts/jQuery-Uncompressed.v3.4.1.js"></script>
-    <script src="/javascripts/articles.js"></script>
+    <script src="/javascripts/articles.js" type="module"></script>
 
 </body>
 

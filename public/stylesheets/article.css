@@ -14,6 +14,10 @@
     box-shadow: 2px 3px 10px #111111;
 }
 
+#article-container form {
+    display: none;
+}
+
 #publish-btn {   
     text-align: center;
     background-color: rgb(23, 114, 199);
@@ -59,15 +63,15 @@
 /* ************************************************************************* */
 
 #error-alert-article {
+    text-align: center;
     width: 40%;
     margin: 10px auto 0 auto;
-
     border-left: 6px solid #be5050;
-
     display: none;
 }
 
 #error-alert-summary, #error-alert-photo {
+    text-align: center;
     margin: 10px auto 0 auto;
     border-left: 6px solid #be5050;
     display: none;
@@ -100,6 +104,11 @@
 
 #file-input-container {
     text-align: center;
+}
+
+
+#finish-btn {
+    display: none;
 }
 
 
