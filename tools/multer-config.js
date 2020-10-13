@@ -26,7 +26,7 @@ const profile_avatar_storage = multer.diskStorage(
     },
 
     filename: function (req, file, callback) {  
-        callback(null, Date.now() + "_" + req.session.user.username + MIME_TYPES[file.mimetype]);
+        callback(null, req.session.user._id + "_" + req.session.user.username + MIME_TYPES[file.mimetype]);
     }
 });
 
@@ -59,7 +59,7 @@ const article_avatar_storage = multer.diskStorage(
     },
 
     filename: function (req, file, callback) {  
-        callback(null, Date.now() + "_" + req.body.article_title + "_" + req.session.user.username + MIME_TYPES[file.mimetype]);
+        callback(null, req.body.article_id + "_" + req.session.user.username + MIME_TYPES[file.mimetype]);
     }
 });
 

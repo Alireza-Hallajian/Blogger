@@ -261,6 +261,9 @@ function change_password (passwords)
 //                              Change Profile Photo
 // *********************************************************************************
 
+//some operations are in 'VALIDATOR' module
+
+
 //open 'Change Photo' panel when cliked on 'Change Photo' area
 $("#add-photo").on("click", function () {  
     $("#photo-modal-btn").trigger("click");
@@ -360,7 +363,7 @@ function remove_avatar ()
         success: function (result, status, xhr) 
         {
             //change the avatar photo in dashboard to the default
-            $("#avatar").attr("src", "/images/profiles/default-profile-pic.jpg");
+            $("#avatar").attr("src", "/images/default-profile-pic.jpg");
 
             changes_for_photo_change("not-loading");
 

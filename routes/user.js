@@ -1,9 +1,10 @@
 //node_modules
 const express = require('express');
-const router = express.Router();
 const colors = require('colors');
 const multer = require('multer');
 const fs = require('fs');
+
+const router = express.Router();
 
 //models
 const User = require('../models/user.js');
@@ -187,7 +188,7 @@ router.put('/avatar', (req, res) =>
                     //remove new photo if could not save in database
                     fs.unlink(`public/images/profiles/${req.file.filename}`, function (err) {
                         if (err) {
-                            console.log(colors.bgRed("\n" + `Something went wrong in removing new ${req.session.user.username}'s avatar!` + "\n"));
+                            console.log(colors.bgRed("\n" + `Something went wrong in removing new " ${req.session.user.username}'s " avatar!` + "\n"));
                             console.log(colors.brightRed(err + "\n"));
                         }
                     });
@@ -196,16 +197,9 @@ router.put('/avatar', (req, res) =>
                 }
 
 
-                //remove previous avatar if is not default
-                if (req.session.user.avatar !== "default-profile-pic.jpg") 
-                {
-                    fs.unlink(`public/images/profiles/${user.avatar}`, function (err) {
-                        if (err) {
-                            console.log(colors.brightRed("\n" + `Something went wrong in removing privious " ${req.session.user.username} " avatar!` + "\n"));
-                            console.log(colors.brightRed(err + "\n\n"));
-                        }
-                    });
-                }       
+                //previous article avatar is removed automatically
+                //because of duplicate filename
+                 
 
                 //update user's session for new avatar
                 req.session.user.avatar = req.file.filename;

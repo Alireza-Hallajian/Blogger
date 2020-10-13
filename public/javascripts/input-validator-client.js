@@ -315,7 +315,7 @@ function change_password(data)
 
 
 // *********************************************************************************
-//                                 Minor Operations
+//                           warning_checker' Function
 // *********************************************************************************
 
 //checks if there is any incorrect data input.
@@ -377,7 +377,7 @@ $("#file-input").on("change", function ()
         $("#finish-btn").hide();
 
         //change preview image to the default
-        $("#preview-article-photo").attr("src", "/images/articles/default-article-pic.png");
+        $("#preview-article-photo").attr("src", "/images/default-article-pic.png");
         
 
         // *****************************************************

@@ -194,12 +194,8 @@ function save_article()
 //                              Add Avatar to Article
 // *********************************************************************************
 
-// $("#file-input").on("click", function () 
-// {
-//     //validate selected photo and send to the server 
-//     //(with exporting 'add_avatar_to_article' function)
-//     VALIDATOR.avatar("article");
-// });
+//some operations are in 'VALIDATOR' module
+
 
 $("#skip-btn").on("click", function () 
 { 
