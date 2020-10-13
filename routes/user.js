@@ -1,8 +1,8 @@
 //node_modules
 const express = require('express');
-const session = require('express-session');
 const router = express.Router();
 const colors = require('colors');
+const multer = require('multer');
 const fs = require('fs');
 
 //models
@@ -10,34 +10,9 @@ const User = require('../models/user.js');
 
 //tools
 const INPUT_VALIDATOR = require('../tools/input-validator-server.js');
-const CHECKER = require('../tools/checker.js');
 const multer_config = require('../tools/multer-config.js');
-const multer = require('multer');
+const CHECKER = require('../tools/checker.js');
 
-
-//******************************************************************************** */
-//                                   Authentication
-//******************************************************************************** */
-
-// *****************************************************
-//                        Check Session
-// *****************************************************
-
-//check if user is logged-in to access non-permitted sections for non-registered users
-const check_session = function (req, res, next) 
-{  
-    //for requests wtih method GET
-    if (!req.session.user && req.method === "GET") {     
-        return res.redirect('/signin');
-    }
-
-    //for AJAX requests with methods rather than GET
-    else if (!req.session.user) {
-        return res.sendStatus(403);
-    }
-
-    next();
-}
 
 
 //******************************************************************************** */
@@ -50,7 +25,7 @@ router.get('/', (req, res) => {
 });
 
 
-router.get('/dashboard', check_session, (req, res) =>
+router.get('/dashboard', (req, res) =>
 {
     //user dashboard
     if (req.session.user)
@@ -83,7 +58,7 @@ router.get('/dashboard', check_session, (req, res) =>
 //             duplicate username' and 'mobile' check  
 //************************************************************** */
 
-router.post('/edit', check_session, async (req, res) => 
+router.post('/edit', async (req, res) => 
 {
     try 
     {
@@ -127,7 +102,7 @@ router.post('/edit', check_session, async (req, res) =>
 //                        update profile
 //************************************************************** */
 
-router.put('/edit', check_session, async (req, res) => 
+router.put('/edit', async (req, res) => 
 {
     try
     {
@@ -182,11 +157,11 @@ router.put('/edit', check_session, async (req, res) =>
 //                                  Change Avatar
 //******************************************************************************** */
 
-router.put('/avatar', check_session, (req, res) =>
+router.put('/avatar', (req, res) =>
 {
     try
     {
-        const upload = multer_config.single('avatar');
+        const upload = multer_config.Profile.single('avatar');
 
 
         //replace new avatar
@@ -252,7 +227,7 @@ router.put('/avatar', check_session, (req, res) =>
 //                                  Remove Avatar
 //******************************************************************************** */
 
-router.delete('/avatar', check_session, (req, res, next) =>
+router.delete('/avatar', (req, res, next) =>
 {
     //if user's avatar is NOT default
     if (req.session.user.avatar !== "default-profile-pic.jpg") 
@@ -299,7 +274,7 @@ router.delete('/avatar', check_session, (req, res, next) =>
 //                                 Change Password
 //******************************************************************************** */
 
-router.put('/password', check_session, async (req, res) => 
+router.put('/password', async (req, res) => 
 {
     try
     {

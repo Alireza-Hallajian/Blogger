@@ -1,6 +1,5 @@
 //node_modules
 const mongoose = require('mongoose');
-const user = require('./user');
 
 //mongoose schema
 const Schema = mongoose.Schema;

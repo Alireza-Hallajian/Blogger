@@ -47,7 +47,7 @@ const check_session = function (req, res, next)
 // *****************************************************
 
 router.use('/user', check_session , user_router);
-router.use('/article', article_router);
+router.use('/article', check_session, article_router);
 // router.use('/comment', check_session, user_router);
 
 

@@ -1,7 +1,6 @@
 //client-side input validator
 import {VALIDATOR} from './input-validator-client.js';
 
-export const ARTICLE = {add_avatar_to_article};
 
 // *********************************************************************************
 //                            TinyMCE Config (Text Editor)
@@ -191,16 +190,16 @@ function save_article()
 }
 
 
-// *****************************************************
-//                 add avatar to article
-// *****************************************************
+// *********************************************************************************
+//                              Add Avatar to Article
+// *********************************************************************************
 
-$("#file-input").on("click", function () 
-{
-    //validate selected photo and send to the server 
-    //(with exporting 'add_avatar_to_article' function)
-    VALIDATOR.avatar("article");
-});
+// $("#file-input").on("click", function () 
+// {
+//     //validate selected photo and send to the server 
+//     //(with exporting 'add_avatar_to_article' function)
+//     VALIDATOR.avatar("article");
+// });
 
 $("#skip-btn").on("click", function () 
 { 
@@ -210,11 +209,23 @@ $("#skip-btn").on("click", function ()
     window.location.assign('/user/dashboard');
 });
 
+//Finish button (in profile-photo panel)
+$("#finish-btn").on("click", function () 
+{  
+    if (VALIDATOR.avatar_change() === true) {
+        add_avatar_to_article();
+    }
+});
+
 
 function add_avatar_to_article() 
 {  
     //make a form data for sending image to ther server
     let form_data = new FormData();
+
+    let article_title = $("#article-title").val();
+    form_data.append('article_title', article_title);
+
     let avatar = document.getElementById("file-input").files[0];
     form_data.append('avatar', avatar);
 
@@ -259,6 +270,7 @@ function add_avatar_to_article()
         }
     }); 
 }
+
 
 // *********************************************************************************
 //                               Appearance changes

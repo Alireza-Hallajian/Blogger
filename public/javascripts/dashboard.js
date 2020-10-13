@@ -1,7 +1,6 @@
 //client-side input validator
 import {VALIDATOR} from './input-validator-client.js';
 
-export const DASHBOARD = {change_avatar};
 
 // *********************************************************************************
 //                                Edit Section Buttons
@@ -195,7 +194,7 @@ $("#apply-password-change").on('click', function ()
         repeat: $("#repeat-p-box").val()
     }
 
-    if (VALIDATOR.p_change(passwords) === true) 
+    if (VALIDATOR.password_change(passwords) === true) 
     {
         changes_for_password_change("is-loading");
  
@@ -263,12 +262,16 @@ function change_password (passwords)
 // *********************************************************************************
 
 //open 'Change Photo' panel when cliked on 'Change Photo' area
-$("#add-photo").on("click", function () 
-{  
+$("#add-photo").on("click", function () {  
     $("#photo-modal-btn").trigger("click");
+});
 
-    //validate selected photo and send to the server (with exporting 'change_avatar' function)
-    VALIDATOR.avatar("profile");
+//Apply button (in profile-photo panel)
+$("#apply-photo-change").on("click", function () 
+{  
+    if (VALIDATOR.avatar_change() === true) {
+        change_avatar();
+    }
 });
 
 
@@ -296,6 +299,9 @@ function change_avatar ()
 
         success: function (result, status, xhr) 
         {
+            //changes were successful
+            alert("Photo changed successfully.");
+            
             //change the avatar photo in dashboard to the new one
             //(use preview-image src)
             $("#avatar").attr("src", `${$("#preview").attr("src")}`);
@@ -304,9 +310,6 @@ function change_avatar ()
 
             //close the change photo panel
             $(".photo-close-btns").trigger("click");
-
-            //changes were successful
-            alert("Photo changed successfully.");
         },
 
         //show error in alert-box
