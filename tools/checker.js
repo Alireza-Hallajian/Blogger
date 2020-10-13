@@ -1,10 +1,12 @@
 const CHECKER = {
     duplicate_signup: duplicate_signup_validator,
-    duplicate_edit: duplicate_edit_validator
+    duplicate_edit: duplicate_edit_validator,
+    duplicate_title: duplicate_title_validator
 };
 
 //models
 const User = require('../models/user.js');
+const Article = require('../models/article.js');
 
 
 //******************************************************************************** */
@@ -69,6 +71,29 @@ async function duplicate_edit_validator (username, mobile, session)
     //'mobile' conflict
     else if (blogger_mobile) {
         return ("Mobile is duplicate to another user.");
+    }
+
+    //No conflict
+    else {
+        return ("No Conflict");
+    }
+}
+
+
+
+//******************************************************************************** */
+//                      duplicate 'title'  - Adding Article
+//******************************************************************************** */
+
+async function duplicate_title_validator (title)
+{
+    // find article with duplicate 'title'
+    const article_title = await Article.findOne({ title });
+
+
+    //'title' conflict
+    if (article_title) {
+        return ("Title is duplicate to another article.");
     }
 
     //No conflict

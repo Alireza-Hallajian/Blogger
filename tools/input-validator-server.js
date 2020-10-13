@@ -3,7 +3,8 @@ const VALIDATOR = {
     signup: signup_validator,
     duplicate: duplicate_validator,
     edit: edit_validator,
-    p_change: change_password
+    p_change: change_password,
+    article: article_characters_count
 };
 
 
@@ -186,7 +187,6 @@ function edit_validator(data)
         return mobile_check_result;
     }
 
-
     
     //no errors in data input
     return true;
@@ -255,7 +255,31 @@ function warning_checker (mobile)
 }
 
 
+// *********************************************************************************
+//                             Article Characters Count
+// *********************************************************************************
 
+function article_characters_count(data)
+{
+    //Title length check
+    if (data.title.trim().length < 2 || data.title.trim().length > 70) {
+        return ("*Title must long at least 2 and at last 70");
+    }
+
+    //Summary length check
+    if (data.summary.trim().length < 100 || data.summary.trim().length > 400) {
+        return ("*Summary must long at least 100 and at last 400");
+    }
+
+    //Content length check
+    if (data.content.trim().length < 300 || data.content.trim().length > 15000) {
+        return ("*Title must long at least 300 and at last 10000");
+    }
+
+
+    //no errors in data input
+    return true;
+}
 
 
 module.exports = VALIDATOR;
