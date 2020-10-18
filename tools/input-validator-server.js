@@ -4,7 +4,8 @@ const VALIDATOR = {
     duplicate: duplicate_validator,
     edit: edit_validator,
     p_change: change_password,
-    article: article_characters_count
+    article: article_characters_count,
+    ObjectID_val: mongo_objectID_validator
 };
 
 
@@ -279,6 +280,39 @@ function article_characters_count(data)
 
     //no errors in data input
     return true;
+}
+
+
+// *********************************************************************************
+//                             Mongo ObjectID Validator
+// *********************************************************************************
+
+//node modules
+const ObjectID = require('mongoose').Types.ObjectId;
+
+
+function mongo_objectID_validator(id) 
+{  
+    if (ObjectID.isValid(id)) 
+    {
+        //valid Mongo ObjectID
+        if (new ObjectID(id) == id) 
+        {
+            //typeof(ObjectID(id)) is not equal to typeof((id))
+            //so double '=' is used instead of triple
+            return true;
+        }
+
+        //invalid Mongo ObjectID
+        else {
+            return ("Invalid article id");
+        }
+    }
+
+    //invalid Mongo ObjectID
+    else {
+        return ("Invalid article id");
+    }
 }
 
 

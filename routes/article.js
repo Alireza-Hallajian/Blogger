@@ -12,7 +12,7 @@ const Article = require('../models/article.js');
 
 //tools
 const INPUT_VALIDATOR = require('../tools/input-validator-server.js');
-const upload_config = require('../tools/upload-config.js');
+const multer_config = require('../tools/multer-config.js');
 const CHECKER = require('../tools/checker.js');
 const VALIDATOR = require('../tools/input-validator-server.js');
 
@@ -84,75 +84,74 @@ router.post('/', async (req, res) =>
 //                                  Change Avatar
 //******************************************************************************** */
 
-router.put('/avatar', async (req, res) => 
+router.put('/avatar/:article_id', async (req, res) => 
 {
     try
     {
         //************************************************************** */
-        //                    upload article avatar
+        //                  Mongo ObjectID Validation
         //************************************************************** */
 
-        let upload_article_avatar = await upload_config.Article(req).catch(err => { throw err; });
+        //ckeck 'article_id' to be a valid mongo ObjectID
+        let article_id_val = VALIDATOR.ObjectID_val(req.params.article_id)
 
-
-        //if recieved from-data is not acceptable
-        if (upload_article_avatar.result !== true) 
-        {       
-            //remove new photo if recieved from-data has any non-acceptable part
-            //('formidable' module, uploads file when '.parse' method is called --> refer to 'upload-config' file)
-            fs.unlink(req.session.article.avatar, function (err) 
-            {
-                if (err) {
-                    console.log(colors.bgRed("\n" + `Something went wrong in removing " ${req.session.user.username}'s " new article avatar!` + "\n"));
-                    console.log(colors.brightRed(err + "\n"));
-                }
-            });            
-
-
-            //change article avatar to default in database, because previous one has been deleted in upper code block
-            await Article.findByIdAndUpdate(upload_article_avatar.article_id, {articleAvatar: "default-article-pic.png"}, (err, article) => 
-            {
-                if (err) 
-                {
-                    console.log(colors.bgRed("\n" + `Something went wrong in changing previous " ${article.title}'s " avatar to default!` + "\n"));
-                    console.log(colors.brightRed(err + "\n"));
-    
-                    return res.status(500).send("Something went wrong in finding article!");
-                }
-            });
-
-            
-            return res.status(400).send(upload_article_avatar.result);
+        //invalid 'article_id'
+        if (article_id_val !== true) {
+            return res.status(400).send(article_id_val);
         }
-            
+
+
+        //************************************************************** */
+        //            chcek 'article_id' to be its own artice  
+        //************************************************************** */
+
+        let article_author = await Article.findById(req.params.article_id, (err, article) => {
+            if (err) throw err;
+        }).populate("author");
+
+        if (article_author.author._id != req.session.user._id) {
+            return res.status(403).send("You can NOT change other people's article avatar.")
+        }
+
+
+        //************************************************************** */
+        //                  Upload Article Avatar
+        //************************************************************** */
         
-            // //update articles's avatar in database
-            // await Article.findByIdAndUpdate(upload_article_avatar.article_id, {articleAvatar: req.session.article.avatar}, {new: false}, (err, article) => 
-            // {
-            //     if (err) 
-            //     {
-            //         //remove new photo if could not save in database
-            //         fs.unlink(`public/images/articles/${req.file.filename}`, function (err) {
-            //             if (err) {
-            //                 console.log(colors.bgRed("\n" + `Something went wrong in removing new " ${article.title}'s " avatar!` + "\n"));
-            //                 console.log(colors.brightRed(err + "\n"));
-            //             }
-            //         });
+        const upload = multer_config.Article.single('avatar');
 
-            //         return res.status(500).send("Something went wrong in finding article!");
-            //     }
+        //replace new avatar
+        upload(req, res, async function (err) 
+        {  
+            if (err)
+            {
+                //multiple file error (just one file/field is accepted)
+                if (err instanceof multer.MulterError && err.message === "Unexpected field") {
+                    return res.status(400).send(err.message);
+                }
+
+                //if NON-acceptable file recieved
+                return res.status(400).send(err);
+            }
+
+            
+            //if no file recieved
+            if (!req.file) {
+                return res.status(400).send("Empty field error.");
+            }
 
 
-            //     //previous article avatar is removed automatically
-            //     //because of duplicate filename
+            // *** article avatar updated ***
+            
+            // previous article avatar is removed automatically
+            // because of duplicate filename and extension
 
-                
-            //     // article avatar updated
-            //     return res.sendStatus(200);
-            // });
+            //no need to update database for new avatar, because new one replaces previous one
+            //and no change in its name occures
+
 
             return res.sendStatus(200);
-        
+        });
     }
 
     catch (err) {
