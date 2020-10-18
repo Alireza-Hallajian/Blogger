@@ -4,8 +4,7 @@ const VALIDATOR = {
     duplicate: duplicate_validator,
     edit: edit_validator,
     p_change: change_password,
-    article: article_characters_count,
-    ObjectID: mongo_objectid_val
+    article: article_characters_count
 };
 
 
@@ -281,81 +280,6 @@ function article_characters_count(data)
     //no errors in data input
     return true;
 }
-
-
-// *********************************************************************************
-//                             Mongo ObjectID Validation
-// *********************************************************************************
-
-const ObjectID = require('mongoose').Types.ObjectId;
-const formidable = require('formidable');
-
-async function mongo_objectid_val(req) 
-{  
-    // if (ObjectID.isValid(id))
-    // {
-    //     //valid Mongo ObjectID
-    //     if (new ObjectID(id) == id) 
-    //     {   
-    //         //typeof(ObjectID(id)) is not equal to typeof((id))
-    //         //so double '=' is used instead of triple
-    //         return true;
-    //     }
-
-    //     //invalid Mongo ObjectID
-    //     else {
-    //         return false;
-    //     }
-    // }
-
-
-    const form = formidable();
-    
-    let form_data_check_result = "";
-    
-    
-    await form.parse(req, (err, fields, files) => 
-    {
-        if (err) throw err;
-    
-        let files_num = Object.keys(files).length;
-        let fields_num = Object.keys(fields).length;
-        
-    
-        //check number of files and fileds recieved (Just one per)
-        if (files_num !== 1 || fields_num !== 1) {
-            form_data_check_result = "Just 1 file and 1 (another)field is accepted.";
-        }
-    
-        //check keys of the recieved form-data
-        if (!("article_id" in fields) || !("article_avatar" in files)) {
-            form_data_check_result = "Keys of the recieved form-data are not accepted.";
-        }
-    
-    
-        let id = fields.article_id;
-    
-        if (ObjectID.isValid(id))
-        {
-            //valid Mongo ObjectID
-            if (new ObjectID(id) == id) 
-            {   
-                //typeof(ObjectID(id)) is not equal to typeof((id))
-                //so double '=' is used instead of triple
-                form_data_check_result = true;
-            }
-    
-            //invalid Mongo ObjectID
-            else {
-                form_data_check_result = "Invalid article id";
-            }
-        }
-    });
-
-    return form_data_check_result;
-}
-
-
 
 
 

@@ -11,7 +11,7 @@ const User = require('../models/user.js');
 
 //tools
 const INPUT_VALIDATOR = require('../tools/input-validator-server.js');
-const multer_config = require('../tools/multer-config.js');
+const upload_config = require('../tools/upload-config.js');
 const CHECKER = require('../tools/checker.js');
 
 
@@ -162,7 +162,7 @@ router.put('/avatar', (req, res) =>
 {
     try
     {
-        const upload = multer_config.Profile.single('avatar');
+        const upload = upload_config.Profile.single('avatar');
 
 
         //replace new avatar
