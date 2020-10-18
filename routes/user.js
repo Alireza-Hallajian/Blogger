@@ -11,7 +11,7 @@ const User = require('../models/user.js');
 
 //tools
 const INPUT_VALIDATOR = require('../tools/input-validator-server.js');
-const upload_config = require('../tools/upload-config.js');
+const multer_config = require('../tools/multer-config.js');
 const CHECKER = require('../tools/checker.js');
 
 
@@ -162,7 +162,7 @@ router.put('/avatar', (req, res) =>
 {
     try
     {
-        const upload = upload_config.Profile.single('avatar');
+        const upload = multer_config.Profile.single('avatar');
 
 
         //replace new avatar
@@ -172,41 +172,33 @@ router.put('/avatar', (req, res) =>
             {
                 //multiple file error (just one file/field is accepted)
                 if (err instanceof multer.MulterError && err.message === "Unexpected field") {
-                    return res.status(400).send("Only one field/file is accepted.");
+                    return res.status(400).send(err.message);
                 }
 
                 //if NON-acceptable file recieved
                 return res.status(400).send(err);
             }
 
-
-            //update user's avatar
-            await User.findByIdAndUpdate(req.session.user._id, {avatar: req.file.filename}, {new: false}, (err, user) => 
-            {
-                if (err) 
-                {
-                    //remove new photo if could not save in database
-                    fs.unlink(`public/images/profiles/${req.file.filename}`, function (err) {
-                        if (err) {
-                            console.log(colors.bgRed("\n" + `Something went wrong in removing new " ${req.session.user.username}'s " avatar!` + "\n"));
-                            console.log(colors.brightRed(err + "\n"));
-                        }
-                    });
-
-                    return res.status(500).send("Something went wrong in finding user!");
-                }
+            
+            //if no file recieved
+            if (!req.file) {
+                return res.status(400).send("Empty field error.");
+            }
 
 
-                //previous article avatar is removed automatically
-                //because of duplicate filename
-                 
+            // *** user avatar updated ***
+            
+            // previous user avatar is removed automatically
+            // because of duplicate filename and extension
 
-                //update user's session for new avatar
-                req.session.user.avatar = req.file.filename;
+            //no need to update database for new avatar, because new one replaces previous one
+            //and no change in its name occures
 
-                //user avatar updated
-                return res.sendStatus(200);
-            });
+
+            //update user's session for new avatar (needed when user reloads dashboard)
+            req.session.user.avatar = req.file.filename;
+
+            return res.sendStatus(200);
         });
     }
 
