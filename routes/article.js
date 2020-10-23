@@ -18,6 +18,68 @@ const VALIDATOR = require('../tools/input-validator-server.js');
 
 
 //******************************************************************************** */
+//                         get articles for a specific user
+//******************************************************************************** */
+
+router.get('/', async (req, res) => 
+{
+    try
+    {
+        //find user aricles sorted by 'createdAt' descended
+        await Article.find({author: req.session.user._id}).sort({createdAt: -1}).populate("author").exec((err, articles) => 
+        {
+            //if database error occured
+            if (err) {
+                console.log(colors.brightRed("\n" + err + "\n"));
+                return res.status(500).send("Something went wrong in finding articles!");
+            }
+
+
+            //if no article found
+            if (articles.length === 0) {
+                return res.status(404).send("You have no article!");
+            }
+
+            //article(s) found
+            else 
+            {
+                let author_info = {
+                    fname: articles[0].author.firstName,
+                    lname: articles[0].author.lastName,
+                    avatar: articles[0].author.avatar
+                }
+
+
+                let articles_info = [];
+                
+                //put all articles inside an array (with needed info)
+                for (let i = 0, len = articles.length; i < len; i++)
+                {
+                    articles_info[i] = {
+                        id: articles[i]._id,
+                        createdAt: articles[i].createdAt,
+                        avatar: articles[i].articleAvatar,
+                        title: articles[i].title,
+                        summary: articles[i].summary,
+                        content: articles[i].content
+                    }
+                }
+
+                //send NEEDED-author_info and articles to the client
+                return res.json({author_info, articles_info});
+            }
+        });
+    }
+
+    catch (err) {
+        console.log(colors.brightRed("\n" + err + "\n"));
+        res.status(500).send("Something went wrong! Try again.");
+    }
+});
+
+
+
+//******************************************************************************** */
 //                                  Save Article
 //******************************************************************************** */
 
@@ -142,10 +204,9 @@ router.put('/title/:article_id', async (req, res) =>
 
         Article.findByIdAndUpdate(req.params.article_id, {title: req.body.new_title}, (err) =>
         {
-            //if database error encountered
+            //if database error occured
             if (err) {
                 console.log(colors.brightRed("\n" + err + "\n"));
-
                 return res.status(500).send("Something went wrong in updating or finding the article!");
             }
 
@@ -213,10 +274,9 @@ router.put('/summary/:article_id', async (req, res) =>
 
         Article.findByIdAndUpdate(req.params.article_id, {summary: req.body.new_summary}, (err) =>
         {
-            //if database error encountered
+            //if database error occured
             if (err) {
                 console.log(colors.brightRed("\n" + err + "\n"));
-
                 return res.status(500).send("Something went wrong in updating or finding the article!");
             }
 
@@ -284,10 +344,9 @@ router.put('/content/:article_id', async (req, res) =>
 
         Article.findByIdAndUpdate(req.params.article_id, {content: req.body.new_content}, (err) =>
         {
-            //if database error encountered
+            //if database error occured
             if (err) {
                 console.log(colors.brightRed("\n" + err + "\n"));
-
                 return res.status(500).send("Something went wrong in updating or finding the article!");
             }
 
@@ -421,10 +480,9 @@ router.delete('/:article_id', async (req, res) =>
         
         Article.findByIdAndDelete(req.params.article_id, (err) => 
         {
-            //if database error encountered
+            //if database error occured
             if (err) {
                 console.log(colors.brightRed("\n" + err + "\n"));
-
                 return res.status(500).send("Something went wrong in deleteing the article!");
             }
 

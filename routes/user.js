@@ -234,7 +234,7 @@ router.delete('/avatar', (req, res, next) =>
             //update user's avatar in database (change to default)
             User.findByIdAndUpdate(req.session.user._id, { avatar: "default-profile-pic.jpg" }, (err, user) => 
             {
-                //if database error encountered
+                //if database error occured
                 if (err) {
                     console.log(colors.brightRed("\n" + err + "\n"));
 
