@@ -9,6 +9,7 @@ const article_router = require('./article.js');
 
 //models
 const User = require('../models/user.js');
+const Article = require('../models/article.js');
 
 //tools
 const INPUT_VALIDATOR = require('../tools/input-validator-server.js');
@@ -70,6 +71,66 @@ const is_login = function (req, res, next)
     
     next();
 }
+
+
+
+//******************************************************************************** */
+//                                 Get All Articles
+//******************************************************************************** */
+
+router.get('/', async (req, res) => 
+{
+    try
+    {
+        //find all articles sorted by 'createdAt' descended
+        await Article.find({}).sort({createdAt: -1}).populate("author").exec((err, articles) => 
+        {
+            //if database error occured
+            if (err) {
+                console.log(colors.brightRed("\n" + err + "\n"));
+                return res.status(500).send("Something went wrong in finding articles!");
+            }
+
+
+            //if no article found
+            if (articles.length === 0) {
+                return res.status(404).send("There is no article!");
+            }
+
+            //article(s) found
+            else 
+            {
+                let articles_info = [];
+                
+                //put all articles inside an array (with needed info)
+                for (let i = 0, len = articles.length; i < len; i++)
+                {
+                    articles_info[i] = {
+                        author_fname: articles[i].author.firstName,
+                        author_lname: articles[i].author.lastName,
+                        author_avatar: articles[i].author.avatar,
+
+                        article_id: articles[i]._id,
+                        article_createdAt: articles[i].createdAt,
+                        article_avatar: articles[i].articleAvatar,
+                        article_title: articles[i].title,
+                        article_summary: articles[i].summary,
+                        article_content: articles[i].content
+                    }
+                }
+
+                
+                //send NEEDED-author_info and articles to the client
+                return res.json(articles_info);
+            }
+        });
+    }
+
+    catch (err) {
+        console.log(colors.brightRed("\n" + err + "\n"));
+        res.status(500).send("Something went wrong! Try again.");
+    }
+});
 
 
 
