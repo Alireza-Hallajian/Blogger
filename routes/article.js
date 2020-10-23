@@ -79,11 +79,12 @@ router.post('/', async (req, res) =>
 });
 
 
+
 //******************************************************************************** */
-//                                 Change Title
+//                                   Edit Title
 //******************************************************************************** */
 
-router.put('/edit_title/:article_id', async (req, res) => 
+router.put('/title/:article_id', async (req, res) => 
 {
     try
     {
@@ -139,7 +140,7 @@ router.put('/edit_title/:article_id', async (req, res) =>
         //                      change title to new one
         //************************************************************** */
 
-        Article.findByIdAndUpdate(req.params.article_id, {title: req.body.new_title}, (err, article) =>
+        Article.findByIdAndUpdate(req.params.article_id, {title: req.body.new_title}, (err) =>
         {
             //if database error encountered
             if (err) {
@@ -149,6 +150,148 @@ router.put('/edit_title/:article_id', async (req, res) =>
             }
 
             return res.send("Article's title changed sucessfully.");
+        });
+    }
+
+
+    catch (err) {
+        console.log(colors.brightRed("\n" + err + "\n"));
+        res.status(500).send("Something went wrong! Try again.");
+    }
+});
+
+
+
+//******************************************************************************** */
+//                                  Edit Summary
+//******************************************************************************** */
+
+router.put('/summary/:article_id', async (req, res) => 
+{
+    try
+    {
+        //************************************************************** */
+        //                  Mongo ObjectID Validation
+        //************************************************************** */
+
+        //ckeck 'article_id' to be a valid mongo ObjectID
+        let article_id_val = VALIDATOR.ObjectID_val(req.params.article_id)
+
+        //invalid 'article_id'
+        if (article_id_val !== true) {
+            return res.status(400).send(article_id_val);
+        }
+
+
+        //************************************************************** */
+        //            chcek 'article_id' to be user's own article 
+        //************************************************************** */
+
+        let article_check_result = await CHECKER.has_article(req.params.article_id, req.session.user._id);
+
+        if (article_check_result !== "No Conflict") {
+            return res.status(400).send(article_check_result);
+        }
+
+
+        //************************************************************** */
+        //                        Input Validation     
+        //************************************************************** */
+
+        //result of input-validation --> 'true' if there is no error
+        let char_cout_validation_result = INPUT_VALIDATOR.article(req.body.new_summary, "summary");
+    
+        //if characters count have any errors
+        if (char_cout_validation_result !== true) {
+            return res.send(char_cout_validation_result);
+        }
+
+
+        //************************************************************** */
+        //                      change summary to new one
+        //************************************************************** */
+
+        Article.findByIdAndUpdate(req.params.article_id, {summary: req.body.new_summary}, (err) =>
+        {
+            //if database error encountered
+            if (err) {
+                console.log(colors.brightRed("\n" + err + "\n"));
+
+                return res.status(500).send("Something went wrong in updating or finding the article!");
+            }
+
+            return res.send("Article's summary changed sucessfully.");
+        });
+    }
+
+
+    catch (err) {
+        console.log(colors.brightRed("\n" + err + "\n"));
+        res.status(500).send("Something went wrong! Try again.");
+    }
+});
+
+
+
+//******************************************************************************** */
+//                                  Edit Content
+//******************************************************************************** */
+
+router.put('/content/:article_id', async (req, res) => 
+{
+    try
+    {
+        //************************************************************** */
+        //                  Mongo ObjectID Validation
+        //************************************************************** */
+
+        //ckeck 'article_id' to be a valid mongo ObjectID
+        let article_id_val = VALIDATOR.ObjectID_val(req.params.article_id)
+
+        //invalid 'article_id'
+        if (article_id_val !== true) {
+            return res.status(400).send(article_id_val);
+        }
+
+
+        //************************************************************** */
+        //            chcek 'article_id' to be user's own article 
+        //************************************************************** */
+
+        let article_check_result = await CHECKER.has_article(req.params.article_id, req.session.user._id);
+
+        if (article_check_result !== "No Conflict") {
+            return res.status(400).send(article_check_result);
+        }
+
+
+        //************************************************************** */
+        //                        Input Validation     
+        //************************************************************** */
+
+        //result of input-validation --> 'true' if there is no error
+        let char_cout_validation_result = INPUT_VALIDATOR.article(req.body.new_content, "content");
+    
+        //if characters count have any errors
+        if (char_cout_validation_result !== true) {
+            return res.send(char_cout_validation_result);
+        }
+
+
+        //************************************************************** */
+        //                      change content to new one
+        //************************************************************** */
+
+        Article.findByIdAndUpdate(req.params.article_id, {content: req.body.new_content}, (err) =>
+        {
+            //if database error encountered
+            if (err) {
+                console.log(colors.brightRed("\n" + err + "\n"));
+
+                return res.status(500).send("Something went wrong in updating or finding the article!");
+            }
+
+            return res.send("Article's content changed sucessfully.");
         });
     }
 
