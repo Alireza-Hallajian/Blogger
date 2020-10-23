@@ -260,26 +260,61 @@ function warning_checker (mobile)
 //                             Article Characters Count
 // *********************************************************************************
 
-function article_characters_count(data)
+function article_characters_count(data, part)
 {
-    //Title length check
-    if (data.title.trim().length < 2 || data.title.trim().length > 70) {
-        return ("*Title must long at least 2 and at last 70");
+    if (part === "all")
+    {
+        //Title length check
+        if (data.title.trim().length < 2 || data.title.trim().length > 70) {
+            return ("*Title must long at least 2 and at last 70");
+        }
+    
+        //Summary length check
+        if (data.summary.trim().length < 100 || data.summary.trim().length > 400) {
+            return ("*Summary must long at least 100 and at last 400");
+        }
+    
+        //Content length check
+        if (data.content.trim().length < 300 || data.content.trim().length > 15000) {
+            return ("*Title must long at least 300 and at last 10000");
+        }
+
+
+        //no errors in data input
+        return true;
     }
 
-    //Summary length check
-    if (data.summary.trim().length < 100 || data.summary.trim().length > 400) {
-        return ("*Summary must long at least 100 and at last 400");
+
+    else 
+    {
+        //Title length check
+        if (part === "title")
+        {
+            if (data.trim().length < 2 || data.trim().length > 70) {
+                return ("*Title must long at least 2 and at last 70");
+            }
+        }
+
+        //Summary length check
+        else if (part === "summary")
+        {
+            if (data.trim().length < 100 || data.trim().length > 400) {
+                return ("*Summary must long at least 100 and at last 400");
+            }
+        }
+
+        //Content length check
+        else if (part === "content")
+        {
+            if (data.trim().length < 300 || data.trim().length > 15000) {
+                return ("*Title must long at least 300 and at last 10000");
+            }
+        }
+
+
+        //no errors in data input
+        return true;
     }
-
-    //Content length check
-    if (data.content.trim().length < 300 || data.content.trim().length > 15000) {
-        return ("*Title must long at least 300 and at last 10000");
-    }
-
-
-    //no errors in data input
-    return true;
 }
 
 
@@ -293,20 +328,12 @@ const ObjectID = require('mongoose').Types.ObjectId;
 
 function mongo_objectID_validator(id) 
 {  
-    if (ObjectID.isValid(id)) 
+    //valid Mongo ObjectID
+    if (ObjectID.isValid(id) && new ObjectID(id) == id) 
     {
-        //valid Mongo ObjectID
-        if (new ObjectID(id) == id) 
-        {
-            //typeof(ObjectID(id)) is not equal to typeof((id))
-            //so double '=' is used instead of triple
-            return true;
-        }
-
-        //invalid Mongo ObjectID
-        else {
-            return ("Invalid article id");
-        }
+        //typeof(ObjectID(id)) is not equal to typeof((id))
+        //so double '=' is used instead of triple
+        return true;
     }
 
     //invalid Mongo ObjectID

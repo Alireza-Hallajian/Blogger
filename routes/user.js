@@ -243,7 +243,7 @@ router.delete('/avatar', (req, res, next) =>
                 //change user's avatar to default
                 req.session.user.avatar = "default-profile-pic.jpg";
 
-                return res.send("User' avatar removed sucessfully");
+                return res.send("User's avatar removed sucessfully");
             });
         });
     }
