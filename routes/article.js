@@ -383,6 +383,63 @@ router.put('/avatar/:article_id', async (req, res) =>
 
 
 
+//******************************************************************************** */
+//                                  Delete Article
+//******************************************************************************** */
+
+router.delete('/:article_id', async (req, res) => 
+{
+    try
+    {
+        //************************************************************** */
+        //                  Mongo ObjectID Validation
+        //************************************************************** */
+
+        //ckeck 'article_id' to be a valid mongo ObjectID
+        let article_id_val = VALIDATOR.ObjectID_val(req.params.article_id)
+
+        //invalid 'article_id'
+        if (article_id_val !== true) {
+            return res.status(400).send(article_id_val);
+        }
+
+
+        //************************************************************** */
+        //            chcek 'article_id' to be user's own article 
+        //************************************************************** */
+
+        let article_check_result = await CHECKER.has_article(req.params.article_id, req.session.user._id);
+
+        if (article_check_result !== "No Conflict") {
+            return res.status(400).send(article_check_result);
+        }
+
+
+        //************************************************************** */
+        //                          Delete Article 
+        //************************************************************** */
+        
+        Article.findByIdAndDelete(req.params.article_id, (err) => 
+        {
+            //if database error encountered
+            if (err) {
+                console.log(colors.brightRed("\n" + err + "\n"));
+
+                return res.status(500).send("Something went wrong in deleteing the article!");
+            }
+
+            return res.send("Article deleted sucessfully.");
+        });
+    }
+
+    catch (err) {
+        console.log(colors.brightRed("\n" + err + "\n"));
+        res.status(500).send("Something went wrong! Try again.");
+    }
+});
+
+
+
 
 
 module.exports = router;
