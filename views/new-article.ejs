@@ -22,7 +22,15 @@
 
     <%- include('./partials/bars/navbar.ejs') -%>
 
-    <%- include('./partials/bars/sidebar-admin.ejs') -%>
+    <%# blogger sidebar %>
+    <% if (role === "blogger") { %>
+        <%- include('./partials/bars/sidebar-blogger.ejs') -%>
+    <%} %>
+
+    <%# admin sidebar %>
+    <% if (role === "admin") { %>
+        <%- include('./partials/bars/sidebar-admin.ejs') -%>
+    <%} %>
     
 
 

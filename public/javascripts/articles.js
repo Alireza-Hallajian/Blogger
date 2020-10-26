@@ -94,16 +94,17 @@ $("#publish-btn").on("click", function (event)
     //open summary panel
     $("#summary-modal-btn").trigger("click");
 
-    let char_count = 0;
+    let summary_char_count = 0;
+    let title_char_count = 0;
 
     //count summary characters
     $("#summary-sheet").keyup(function () 
     { 
-        char_count = $(this).val().length;
+        summary_char_count = $(this).val().length;
 
-        $("#char-count span").text(char_count);
+        $("#char-count span").text(summary_char_count);
         
-        if (char_count > 400) {
+        if (summary_char_count > 400) {
             $("#char-count").css("color", "red");
         }
         else {
@@ -112,17 +113,19 @@ $("#publish-btn").on("click", function (event)
     });
 
     
-    //check summary characters and send to the server
+    //check summary and title characters and send to the server
     $("#expose-btn").click(function () 
     { 
-        if (char_count < 100) {
+        title_char_count = $("#article-title").val().length;
+
+        if (title_char_count < 2 || title_char_count > 70) {
             $("#error-alert-summary").show();
-            $("#error-alert-summary").html("<b>Min</b> characters allowed is <b>100</b>");
+            $("#error-alert-summary").html("<b>Title</b> characters MUST be between <b>2</b> and <b>70</b>.");
         }
 
-        else if (char_count > 400) {
+        else if (summary_char_count < 100 || summary_char_count > 400) {
             $("#error-alert-summary").show();
-            $("#error-alert-summary").html("<b>Max</b> characters allowed is <b>400</b>");
+            $("#error-alert-summary").html("<b>Summary</b> characters MUST be between <b>100</b> and <b>400</b>.");
         }
 
         else {
@@ -141,9 +144,9 @@ function save_article()
 {  
     //article parts
     let article = {
-        content: $("#article-sheet").val(),
         title: $("#article-title").val(),
-        summary: $("#summary-sheet").val()
+        summary: $("#summary-sheet").val(),
+        content: $("#article-sheet").val()
     }
 
     changes_for_article_publish("is-loading");
@@ -166,11 +169,16 @@ function save_article()
             $(".summary-close-btns").trigger("click");
 
 
-            //open the add photo panel
-            $("#article-photo-modal-btn").trigger("click");
+            //*******************************************************************************
+            //should go to articles page
+            //*******************************************************************************
+            window.location.assign('/user/dashboard');
 
-            //diselect chosen photo
-            document.getElementById("file-input-container").reset()
+            // //open the add photo panel
+            // $("#article-photo-modal-btn").trigger("click");
+
+            // //diselect chosen photo
+            // document.getElementById("file-input-container").reset()
         },
 
         error: function (xhr, status, error) 
@@ -194,7 +202,7 @@ function save_article()
 //                              Add Avatar to Article
 // *********************************************************************************
 
-//some operations are in 'VALIDATOR' module
+//*** some operations are in 'VALIDATOR' module ***
 
 
 $("#skip-btn").on("click", function () 
@@ -273,7 +281,7 @@ function add_avatar_to_article()
 // *********************************************************************************
 
 //hiding and showing buttons and boxes when 'expose' button is clicked
-//for password change
+//for article publish
 function changes_for_article_publish (status) 
 {
     if (status === "is-loading")
@@ -299,28 +307,28 @@ function changes_for_article_publish (status)
 }
 
 
-//hiding and showing buttons and boxes when 'expose' button is clicked
-//for password change
+//hiding and showing buttons and boxes when 'finish' button is clicked
+//for article avatar
 function changes_for_article_avatar (status) 
 {
-    // if (status === "is-loading")
-    // {
-    //     //hide error box and buttons
-    //     $("#error-alert-summary").hide();    
-    //     $("#expose-btn").hide();  
-    //     $(".summary-close-btns").hide();
+    if (status === "is-loading")
+    {
+        //hide error box and buttons
+        $("#error-alert-summary").hide();    
+        $("#expose-btn").hide();  
+        $(".summary-close-btns").hide();
 
-    //     //show loading
-    //     $("#loading-summary").show();
-    // }
+        //show loading
+        $("#loading-summary").show();
+    }
 
-    // else if ("not-loading")
-    // {
-    //     //hide loading
-    //     $("#loading-summary").hide();
+    else if ("not-loading")
+    {
+        //hide loading
+        $("#loading-summary").hide();
                     
-    //     //show buttons
-    //     $(".summary-close-btns").show();
-    //     $("#expose-btn").show();
-    // }
+        //show buttons
+        $(".summary-close-btns").show();
+        $("#expose-btn").show();
+    }
 }
