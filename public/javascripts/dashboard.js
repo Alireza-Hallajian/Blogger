@@ -155,6 +155,7 @@ function save_profile_changes (user_info)
 }
 
 
+
 // *********************************************************************************
 //                                Change Password
 // *********************************************************************************
@@ -257,11 +258,13 @@ function change_password (passwords)
     }); 
 }
 
+
+
 // *********************************************************************************
 //                              Change Profile Photo
 // *********************************************************************************
 
-//some operations are in 'VALIDATOR' module
+//*** some operations are in 'VALIDATOR' module ***
 
 
 //open 'Change Photo' panel when cliked on 'Change Photo' area
@@ -276,6 +279,7 @@ $("#apply-photo-change").on("click", function ()
         change_avatar();
     }
 });
+
 
 
 // *****************************************************
@@ -399,6 +403,7 @@ function remove_avatar ()
 }
 
 
+
 // *********************************************************************************
 //                                    Check Ups
 // *********************************************************************************
@@ -464,37 +469,6 @@ function duplicate_check (username, mobile)
     });
 }
 
-
-// *********************************************************************************
-//                                  Log Out
-// *********************************************************************************
-
-$("#logout-btn").on("click", function ()
-{
-    //send log-out request to the server
-    $.ajax({
-        type: "DELETE",
-        url: "/user",
-
-        success: function (result,status,xhr) {
-            window.location.assign(result);
-        },
-
-        //show error ine alert-box
-        error: function (xhr, status, error) 
-        {
-            //forbidden error (when server restarts and sessions are cleared)
-            if (xhr.status === 403) {
-                window.location.assign("/");
-            }
-
-            //server error
-            if (xhr.status === 500) {
-                alert("Something went wrong logging out! Try again.");
-            }
-        }
-    });
-});
 
 
 // *********************************************************************************

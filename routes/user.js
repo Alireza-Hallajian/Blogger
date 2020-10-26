@@ -335,7 +335,7 @@ router.put('/password', async (req, res) =>
 //******************************************************************************** */
 
 //destroy user session and clear cookie
-router.delete('/', (req, res) =>
+router.get('/logout', (req, res) =>
 {  
     req.session.destroy((err) => 
     {
@@ -345,7 +345,7 @@ router.delete('/', (req, res) =>
         }
 
         res.clearCookie("user_sid");
-        res.send('/signin');
+        res.redirect("/signin");
     });
 });
 
