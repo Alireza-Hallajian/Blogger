@@ -48,14 +48,24 @@
     <% if (status === "has-Article") { %>
         
         <% for (let i = 0; i < articles_info.length; i++) { %>
-            <%- include('./partials/article-box.ejs', {articles, i}) -%>
+            <%- include('./partials/article-box-details.ejs', {articles, i}) -%>
         <%} %>
 
     <%} %>
 
 
+    <!-- show a specific article -->
+    <% if (status === "show-Article") { %>
+        
+        <%- include('./partials/article-box-text.ejs') -%>
+
+    <%} %>
 
 
+
+    <!-- Needed to avoid ancountering errors in HTML pages that don't have TinyMCE API -->
+    <!-- Because TinyMCE config is in 'articles.js' file -->
+    <%- include('./partials/APIs&CDNs/tiny-cloud.ejs') -%>
 
     <%- include('./partials/APIs&CDNs/fontawsome-js.ejs') -%>
     <%- include('./partials/APIs&CDNs/bootstrap-js.ejs') -%>

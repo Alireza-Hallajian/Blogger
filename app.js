@@ -55,29 +55,8 @@ app.use(session({
 }));
 
 
-
-app.get('/', function (req, res) 
-{  
-	// //bloggers' page
-	// if (req.session.user) {
-	// 	res.render('home.ejs', {
-	// 		role: req.session.user.role
-	// 	});
-	// }
-
-	// //guests' page
-	// else {
-	// 	res.render('home.ejs', {
-	// 		role: "guest"
-	// 	});
-	// }
-
-	res.render('new-article.ejs');
-});
-
-
+//control routes with an API
 app.use('/', api_router);
-
 
 
 

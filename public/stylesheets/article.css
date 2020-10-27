@@ -127,7 +127,7 @@
     width: 76.25%;
     height: auto;
     margin: 20px 320px;
-    padding: 20px;
+    padding: 20px 30px 30px 30px;
 
     border-radius: 15px;
     box-shadow: 2px 3px 10px #111111;
@@ -139,6 +139,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
 }
 
 #author-info {
@@ -198,6 +199,12 @@
     word-wrap: break-word;
 }
 
+#content {
+    width: 100%;
+    height: auto;
+    word-wrap: break-word;
+    display: none;
+}
 
 #footer {
     margin-top: 15px;

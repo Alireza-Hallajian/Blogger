@@ -54,6 +54,17 @@ function get_stats(id)
 
 
 // *********************************************************************************
+//             show loading until the article is completely ready
+// *********************************************************************************
+
+//change article content from string to HTML content
+$("#content").html($("#content").text());
+
+$("#loading-article-show").hide();
+$("#content").show();
+
+
+// *********************************************************************************
 //                              save article to database
 // *********************************************************************************
 
@@ -168,7 +179,7 @@ function save_article()
             //close the panel
             $(".summary-close-btns").trigger("click");
 
-            window.location.assign('/article');
+            window.location.assign('/article/user');
 
             // //open the add photo panel
             // $("#article-photo-modal-btn").trigger("click");
@@ -204,7 +215,7 @@ function save_article()
 $("#skip-btn").on("click", function () 
 { 
     
-    window.location.assign('/article');
+    window.location.assign('/user');
 });
 
 //Finish button (in profile-photo panel)
@@ -245,7 +256,7 @@ function add_avatar_to_article()
             //close the change photo panel
             $(".photo-close-btns").trigger("click");   
 
-            window.location.assign('/article');
+            window.location.assign('/article/user');
         },
 
         //show error in alert-box

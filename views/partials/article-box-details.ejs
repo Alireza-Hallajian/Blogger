@@ -4,6 +4,8 @@
 
         <div id="author-info">
 
+            <!------------------- author's avatar ------------------->
+
             <!-- all-articles mode -->
             <% if (articles === "all") { %>
 
@@ -18,9 +20,10 @@
     
             <%} %>
 
-    
 
             <div>
+
+                <!------------------- author's name ------------------->
 
                 <!-- all-articles mode -->
                 <% if (articles === "all") { %>
@@ -36,6 +39,9 @@
 
                 <%} %>
 
+
+                <!------------------- articles' dates ------------------->
+
                 <p> - <%= articles_info[i].createdAt -%></p>
 
             </div>
@@ -45,6 +51,8 @@
     </div>        
 
     <hr>
+
+    <!------------------- articles' titles' ------------------->
 
     <div id="article-title-container">
         <h3 id="article-title"><b><%= articles_info[i].title -%></b></h3>
@@ -61,12 +69,11 @@
     </div>
     
     
+    <!------------------- articles' summaries' ------------------->
+
     <div id="footer">
 
-        <!-- holds article id -->
-        <div id="article-id" style="display: none;"><%= articles_info[i].id -%></div>
-
-        <a href="#">Read More</a>
+        <a href="/article/<%= articles_info[i].id %>" id="read-more">Read More</a>
 
     </div>
 

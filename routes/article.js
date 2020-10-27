@@ -17,6 +17,10 @@ const VALIDATOR = require('../tools/input-validator-server.js');
 
 
 
+router.get('/', (req, res) => {
+    res.redirect("/");
+});
+
 //******************************************************************************** */
 //                               New Article Page
 //******************************************************************************** */
@@ -50,7 +54,7 @@ router.get('/user', async (req, res) =>
             //if no article found
             if (articles.length === 0) 
             {
-                return res.render("user-articles.ejs", {
+                return res.status(404).render("user-articles.ejs", {
                     role: req.session.user.role,
                     status: "no-Article"
                 });
@@ -92,6 +96,89 @@ router.get('/user', async (req, res) =>
             }
         });
     }
+
+    catch (err) {
+        console.log(colors.brightRed("\n" + err + "\n"));
+        res.status(500).send("Something went wrong! Try again.");
+    }
+});
+
+
+
+//******************************************************************************** */
+//                              Show a Specific Article
+//******************************************************************************** */
+
+router.get('/:article_id', async (req, res) => 
+{
+    try
+    {
+        //************************************************************** */
+        //                  Mongo ObjectID Validation
+        //************************************************************** */
+
+        //ckeck 'article_id' to be a valid mongo ObjectID
+        let article_id_val = VALIDATOR.ObjectID_val(req.params.article_id)
+
+        //invalid 'article_id'
+        if (article_id_val !== true) {
+            return res.status(400).send(article_id_val);
+        }
+
+        //************************************************************** */
+        //                  find the article and its info
+        //************************************************************** */        
+
+        let article = await Article.findOne({_id: req.params.article_id}).populate("author").exec((err, article) => 
+        {
+            //if database error occured
+            if (err) {
+                console.log(colors.brightRed("\n" + err + "\n"));
+                return res.status(500).send("Something went wrong in finding the article!");
+            }
+
+
+            //if article not found
+            if (!article) 
+            {
+                return res.render("user-articles.ejs", {
+                    role: req.session.user.role,
+                    status: "no-Article"
+                });
+            }
+
+            // res.sendStatus(200);
+
+            //article found
+            else 
+            {
+                let authors_info = {
+                    fname: article.author.firstName,
+                    lname: article.author.lastName,
+                    avatar: article.author.avatar
+                }
+           
+                let articles_info = {
+                    id: article._id,
+                    createdAt: article.createdAt,
+                    avatar: article.articleAvatar,
+                    title: article.title,
+                    content: article.content
+                }
+                
+
+                //send NEEDED-author_info and articles to the client
+                return res.render("user-articles.ejs", {
+                    role: req.session.user.role,
+                    status: "show-Article",
+                    authors_info,
+                    articles_info,
+                });
+            }
+        });
+        
+    }
+
 
     catch (err) {
         console.log(colors.brightRed("\n" + err + "\n"));

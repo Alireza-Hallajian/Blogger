@@ -54,12 +54,12 @@
   }
 
 
-  #loading-edit, #loading-password, #loading-photo, #loading-article, #loading-summary {
+  #loading-edit, #loading-password, #loading-photo, #loading-article, #loading-article-show, #loading-summary {
     display: none;
     margin: auto;
   }
 
-  #loading-article {
+  #loading-article, #loading-article-show {
     width: 250px;
     height: 250px;
     margin: 100px auto;

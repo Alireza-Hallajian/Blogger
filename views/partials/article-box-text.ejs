@@ -1,0 +1,59 @@
+<section class="article-box">
+
+    <div id="header">
+
+        <div id="author-info">
+
+            <!------------------- author's avatar ------------------->     
+    
+            <img id="author-avatar" src="/images/profiles/<%= authors_info.avatar -%>" alt="Author">
+    
+
+            <div>
+
+                <!------------------- author's name ------------------->
+
+                <p><%= authors_info.fname -%> <%= authors_info.lname -%></p>   
+
+
+                <!------------------- article's date ------------------->
+
+                <p> - <%= articles_info.createdAt -%></p>
+                
+            </div>
+
+            
+        </div>
+        <img id="article-avatar" src="/images/articles/<%= articles_info.avatar %>" alt="Article">
+       
+    </div>        
+
+    <hr>
+
+    <!------------------- article's title ------------------->
+
+    <div id="article-title-container">
+        <h3 id="article-title"><b><%= articles_info.title -%></b></h3>
+    </div>
+
+
+    <!------------------- article's content ------------------->
+
+    <div id="body">
+        
+        <div id="content"><%= articles_info.content %></div>
+
+    </div>
+
+
+    <!-- Loading Animation -->
+    <div id="loading-article-show" class="sk-chase">
+        <div class="sk-chase-dot"></div>
+        <div class="sk-chase-dot"></div>
+        <div class="sk-chase-dot"></div>
+        <div class="sk-chase-dot"></div>
+        <div class="sk-chase-dot"></div>
+        <div class="sk-chase-dot"></div>
+    </div>
+
+</section>
