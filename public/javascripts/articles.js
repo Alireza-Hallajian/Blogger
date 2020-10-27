@@ -168,11 +168,7 @@ function save_article()
             //close the panel
             $(".summary-close-btns").trigger("click");
 
-
-            //*******************************************************************************
-            //should go to articles page
-            //*******************************************************************************
-            window.location.assign('/user/dashboard');
+            window.location.assign('/article');
 
             // //open the add photo panel
             // $("#article-photo-modal-btn").trigger("click");
@@ -207,10 +203,8 @@ function save_article()
 
 $("#skip-btn").on("click", function () 
 { 
-    //*******************************************************************************
-    //should go to articles page
-    //*******************************************************************************
-    window.location.assign('/user/dashboard');
+    
+    window.location.assign('/article');
 });
 
 //Finish button (in profile-photo panel)
@@ -251,10 +245,7 @@ function add_avatar_to_article()
             //close the change photo panel
             $(".photo-close-btns").trigger("click");   
 
-            //*******************************************************************************
-            //should go to articles page
-            //*******************************************************************************
-            window.location.assign('/user/dashboard');
+            window.location.assign('/article');
         },
 
         //show error in alert-box

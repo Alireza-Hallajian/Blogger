@@ -1,0 +1,44 @@
+<section class="article-box">
+
+    <div id="header">
+
+        <div id="author-info">
+
+            <img id="author-avatar" src="images/profiles/<%= author_info.avatar -%>" alt="Author">
+
+            <div>
+                <p><%= author_info.fname -%> <%= author_info.lname -%></p>
+                <p> - <%= articles_info[i].createdAt -%></p>
+            </div>
+
+        </div>
+       
+    </div>        
+
+    <hr>
+
+    <div id="article-title-container">
+        <h3 id="article-title"><b><%= articles_info[i].title -%></b></h3>
+    </div>
+
+    <div id="body">
+
+        <img id="article-avatar" src="./images/default-article-pic.png" alt="Article">
+
+        <div id="summary">
+            <p><%= articles_info[i].summary -%></p>
+        </div>
+
+    </div>
+    
+    
+    <div id="footer">
+
+        <!-- holds article id -->
+        <div id="article-id" style="display: none;"><%= articles_info[i].id -%></div>
+
+        <a href="#">Read More</a>
+
+    </div>
+
+</section>

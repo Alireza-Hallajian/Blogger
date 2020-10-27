@@ -18,7 +18,19 @@ const VALIDATOR = require('../tools/input-validator-server.js');
 
 
 //******************************************************************************** */
-//                         get articles for a specific user
+//                               New Article Page
+//******************************************************************************** */
+
+router.get('/new', (req, res) => 
+{
+    res.render('new-article.ejs', {
+        role: req.session.user.role,
+    });
+});
+
+
+//******************************************************************************** */
+//                        get all articles of a specific user
 //******************************************************************************** */
 
 router.get('/', async (req, res) => 
@@ -60,13 +72,17 @@ router.get('/', async (req, res) =>
                         createdAt: articles[i].createdAt,
                         avatar: articles[i].articleAvatar,
                         title: articles[i].title,
-                        summary: articles[i].summary,
-                        content: articles[i].content
+                        summary: articles[i].summary
+                        // content: articles[i].content
                     }
                 }
 
                 //send NEEDED-author_info and articles to the client
-                return res.json({author_info, articles_info});
+                return res.render("user-articles.ejs", {
+                    role: req.session.user.role,
+                    author_info,
+                    articles_info
+                })
             }
         });
     }
@@ -80,7 +96,7 @@ router.get('/', async (req, res) =>
 
 
 //******************************************************************************** */
-//                                  Save Article
+//                                  Save New Article
 //******************************************************************************** */
 
 router.post('/', async (req, res) => 
@@ -118,8 +134,8 @@ router.post('/', async (req, res) =>
         const new_article = new Article({
             author: req.session.user._id,
             title: req.body.title,
-            content: req.body.content,
-            summary: req.body.summary
+            summary: req.body.summary,
+            content: req.body.content
         });
 
         new_article.save((err) => 

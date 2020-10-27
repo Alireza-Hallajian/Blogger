@@ -115,3 +115,88 @@
 #loading-article-photo {
     display: none;
 }
+
+
+/* ************************************************************************* */
+/*                             Articles List Section                         */
+/* ************************************************************************* */
+
+.article-box {
+    background-color: white;
+    
+    width: 76.25%;
+    height: auto;
+    margin: 20px 320px;
+    padding: 20px;
+
+    border-radius: 15px;
+    box-shadow: 2px 3px 10px #111111;
+
+    /* overflow: auto; */
+}
+
+#header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#author-info {
+    width: auto;
+    padding: 5px;
+    margin-top: 5px;
+
+    display: flex; 
+    flex-direction: row; 
+    justify-content: space-between; 
+    align-items: center;
+}
+
+#author-info div p {
+    display: inline-block;
+    width: auto;
+    margin: 2px;
+}
+
+#author-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    margin-right: 10px;
+}
+
+
+#article-title-container {
+    text-align: center;
+}
+
+#article-title {
+    margin: 5px auto;
+    /* word-wrap: break-word; */
+    display: inline-block;
+    text-align: center;
+}
+
+#body {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#article-avatar {
+    width: 80px;
+    float: left;
+}
+
+#summary {
+    width: 90%;
+    height: auto;
+    word-wrap: break-word;
+}
+
+
+#footer {
+    margin-top: 15px;
+    text-align: right;
+}
