@@ -48,8 +48,12 @@ router.get('/', async (req, res) =>
 
 
             //if no article found
-            if (articles.length === 0) {
-                return res.status(404).send("You have no article!");
+            if (articles.length === 0) 
+            {
+                return res.render("user-articles.ejs", {
+                    role: req.session.user.role,
+                    status: "no-Article"
+                });
             }
 
             //article(s) found
@@ -81,8 +85,9 @@ router.get('/', async (req, res) =>
                 return res.render("user-articles.ejs", {
                     role: req.session.user.role,
                     author_info,
-                    articles_info
-                })
+                    articles_info,
+                    status: "has-Article"
+                });
             }
         });
     }

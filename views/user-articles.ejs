@@ -34,15 +34,24 @@
     
 
 
-    
+    <!-- if user has no articles -->
+    <% if (status === "no-Article") { %>
 
-    <% for (let i = 0; i < articles_info.length; i++) { %>
-        <%- include('./partials/article-box.ejs', {i}) -%>
+        <section class="article-box" style="text-align: center;">
+            <h1><b>You have no articles!</b></h1>
+        </section>
+
     <%} %>
 
+        
+    <!-- load articles if any -->
+    <% if (status === "has-Article") { %>
+        
+        <% for (let i = 0; i < articles_info.length; i++) { %>
+            <%- include('./partials/article-box.ejs', {i}) -%>
+        <%} %>
 
-
-    
+    <%} %>
 
 
 

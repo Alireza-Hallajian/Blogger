@@ -168,11 +168,12 @@
 
 #article-title-container {
     text-align: center;
+    word-wrap: break-word;
 }
 
 #article-title {
+    max-width: 80%;
     margin: 5px auto;
-    /* word-wrap: break-word; */
     display: inline-block;
     text-align: center;
 }

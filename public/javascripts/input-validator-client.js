@@ -377,7 +377,7 @@ $("#file-input").on("change", function ()
         $("#finish-btn").hide();
 
         //change preview image to the default
-        $("#preview-article-photo").attr("src", "/images/default-article-pic.png");
+        $("#preview-article-photo").attr("src", "/images/articles/default-article-pic.png");
         
 
         // *****************************************************
