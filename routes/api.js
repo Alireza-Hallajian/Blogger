@@ -75,7 +75,7 @@ const is_login = function (req, res, next)
 
 
 //******************************************************************************** */
-//                                 Get All Articles
+//                                 Show All Articles
 //******************************************************************************** */
 
 router.get('/', async (req, res) => 
@@ -93,35 +93,47 @@ router.get('/', async (req, res) =>
 
 
             //if no article found
-            if (articles.length === 0) {
-                return res.status(404).send("There is no article!");
+            if (articles.length === 0) 
+            {
+                return res.render("user-articles.ejs", {
+                    role: req.session.user.role,
+                    status: "no-Article"
+                });
             }
 
             //article(s) found
             else 
             {
+                let authors_info = [];
                 let articles_info = [];
                 
                 //put all articles inside an array (with needed info)
                 for (let i = 0, len = articles.length; i < len; i++)
                 {
-                    articles_info[i] = {
-                        author_fname: articles[i].author.firstName,
-                        author_lname: articles[i].author.lastName,
-                        author_avatar: articles[i].author.avatar,
+                    authors_info[i] = {
+                        fname: articles[i].author.firstName,
+                        lname: articles[i].author.lastName,
+                        avatar: articles[i].author.avatar
+                    }
 
-                        article_id: articles[i]._id,
-                        article_createdAt: articles[i].createdAt,
-                        article_avatar: articles[i].articleAvatar,
-                        article_title: articles[i].title,
-                        article_summary: articles[i].summary,
-                        article_content: articles[i].content
+                    articles_info[i] = {
+                        id: articles[i]._id,
+                        createdAt: articles[i].createdAt,
+                        avatar: articles[i].articleAvatar,
+                        title: articles[i].title,
+                        summary: articles[i].summary
+                        // content: articles[i].content
                     }
                 }
 
-                
                 //send NEEDED-author_info and articles to the client
-                return res.json(articles_info);
+                return res.render("user-articles.ejs", {
+                    role: req.session.user.role,
+                    authors_info,
+                    articles_info,
+                    status: "has-Article",
+                    articles: "all"
+                });
             }
         });
     }

@@ -38,7 +38,7 @@
     <% if (status === "no-Article") { %>
 
         <section class="article-box" style="text-align: center;">
-            <h1><b>You have no articles!</b></h1>
+            <h1><b>There is no article!</b></h1>
         </section>
 
     <%} %>
@@ -48,7 +48,7 @@
     <% if (status === "has-Article") { %>
         
         <% for (let i = 0; i < articles_info.length; i++) { %>
-            <%- include('./partials/article-box.ejs', {i}) -%>
+            <%- include('./partials/article-box.ejs', {articles, i}) -%>
         <%} %>
 
     <%} %>

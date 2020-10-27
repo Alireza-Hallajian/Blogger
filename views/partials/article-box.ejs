@@ -4,11 +4,40 @@
 
         <div id="author-info">
 
-            <img id="author-avatar" src="images/profiles/<%= author_info.avatar -%>" alt="Author">
+            <!-- all-articles mode -->
+            <% if (articles === "all") { %>
+
+                <img id="author-avatar" src="/images/profiles/<%= authors_info[i].avatar -%>" alt="Author">
+    
+            <%} %>
+    
+            <!-- user-articles mode -->
+            <% if (articles === "user's") { %>
+    
+                <img id="author-avatar" src="/images/profiles/<%= authors_info.avatar -%>" alt="Author">
+    
+            <%} %>
+
+    
 
             <div>
-                <p><%= author_info.fname -%> <%= author_info.lname -%></p>
+
+                <!-- all-articles mode -->
+                <% if (articles === "all") { %>
+
+                    <p><%= authors_info[i].fname -%> <%= authors_info[i].lname -%></p>
+
+                <%} %>
+
+                <!-- user-articles mode -->
+                <% if (articles === "user's") { %>
+
+                    <p><%= authors_info.fname -%> <%= authors_info.lname -%></p>
+
+                <%} %>
+
                 <p> - <%= articles_info[i].createdAt -%></p>
+
             </div>
 
         </div>
@@ -23,7 +52,7 @@
 
     <div id="body">
 
-        <img id="article-avatar" src="./images/articles/default-article-pic.png" alt="Article">
+        <img id="article-avatar" src="/images/articles/<%= articles_info[i].avatar %>" alt="Article">
 
         <div id="summary">
             <p><%= articles_info[i].summary -%></p>

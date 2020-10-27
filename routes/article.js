@@ -33,7 +33,7 @@ router.get('/new', (req, res) =>
 //                        get all articles of a specific user
 //******************************************************************************** */
 
-router.get('/', async (req, res) => 
+router.get('/user', async (req, res) => 
 {
     try
     {
@@ -59,7 +59,7 @@ router.get('/', async (req, res) =>
             //article(s) found
             else 
             {
-                let author_info = {
+                let authors_info = {
                     fname: articles[0].author.firstName,
                     lname: articles[0].author.lastName,
                     avatar: articles[0].author.avatar
@@ -84,9 +84,10 @@ router.get('/', async (req, res) =>
                 //send NEEDED-author_info and articles to the client
                 return res.render("user-articles.ejs", {
                     role: req.session.user.role,
-                    author_info,
+                    authors_info,
                     articles_info,
-                    status: "has-Article"
+                    status: "has-Article",
+                    articles: "user's"
                 });
             }
         });
