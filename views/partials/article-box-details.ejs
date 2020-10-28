@@ -1,4 +1,4 @@
-<section class="article-box">
+<section class="article-box" id="<%= articles_info[i].id %>">
 
     <div id="header">
 
@@ -7,14 +7,14 @@
             <!------------------- author's avatar ------------------->
 
             <!-- all-articles mode -->
-            <% if (articles === "all") { %>
+            <% if (articles_for === "all") { %>
 
                 <img id="author-avatar" src="/images/profiles/<%= authors_info[i].avatar -%>" alt="Author">
     
             <%} %>
     
             <!-- user-articles mode -->
-            <% if (articles === "user's") { %>
+            <% if (articles_for === "user") { %>
     
                 <img id="author-avatar" src="/images/profiles/<%= authors_info.avatar -%>" alt="Author">
     
@@ -26,14 +26,14 @@
                 <!------------------- author's name ------------------->
 
                 <!-- all-articles mode -->
-                <% if (articles === "all") { %>
+                <% if (articles_for === "all") { %>
 
                     <p><%= authors_info[i].fname -%> <%= authors_info[i].lname -%></p>
 
                 <%} %>
 
                 <!-- user-articles mode -->
-                <% if (articles === "user's") { %>
+                <% if (articles_for === "user") { %>
 
                     <p><%= authors_info.fname -%> <%= authors_info.lname -%></p>
 
@@ -47,6 +47,18 @@
             </div>
 
         </div>
+
+
+        <!-- user-articles mode -->
+        <% if (articles_for === "user") { %>
+
+            <!----------------- edit article buttons ----------------->
+            <div>
+                <i class="fas fa-edit edit-article-btn" title="Edit Article"></i>
+                <i class="fas fa-trash-alt delete-article-btn" title="Delete Article"></i>
+            </div>
+
+        <%} %>
        
     </div>        
 

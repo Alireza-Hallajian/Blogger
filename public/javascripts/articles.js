@@ -54,7 +54,7 @@ function get_stats(id)
 
 
 // *********************************************************************************
-//             show loading until the article is completely ready
+//          show loading until the article is completely ready to be shown
 // *********************************************************************************
 
 //change article content from string to HTML content
@@ -62,6 +62,55 @@ $("#content").html($("#content").text());
 
 $("#loading-article-show").hide();
 $("#content").show();
+
+
+// *********************************************************************************
+//                                    Edit Article 
+// *********************************************************************************
+
+
+
+// *********************************************************************************
+//                                    Delete Article 
+// *********************************************************************************
+
+$(".delete-article-btn").on("click", function (event) 
+{ 
+    if (confirm("Are you sure to DELETE this article permanently?"))
+    {
+        // 'section' with class="article-box" and id=`article_id`
+        let article_info_container = $(this).parent().parent().parent();
+
+        let article_id = $(article_info_container).attr("id");
+
+        $.ajax(
+        {
+            type: "DELETE",
+            url: `/article/${article_id}`,
+    
+            success: function (result, status, xhr) 
+            {
+                alert("Article deleted successfully.")
+    
+                //remove the article-info panel
+                $(article_info_container).remove();
+            },
+    
+            error: function (xhr, status, error) 
+            {
+                //session timed out
+                if (xhr.status === 403) {
+                    window.location.assign('/signin');
+                }
+    
+                //server error
+                else if (xhr.status === 500) {
+                    alert("Something went wrong in deleting article! Try again.");
+                }
+            }
+        });
+    }
+});
 
 
 // *********************************************************************************

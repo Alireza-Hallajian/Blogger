@@ -141,7 +141,7 @@ router.get('/', async (req, res) =>
                     authors_info,
                     articles_info,
                     status: "has-Article",
-                    articles: "all"
+                    articles_for: "all"
                 });
             }
         });

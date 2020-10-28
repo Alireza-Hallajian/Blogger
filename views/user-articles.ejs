@@ -53,7 +53,7 @@
     <% if (status === "has-Article") { %>
         
         <% for (let i = 0; i < articles_info.length; i++) { %>
-            <%- include('./partials/article-box-details.ejs', {articles, i}) -%>
+            <%- include('./partials/article-box-details.ejs', {articles_for, i}) -%>
         <%} %>
 
     <%} %>

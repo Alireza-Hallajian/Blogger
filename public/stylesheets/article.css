@@ -135,6 +135,11 @@
     /* overflow: auto; */
 }
 
+
+/* ************************************************* */
+/*                  Header Section                   */
+/* ************************************************* */
+
 #header {
     display: flex;
     flex-direction: row;
@@ -166,6 +171,36 @@
     margin-right: 10px;
 }
 
+.delete-article-btn, .edit-article-btn {
+    font-size: 25px;
+    margin: 0 5px;
+    padding: 7px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.delete-article-btn {
+    color: red;
+}
+
+.delete-article-btn:hover {
+    color: white;
+    background-color: red;
+}
+
+.edit-article-btn {
+    color: #1d71c0;
+}
+
+.edit-article-btn:hover {
+    color: white;
+    background-color:  #1d71c0;
+}
+
+
+/* ************************************************* */
+/*                    Body Section                   */
+/* ************************************************* */
 
 #article-title-container {
     text-align: center;
@@ -185,6 +220,11 @@
     justify-content: space-between;
     align-items: center;
 }
+
+
+/* ************************************************* */
+/*                  Footer Section                   */
+/* ************************************************* */
 
 #article-avatar {
     width: 80px;

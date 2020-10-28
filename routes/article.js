@@ -90,7 +90,7 @@ router.get('/user', async (req, res) =>
                     authors_info,
                     articles_info,
                     status: "has-Article",
-                    articles: "user's"
+                    articles_for: "user"
                 });
             }
         });
@@ -145,8 +145,6 @@ router.get('/:article_id', async (req, res) =>
                     status: "no-Article"
                 });
             }
-
-            // res.sendStatus(200);
 
             //article found
             else 
