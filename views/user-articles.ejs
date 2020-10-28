@@ -14,13 +14,18 @@
     <link rel="stylesheet" href="../stylesheets/article.css">
     <link rel="stylesheet" href="../stylesheets/loading1.css">
 
-    <title>Your Articles</title>
+    <title>Articles</title>
 
 </head>
 
 <body>
 
     <%- include('./partials/bars/navbar.ejs') -%>
+
+    <%# guest sidebar %>
+    <% if (role === "guest") { %>
+        <%- include('./partials/bars/sidebar-guest.ejs') -%>
+    <%} %>
 
     <%# blogger sidebar %>
     <% if (role === "blogger") { %>
@@ -38,7 +43,7 @@
     <% if (status === "no-Article") { %>
 
         <section class="article-box" style="text-align: center;">
-            <h1><b>There is no article!</b></h1>
+            <h1 style="margin-bottom: 0;"><b>There is no article!</b></h1>
         </section>
 
     <%} %>

@@ -81,7 +81,6 @@ router.get('/user', async (req, res) =>
                         avatar: articles[i].articleAvatar,
                         title: articles[i].title,
                         summary: articles[i].summary
-                        // content: articles[i].content
                     }
                 }
 

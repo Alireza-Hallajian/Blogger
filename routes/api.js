@@ -92,11 +92,21 @@ router.get('/', async (req, res) =>
             }
 
 
+            //define role for ejs file to render correct sidebar
+            let role;
+            if (req.session.user) {
+                role = req.session.user.role;
+            }
+            else {
+                role = "guest"
+            }
+
+
             //if no article found
             if (articles.length === 0) 
             {
                 return res.render("user-articles.ejs", {
-                    role: req.session.user.role,
+                    role,
                     status: "no-Article"
                 });
             }
@@ -122,13 +132,12 @@ router.get('/', async (req, res) =>
                         avatar: articles[i].articleAvatar,
                         title: articles[i].title,
                         summary: articles[i].summary
-                        // content: articles[i].content
                     }
                 }
 
                 //send NEEDED-author_info and articles to the client
                 return res.render("user-articles.ejs", {
-                    role: req.session.user.role,
+                    role,
                     authors_info,
                     articles_info,
                     status: "has-Article",
