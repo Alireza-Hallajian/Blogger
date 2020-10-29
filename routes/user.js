@@ -192,14 +192,67 @@ router.put('/avatar', (req, res) =>
             // previous user avatar is removed automatically
             // because of duplicate filename and extension
 
-            //no need to update database for new avatar, because new one replaces previous one
-            //and no change in its name occures
+
+            //update database if user avatar is default
+            await User.findOne({_id: req.session.user._id}).exec((err, user) => 
+            {
+                //if database error occured
+                if (err) 
+                {
+                    console.log(colors.brightRed("\n" + err + "\n"));
+
+                    //remove user's avatar if database error occured
+                    fs.unlink(`public/images/users/${req.file.filename}`, (err) => 
+                    {
+                        if (err) {
+                            console.log(colors.brightRed("\n" + err + "\n"));
+                            console.log(colors.brightRed(`Something went wrong in removing new [user: ${req.session.user._id}]'s avatar`) + "\n");
+                        }
+                    });
+
+                    return res.status(500).send("Something went wrong in finding the user!");
+                }
+
+                
+                //update database if article avatar is default
+                if (user.avatar === "default-profile-pic.jpg")
+                {
+                    User.findByIdAndUpdate(req.session.user._id, {avatar: req.file.filename}, (err) =>
+                    {
+                        //if database error occured
+                        if (err) 
+                        {
+                            console.log(colors.brightRed("\n" + err + "\n"));
+
+                            //remove user's avatar if could not update database
+                            fs.unlink(`public/images/users/${req.file.filename}`, (err) => 
+                            {
+                                if (err) {
+                                    console.log(colors.brightRed("\n" + err + "\n"));
+                                    console.log(colors.brightRed(`Something went wrong in removing new [user: ${req.session.user._id}]'s avatar`) + "\n");
+                                }
+                            });
+
+                            return res.status(500).send("Something went wrong in updating or finding the user!");
+                        }
+                    });
 
 
-            //update user's session for new avatar (needed when user reloads dashboard)
-            req.session.user.avatar = req.file.filename;
+                    //update user's session for new avatar (needed when user reloads dashboard)
+                    req.session.user.avatar = req.file.filename;
 
-            return res.sendStatus(200);
+                    return res.send("Your avatar updated sucessfully.");
+                }
+
+
+                else
+                {
+                    //no need to update database for new avatar (if not default)
+                    //and no change in its name occures because new one replaces previous one
+
+                    return res.send("Your avatar updated sucessfully.");
+                }
+            });
         });
     }
 
