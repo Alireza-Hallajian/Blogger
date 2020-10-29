@@ -1,7 +1,7 @@
 const VALIDATOR = {
     signin: signin_validator,
     signup: signup_validator,
-    duplicate: duplicate_validator,
+    profile_duplicate: profile_duplicate_validator,
     edit: edit_validator,
     p_change: change_password,
     article: article_characters_count,
@@ -117,7 +117,7 @@ function signup_validator(data)
 // *********************************************************************************
 
 //duplicate username' and 'mobile' check
-function duplicate_validator (data) 
+function profile_duplicate_validator (data) 
 {  
     // empty field check
     if (!data.username || !data.mobile) {
@@ -291,7 +291,7 @@ function article_characters_count(data, part)
         if (part === "title")
         {
             if (data.trim().length < 2 || data.trim().length > 70) {
-                return ("*Title must long at least 2 and at last 70");
+                return ("*Title MUST long at least 2 and at last 70");
             }
         }
 

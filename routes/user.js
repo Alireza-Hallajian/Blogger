@@ -68,7 +68,7 @@ router.post('/edit', async (req, res) =>
         //************************************************************** */
 
         //result of input-validation --> 'true' if there is no error
-        let duplicate_validation_result = INPUT_VALIDATOR.duplicate(req.body);
+        let duplicate_validation_result = INPUT_VALIDATOR.profile_duplicate(req.body);
     
         //if sign-in data has any errors
         if (duplicate_validation_result !== true) {

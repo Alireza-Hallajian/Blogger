@@ -249,10 +249,100 @@ router.post('/', async (req, res) =>
 
 
 //******************************************************************************** */
+//                                 Edit Article Page
+//******************************************************************************** */
+
+router.get('/edit/:article_id', async (req, res) => 
+{
+    try
+    {
+        //************************************************************** */
+        //                  Mongo ObjectID Validation
+        //************************************************************** */
+
+        //ckeck 'article_id' to be a valid mongo ObjectID
+        let article_id_val = VALIDATOR.ObjectID_val(req.params.article_id)
+
+        //invalid 'article_id'
+        if (article_id_val !== true) 
+        {
+            return res.status(400).render("user-articles.ejs", {
+                role: req.session.user.role,
+                status: "no-Article"
+            });
+        }
+
+
+        //************************************************************** */
+        //            chcek 'article_id' to be user's own article 
+        //************************************************************** */
+
+        let article_check_result = await CHECKER.has_article(req.params.article_id, req.session.user._id);
+
+        if (article_check_result !== "No Conflict") 
+        {
+            return res.status(400).render("user-articles.ejs", {
+                role: req.session.user.role,
+                status: "no-Article"
+            });
+        }
+
+
+        //************************************************************** */
+        //                  find the article and its info
+        //************************************************************** */        
+
+        let article = await Article.findOne({_id: req.params.article_id}).exec((err, article) => 
+        {
+            //if database error occured
+            if (err) {
+                console.log(colors.brightRed("\n" + err + "\n"));
+                return res.status(500).send("Something went wrong in finding the article!");
+            }
+
+
+            //if article not found
+            if (!article) 
+            {
+                return res.render("user-articles.ejs", {
+                    role: req.session.user.role,
+                    status: "no-Article"
+                });
+            }
+
+            //article found
+            else 
+            {
+                //************************************************************** */
+                //                      send edit article page
+                //************************************************************** */
+
+                res.render("edit-article.ejs", {
+                    role: req.session.user.role,
+                    article_id: req.params.article_id,
+                    avatar: article.avatar,
+                    title: article.title,
+                    summary: article.summary,
+                    content: article.content
+                });
+            }
+        });     
+    }
+
+
+    catch (err) {
+        console.log(colors.brightRed("\n" + err + "\n"));
+        res.status(500).send("Something went wrong! Try again.");
+    }
+});
+
+
+
+//******************************************************************************** */
 //                                   Edit Title
 //******************************************************************************** */
 
-router.put('/title/:article_id', async (req, res) => 
+router.put('/edit/title/:article_id', async (req, res) => 
 {
     try
     {
@@ -284,12 +374,17 @@ router.put('/title/:article_id', async (req, res) =>
         //                        Input Validation     
         //************************************************************** */
 
+        //check recieved parameters
+        if (!req.body.new_title) {
+            return res.status(400).send("No title recieved");
+        }
+
         //result of input-validation --> 'true' if there is no error
         let char_cout_validation_result = INPUT_VALIDATOR.article(req.body.new_title, "title");
     
         //if characters count have any errors
         if (char_cout_validation_result !== true) {
-            return res.send(char_cout_validation_result);
+            return res.status(406).send(char_cout_validation_result);
         }
 
 
@@ -316,7 +411,7 @@ router.put('/title/:article_id', async (req, res) =>
                 return res.status(500).send("Something went wrong in updating or finding the article!");
             }
 
-            return res.send("Article's title changed sucessfully.");
+            return res.send("Article's title updated sucessfully.");
         });
     }
 
@@ -333,7 +428,7 @@ router.put('/title/:article_id', async (req, res) =>
 //                                  Edit Summary
 //******************************************************************************** */
 
-router.put('/summary/:article_id', async (req, res) => 
+router.put('/edit/summary/:article_id', async (req, res) => 
 {
     try
     {
@@ -403,7 +498,7 @@ router.put('/summary/:article_id', async (req, res) =>
 //                                  Edit Content
 //******************************************************************************** */
 
-router.put('/content/:article_id', async (req, res) => 
+router.put('/edit/content/:article_id', async (req, res) => 
 {
     try
     {

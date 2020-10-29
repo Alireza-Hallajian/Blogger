@@ -94,7 +94,7 @@ async function duplicate_title_validator(title)
 
     //'title' conflict
     if (article_title) {
-        return ("Title is duplicate to another article.");
+        return ("Title is duplicate to another article's.");
     }
 
     //No conflict

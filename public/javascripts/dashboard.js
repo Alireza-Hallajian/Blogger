@@ -82,7 +82,7 @@ $("#apply-btn").on("click", async function ()
     }
 
     //if there is no length error or warning
-    if (VALIDATOR.edit(inputs_data) === true)
+    if (VALIDATOR.profile_edit(inputs_data) === true)
     {
         try {
             //if no duplicate

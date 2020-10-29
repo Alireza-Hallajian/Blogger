@@ -1,9 +1,10 @@
 export const VALIDATOR = {
     signin: signin_validator,
     signup: signup_validator,
-    edit: edit_validator,
+    profile_edit: profile_edit_validator,
     password_change: change_password,
-    avatar_change: change_avatar
+    avatar_change: change_avatar,
+    edit_article_title
 };
 
 
@@ -172,7 +173,7 @@ function signup_validator(data)
 // *********************************************************************************
 
 //length and warning check for inputs while editing
-function edit_validator(data) 
+function profile_edit_validator(data) 
 {
     // empty field check
     if (!data.fname || !data.lname || !data.username || !data.mobile) 
@@ -457,4 +458,19 @@ function change_avatar()
 
         return false;
     }
+}
+
+
+
+// *********************************************************************************
+//                                Edit Article Title
+// *********************************************************************************
+
+function edit_article_title(title)
+{
+    if (title.trim().length < 2 || title.trim().length > 70) {
+        return ("*Title MUST long at least <b>2</b> and at last <b>70</b>");
+    }
+
+    return true;
 }

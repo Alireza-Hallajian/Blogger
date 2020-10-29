@@ -77,6 +77,14 @@
     display: none;
 }
 
+#error-alert-title-edit {
+    text-align: center;
+    width: 45%;
+    margin: 20px auto 0 auto;
+    border-left: 6px solid #be5050;
+    display: none;
+}
+
 /* ************************************************************************* */
 /*                              Add Photo Panel                              */
 /* ************************************************************************* */
@@ -131,8 +139,6 @@
 
     border-radius: 15px;
     box-shadow: 2px 3px 10px #111111;
-
-    /* overflow: auto; */
 }
 
 
@@ -210,8 +216,6 @@
 #article-title {
     max-width: 80%;
     margin: 5px auto;
-    display: inline-block;
-    text-align: center;
 }
 
 #body {
@@ -249,4 +253,73 @@
 #footer {
     margin-top: 15px;
     text-align: right;
+}
+
+
+/* ************************************************************************* */
+/*                                 Edit Article                              */
+/* ************************************************************************* */
+
+#article-title-edit {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#title-edit-section {
+    width: 80%;
+}
+
+#title-edit-section h4 {
+    margin-bottom: -8px;
+    display: inline-block;
+    width: auto;
+}
+
+#edit-title-input {
+    width: 90%;
+    height: 40px;
+}
+
+#title-edit-process {
+    width: 20%;
+    text-align: center;
+}
+
+#title-edit-btn {
+    background-color: #1d71c0;
+    color: white;
+    padding: 10px;
+    border-radius: 7px;
+    margin: auto;
+    cursor: pointer;
+}
+
+#title-edit-btn:hover {
+    background-color: #2181db;
+}
+
+
+#article-avatar-and-summary-edit {
+    display: flex;
+    justify-content: space-between;
+    /* align-items: center; */
+}
+
+#summary-edit {
+    width: 70%;
+    height: 200px;
+    border: 1px solid black;
+}
+
+#avatar-edit {
+    text-align: center;
+    width: 25%;
+    height: 200px;
+    border: 1px solid black;
+}
+
+#avatar-edit img {
+    width: 200px;
+    height: 200px;
 }

@@ -113,6 +113,104 @@ $(".delete-article-btn").on("click", function (event)
 });
 
 
+
+// *********************************************************************************
+//                                    Edit Article
+// *********************************************************************************
+
+$(".edit-article-btn").on("click", function (event) 
+{ 
+    // 'section' with class="article-box" and id=`article_id`
+    let article_info_container = $(this).parent().parent().parent();
+
+    let article_id = $(article_info_container).attr("id");
+
+    window.location.assign(`/article/edit/${article_id}`);
+});
+
+
+
+$("#title-edit-btn").on("click", function (event) 
+{ 
+    let new_title = $("#edit-title-input").val();
+
+
+    //check new title to have valid length
+    let new_title_val = VALIDATOR.edit_article_title(new_title);
+
+    //if NOT valid
+    if (new_title_val !== true) 
+    {
+        $("#error-alert-title-edit").html(new_title_val);
+        $("#error-alert-title-edit").show();
+    }
+
+    else 
+    {
+        $("#error-alert-title-edit").hide();
+
+        changes_for_article_title_edit("is-loading");
+
+        let article_id = $("#article_id_for_edit_article").text();
+
+        $.ajax(
+        {
+            type: "PUT",
+            url: `/article/edit/title/${article_id}`,
+            data: {new_title},
+
+            success: function (result, status, xhr) 
+            {
+                alert("Article title updated successfully.");
+
+                changes_for_article_title_edit("not-loading");
+            },
+
+            error: function (xhr, status, error) 
+            {
+                //session timed out
+                if (xhr.status === 403) {
+                    window.location.assign('/signin');
+                }
+
+                //article_id error
+                else if (xhr.status === 400) 
+                {
+                    $("#error-alert-title-edit").html(xhr.responseText);
+                    $("#error-alert-title-edit").show();
+
+                    changes_for_article_title_edit("not-loading");
+                }
+                
+                //length error
+                else if (xhr.status === 406) 
+                {
+                    $("#error-alert-title-edit").html(xhr.responseText);
+                    $("#error-alert-title-edit").show();
+
+                    changes_for_article_title_edit("not-loading");
+                }
+
+                //conflict error
+                else if (xhr.status === 409) 
+                {
+                    $("#error-alert-title-edit").html(xhr.responseText);
+                    $("#error-alert-title-edit").show();
+
+                    changes_for_article_title_edit("not-loading");
+                }
+
+                //server error
+                else if (xhr.status === 500) {
+                    changes_for_article_title_edit("not-loading");
+                    alert("Something went wrong in updating or finding the article!");
+                }
+            }
+        });
+    }
+});
+
+
 // *********************************************************************************
 //                              save article to database
 // *********************************************************************************
@@ -246,8 +344,8 @@ function save_article()
 
             //server error
             else if (xhr.status === 500) {
-                alert("Something went wrong in saving article! Try again.");
                 changes_for_article_publish("not-loading");
+                alert("Something went wrong in saving article! Try again.");
             }
         }
     });
@@ -331,8 +429,11 @@ function add_avatar_to_article()
 //                               Appearance changes
 // *********************************************************************************
 
+// *****************************************************
+//                 for article publish
+// *****************************************************
+
 //hiding and showing buttons and boxes when 'expose' button is clicked
-//for article publish
 function changes_for_article_publish (status) 
 {
     if (status === "is-loading")
@@ -358,8 +459,11 @@ function changes_for_article_publish (status)
 }
 
 
+// *****************************************************
+//                 for article avatar
+// *****************************************************
+
 //hiding and showing buttons and boxes when 'finish' button is clicked
-//for article avatar
 function changes_for_article_avatar (status) 
 {
     if (status === "is-loading")
@@ -381,5 +485,33 @@ function changes_for_article_avatar (status)
         //show buttons
         $(".summary-close-btns").show();
         $("#expose-btn").show();
+    }
+}
+
+
+// *****************************************************
+//                 for article title-edit
+// *****************************************************
+
+//hiding and showing buttons and boxes when 'finish' button is clicked
+function changes_for_article_title_edit (status) 
+{
+    if (status === "is-loading")
+    {
+        //hide error box and buttons
+        $("#error-alert-title-edit").hide();    
+        $("#title-edit-btn").hide();  
+
+        //show loading
+        $("#loading-title-edit").show();
+    }
+
+    else if ("not-loading")
+    {
+        //hide loading
+        $("#loading-title-edit").hide();
+                    
+        //show buttons
+        $("#title-edit-btn").show();
     }
 }
