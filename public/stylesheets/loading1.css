@@ -54,7 +54,9 @@
   }
 
 
-  #loading-edit, #loading-password, #loading-photo, #loading-article, #loading-article-show, #loading-summary, #loading-title-edit {
+  #loading-edit, #loading-password, #loading-photo, 
+  #loading-article, #loading-article-show, #loading-summary, 
+  #loading-title-edit, #loading-summary-edit {
     display: none;
     margin: auto;
   }

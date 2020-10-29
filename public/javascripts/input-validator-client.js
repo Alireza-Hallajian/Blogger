@@ -4,7 +4,7 @@ export const VALIDATOR = {
     profile_edit: profile_edit_validator,
     password_change: change_password,
     avatar_change: change_avatar,
-    edit_article_title
+    edit_article
 };
 
 
@@ -463,14 +463,36 @@ function change_avatar()
 
 
 // *********************************************************************************
-//                                Edit Article Title
+//                                      Edit Article
 // *********************************************************************************
 
-function edit_article_title(title)
+function edit_article(part, value)
 {
-    if (title.trim().length < 2 || title.trim().length > 70) {
-        return ("*Title MUST long at least <b>2</b> and at last <b>70</b>");
+    //Title length check
+    if (part === "title")
+    {
+        if (value.trim().length < 2 || value.trim().length > 70) {
+            return ("*Title MUST long at least <b>2</b> and at last <b>70</b>");
+        }
     }
 
+    //Summary length check
+    else if (part === "summary")
+    {
+        if (value.trim().length < 100 || value.trim().length > 400) {
+            return ("*Summary MUST long at least <b>100</b> and at last <b>400</b>");
+        }
+    }
+
+    //Content length check
+    else if (part === "content")
+    {
+        if (value.trim().length < 500 || value.trim().length > 15000) {
+            return ("*Title MUST long at least <b>500</b> and at last <b>10000</b>");
+        }
+    }
+    
+
+    //no errors in data input
     return true;
 }

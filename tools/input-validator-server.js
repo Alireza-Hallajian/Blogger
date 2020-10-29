@@ -275,8 +275,8 @@ function article_characters_count(data, part)
         }
     
         //Content length check
-        if (data.content.trim().length < 300 || data.content.trim().length > 15000) {
-            return ("*Content must long at least 300 and at last 10000");
+        if (data.content.trim().length < 500 || data.content.trim().length > 15000) {
+            return ("*Content must long at least 500 and at last 10000");
         }
 
 
@@ -306,8 +306,8 @@ function article_characters_count(data, part)
         //Content length check
         else if (part === "content")
         {
-            if (data.trim().length < 300 || data.trim().length > 15000) {
-                return ("*Content must long at least 300 and at last 10000");
+            if (data.trim().length < 500 || data.trim().length > 15000) {
+                return ("*Content must long at least 500 and at last 10000");
             }
         }
 

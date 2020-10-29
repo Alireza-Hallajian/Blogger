@@ -460,12 +460,17 @@ router.put('/edit/summary/:article_id', async (req, res) =>
         //                        Input Validation     
         //************************************************************** */
 
+        //check recieved parameters
+        if (!req.body.new_summary) {
+            return res.status(400).send("No title recieved");
+        }
+
         //result of input-validation --> 'true' if there is no error
         let char_cout_validation_result = INPUT_VALIDATOR.article(req.body.new_summary, "summary");
     
         //if characters count have any errors
         if (char_cout_validation_result !== true) {
-            return res.send(char_cout_validation_result);
+            return res.status(406).send(char_cout_validation_result);
         }
 
 
@@ -481,7 +486,7 @@ router.put('/edit/summary/:article_id', async (req, res) =>
                 return res.status(500).send("Something went wrong in updating or finding the article!");
             }
 
-            return res.send("Article's summary changed sucessfully.");
+            return res.send("Article's summary updated sucessfully.");
         });
     }
 
@@ -530,12 +535,17 @@ router.put('/edit/content/:article_id', async (req, res) =>
         //                        Input Validation     
         //************************************************************** */
 
+        //check recieved parameters
+        if (!req.body.new_content) {
+            return res.status(400).send("No title recieved");
+        }
+
         //result of input-validation --> 'true' if there is no error
         let char_cout_validation_result = INPUT_VALIDATOR.article(req.body.new_content, "content");
     
         //if characters count have any errors
         if (char_cout_validation_result !== true) {
-            return res.send(char_cout_validation_result);
+            return res.status(406).send(char_cout_validation_result);
         }
 
 

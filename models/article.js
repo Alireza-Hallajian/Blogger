@@ -29,7 +29,7 @@ const ArticleShema = new Schema(
         type: String,
         required: true,
         trim: true,
-        minlength: 300,
+        minlength: 500,
         maxlength: 15000,
     },
 

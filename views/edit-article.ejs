@@ -81,9 +81,34 @@
             <img src="/images/articles/default-article-pic.png" alt="Article Avatar">
 
         </div>
-
+        
 
         <div id="summary-edit">
+
+            <div id="summary-edit-section">
+                <h4><b>Summary: </b></h4>
+                <textarea id="summary-title-input" cols="30" rows="10" wrap="hard"><%= summary %></textarea>
+            </div>
+
+
+            <div id="summary-edit-process">
+
+                <div id="summary-edit-btn">Apply Summary Edit</div>
+
+                <!-- Loading Animation -->
+                <div id="loading-summary-edit" class="sk-chase">
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                </div>
+
+                
+                <div id="error-alert-summary-edit" class="alert alert-danger alert-box" role="alert"></div>
+            
+            </div>
 
         </div>
 

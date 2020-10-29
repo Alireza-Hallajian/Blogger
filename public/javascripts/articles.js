@@ -64,60 +64,12 @@ $("#loading-article-show").hide();
 $("#content").show();
 
 
-// *********************************************************************************
-//                                    Edit Article 
-// *********************************************************************************
-
-
-
-// *********************************************************************************
-//                                    Delete Article 
-// *********************************************************************************
-
-$(".delete-article-btn").on("click", function (event) 
-{ 
-    if (confirm("Are you sure to DELETE this article permanently?"))
-    {
-        // 'section' with class="article-box" and id=`article_id`
-        let article_info_container = $(this).parent().parent().parent();
-
-        let article_id = $(article_info_container).attr("id");
-
-        $.ajax(
-        {
-            type: "DELETE",
-            url: `/article/${article_id}`,
-    
-            success: function (result, status, xhr) 
-            {
-                alert("Article deleted successfully.")
-    
-                //remove the article-info panel
-                $(article_info_container).remove();
-            },
-    
-            error: function (xhr, status, error) 
-            {
-                //session timed out
-                if (xhr.status === 403) {
-                    window.location.assign('/signin');
-                }
-    
-                //server error
-                else if (xhr.status === 500) {
-                    alert("Something went wrong in deleting article! Try again.");
-                }
-            }
-        });
-    }
-});
-
-
 
 // *********************************************************************************
 //                                    Edit Article
 // *********************************************************************************
 
+//get edit page
 $(".edit-article-btn").on("click", function (event) 
 { 
     // 'section' with class="article-box" and id=`article_id`
@@ -129,6 +81,9 @@ $(".edit-article-btn").on("click", function (event)
 });
 
 
+// *****************************************************
+//                     Edit Title
+// *****************************************************
 
 $("#title-edit-btn").on("click", function (event) 
 { 
@@ -136,7 +91,7 @@ $("#title-edit-btn").on("click", function (event)
 
 
     //check new title to have valid length
-    let new_title_val = VALIDATOR.edit_article_title(new_title);
+    let new_title_val = VALIDATOR.edit_article("title", new_title);
 
     //if NOT valid
     if (new_title_val !== true) 
@@ -211,6 +166,133 @@ $("#title-edit-btn").on("click", function (event)
 });
 
 
+// *****************************************************
+//                    Edit Summary
+// *****************************************************
+
+$("#summary-edit-btn").on("click", function (event) 
+{ 
+    let new_summary = $("#summary-title-input").val();
+
+
+    //check new title to have valid length
+    let new_summary_val = VALIDATOR.edit_article("summary", new_summary);
+
+    //if NOT valid
+    if (new_summary_val !== true) 
+    {
+        $("#error-alert-summary-edit").html(new_summary_val);
+        $("#error-alert-summary-edit").show();
+    }
+
+    else 
+    {
+        $("#error-alert-summary-edit").hide();
+
+        changes_for_article_summary_edit("is-loading");
+
+        let article_id = $("#article_id_for_edit_article").text();
+
+        $.ajax(
+        {
+            type: "PUT",
+            url: `/article/edit/summary/${article_id}`,
+            data: {new_summary},
+
+            success: function (result, status, xhr) 
+            {
+                alert("Article summary updated successfully.");
+
+                changes_for_article_summary_edit("not-loading");
+            },
+
+            error: function (xhr, status, error) 
+            {
+                //session timed out
+                if (xhr.status === 403) {
+                    window.location.assign('/signin');
+                }
+
+                //article_id error
+                else if (xhr.status === 400) 
+                {
+                    $("#error-alert-summary-edit").html(xhr.responseText);
+                    $("#error-alert-summary-edit").show();
+
+                    changes_for_article_summary_edit("not-loading");
+                }
+                
+                //length error
+                else if (xhr.status === 406) 
+                {
+                    $("#error-alert-summary-edit").html(xhr.responseText);
+                    $("#error-alert-summary-edit").show();
+
+                    changes_for_article_summary_edit("not-loading");
+                }
+
+                //conflict error
+                else if (xhr.status === 409) 
+                {
+                    $("#error-alert-summary-edit").html(xhr.responseText);
+                    $("#error-alert-summary-edit").show();
+
+                    changes_for_article_summary_edit("not-loading");
+                }
+
+                //server error
+                else if (xhr.status === 500) {
+                    changes_for_article_summary_edit("not-loading");
+                    alert("Something went wrong in updating or finding the article!");
+                }
+            }
+        });
+    }
+});
+
+
+
+// *********************************************************************************
+//                                    Delete Article 
+// *********************************************************************************
+
+$(".delete-article-btn").on("click", function (event) 
+{ 
+    if (confirm("Are you sure to DELETE this article permanently?"))
+    {
+        // 'section' with class="article-box" and id=`article_id`
+        let article_info_container = $(this).parent().parent().parent();
+
+        let article_id = $(article_info_container).attr("id");
+
+        $.ajax(
+        {
+            type: "DELETE",
+            url: `/article/${article_id}`,
+    
+            success: function (result, status, xhr) 
+            {
+                alert("Article deleted successfully.")
+    
+                //remove the article-info panel
+                $(article_info_container).remove();
+            },
+    
+            error: function (xhr, status, error) 
+            {
+                //session timed out
+                if (xhr.status === 403) {
+                    window.location.assign('/signin');
+                }
+    
+                //server error
+                else if (xhr.status === 500) {
+                    alert("Something went wrong in deleting article! Try again.");
+                }
+            }
+        });
+    }
+});
 // *********************************************************************************
 //                              save article to database
 // *********************************************************************************
@@ -224,11 +306,11 @@ $("#publish-btn").on("click", function (event)
     //                  Character Limit
     // *****************************************************
 
-    //if characters of the article are less than 300
-    if (get_stats('article-sheet').chars < 300){
+    //if characters of the article are less than 500
+    if (get_stats('article-sheet').chars < 500){
         $("#error-alert-article").show();
         $("html").scrollTop(300);
-        return $("#error-alert-article").html("<b>Min</b> characters allowed is <b>300</b>");
+        return $("#error-alert-article").html("<b>Min</b> characters allowed is <b>500</b>");
     }
     else {
         $("#error-alert-article").hide();
@@ -513,5 +595,34 @@ function changes_for_article_title_edit (status)
                     
         //show buttons
         $("#title-edit-btn").show();
+    }
+}
+
+
+
+// *****************************************************
+//                 for article summary-edit
+// *****************************************************
+
+//hiding and showing buttons and boxes when 'finish' button is clicked
+function changes_for_article_summary_edit (status) 
+{
+    if (status === "is-loading")
+    {
+        //hide error box and buttons
+        $("#error-alert-summary-edit").hide();    
+        $("#summary-edit-btn").hide();  
+
+        //show loading
+        $("#loading-summary-edit").show();
+    }
+
+    else if ("not-loading")
+    {
+        //hide loading
+        $("#loading-summary-edit").hide();
+                    
+        //show buttons
+        $("#summary-edit-btn").show();
     }
 }
