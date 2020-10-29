@@ -28,9 +28,10 @@
 
             <div class="modal-body">
 
-                <div id="preview-article-photo-container">
+                <div id="preview-container">
 
-                    <img id="preview-article-photo" src="/images/articles/default-article-pic.png">
+                    <p><b>No Photo</b></p>
+                    <img id="preview" src="/images/default-profile-pic.jpg">
                     
                 </div>
 
@@ -38,15 +39,20 @@
                     <input id="file-input" type="file" accept="image/jpg, image/jpeg, image/png">
                 </form>
 
+
                 <div id="error-alert-photo" class="alert alert-danger alert-box" role="alert"></div>
 
             </div>
 
 
-            <div class="modal-footer" id="article-photo-footer">                
+            <div class="modal-footer" id="article-photo-footer">      
+                
+                <a href="#" id="remove-article-photo">Remove Photo</a>
+                
 
-                <button type="button" class="btn btn-primary" id="skip-btn">Skip</button>
-                <button type="button" class="btn btn-primary" id="finish-btn">Finish</button>
+                <button type="button" class="btn btn-secondary article-photo-close-btns"
+                    data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="apply-photo-change">Apply</button>
 
 
                 <!-- Loading Animation -->

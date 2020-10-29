@@ -78,7 +78,23 @@
 
         <div id="avatar-edit">
 
-            <img src="/images/articles/default-article-pic.png" alt="Article Avatar">
+            <%# default avatar %>
+            <% if (avatar === "default-article-pic.jpg") { %>
+                <img id="avatar" src="/images/articles/default-article-pic.jpg" alt="default-pic">
+            <%} %>
+
+            <%# article avatar %>
+            <% if (avatar !== "default-article-pic.jpg") { %>
+                <img id="avatar" src="/images/articles/<%= avatar -%>" alt="avatar">
+            <%} %>
+
+
+            <div id="add-photo">
+
+                <i class="fas fa-camera"></i>
+                <p>Change Photo</p>
+
+            </div>
 
         </div>
         
@@ -87,7 +103,7 @@
 
             <div id="summary-edit-section">
                 <h4><b>Summary: </b></h4>
-                <textarea id="summary-title-input" cols="30" rows="10" wrap="hard"><%= summary %></textarea>
+                <textarea id="summary-edit-input" cols="30" rows="10" wrap="hard"><%= summary %></textarea>
             </div>
 
 
@@ -158,7 +174,7 @@
 
 
       
-    <!-- <%- include('./partials/article-photo-panel.ejs') -%>   -->
+    <%- include('./partials/article-photo-panel.ejs', {avatar}) -%>  
 
 
 

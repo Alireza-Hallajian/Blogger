@@ -128,14 +128,14 @@
 
             <section id="picture-section">
 
-                <%# no avatar %>
-                <% if (avatar === "default-pic.jpg") { %>
-                    <img id="avatar" src="../images/profiles/default-pic.jpg" alt="default-pic">
+                <%# default avatar %>
+                <% if (avatar === "default-profile-pic.jpg") { %>
+                    <img id="avatar" src="/images/profiles/default-profile-pic.jpg" alt="default-pic">
                 <%} %>
 
                 <%# personal avatar %>
-                <% if (avatar !== "default-pic.jpg") { %>
-                    <img id="avatar" src="../images/profiles/<%=avatar-%>" alt="avatar">
+                <% if (avatar !== "default-profile-pic.jpg") { %>
+                    <img id="avatar" src="/images/profiles/<%= avatar -%>" alt="avatar">
                 <%} %>
 
 

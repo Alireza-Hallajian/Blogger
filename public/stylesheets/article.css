@@ -97,11 +97,7 @@
 /*                              Add Photo Panel                              */
 /* ************************************************************************* */
 
-.article-photo-close-btns {
-    display: none;
-}
-
-#preview-article-photo-container {
+#preview-container {
     width: 200px;
     height: 200px;
     margin: auto;
@@ -111,11 +107,20 @@
     border-radius: 100%;
 }
 
-#preview-article-photo {
+#preview-container p {
+    margin: 40% auto;
+}
+
+#preview {
     width: 100%;
     height: 100%;
     margin: auto;
     border-radius: 100%;
+    display: none;
+}
+
+.modal-body {
+    text-align: center;
 }
 
 #file-input-container {
@@ -128,8 +133,9 @@
 }
 
 
-#loading-article-photo {
-    display: none;
+#remove-article-photo {
+    position: absolute;
+    left: 16px;
 }
 
 
@@ -268,6 +274,10 @@
 /*                                 Edit Article                              */
 /* ************************************************************************* */
 
+/* ************************************************* */
+/*                   Title Section                   */
+/* ************************************************* */
+
 #article-title-edit {
     display: flex;
     justify-content: space-between;
@@ -315,17 +325,62 @@
     align-items: center;
 }
 
+
+/* ************************************************* */
+/*                  Avatar Section                   */
+/* ************************************************* */
+
 #avatar-edit {
     text-align: center;
-    width: 25%;
+    width: 20%;
     height: 200px;
+    border-radius: 100%;
+    position: relative;
 }
 
-#avatar-edit img {
-    width: 200px;
-    height: 200px;
+#avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
 }
 
+#add-photo {
+    background-color: rgba(42, 42, 42, 0.719);
+
+    width: 100%;
+    height: 100%;
+
+    border-radius: 100%;
+
+    position: absolute;
+    top: 0;
+
+    display: none;
+    justify-content: center;
+    flex-direction: column;
+    align-items : center;
+
+    cursor: pointer;
+}
+
+#add-photo i {
+    color: white;
+    font-size: 50px;
+    clear: both;
+}
+
+#add-photo p {
+    color: white;
+}
+
+#avatar-edit:hover #add-photo {
+    display: flex;
+}
+
+
+/* ************************************************* */
+/*                  Summary Section                  */
+/* ************************************************* */
 
 #summary-edit-process, #content-edit-process {
     margin-top: 20px;
@@ -335,14 +390,15 @@
 
 #summary-edit {
     width: 70%;
-    height: 220px;
+    height: auto;
 }
 
-#summary-title-input {
+#summary-edit-input {
     width: 100%;
     height: 120px;
     word-wrap: break-word;
 }
+
 
 #summary-edit-btn, #content-edit-btn {
     background-color: #1d71c0;

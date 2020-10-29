@@ -128,7 +128,7 @@ router.get('/:article_id', async (req, res) =>
         //                  find the article and its info
         //************************************************************** */        
 
-        let article = await Article.findOne({_id: req.params.article_id}).populate("author").exec((err, article) => 
+        await Article.findOne({_id: req.params.article_id}).populate("author").exec((err, article) => 
         {
             //if database error occured
             if (err) {
@@ -173,7 +173,6 @@ router.get('/:article_id', async (req, res) =>
                 });
             }
         });
-        
     }
 
 
@@ -320,7 +319,7 @@ router.get('/edit/:article_id', async (req, res) =>
                 res.render("edit-article.ejs", {
                     role: req.session.user.role,
                     article_id: req.params.article_id,
-                    avatar: article.avatar,
+                    avatar: article.articleAvatar,
                     title: article.title,
                     summary: article.summary,
                     content: article.content
@@ -637,12 +636,157 @@ router.put('/avatar/:article_id', async (req, res) =>
             // previous article avatar is removed automatically
             // because of duplicate filename and extension
 
-            //no need to update database for new avatar, because new one replaces previous one
-            //and no change in its name occures
+
+            //update database if article avatar is default
+            await Article.findOne({_id: req.params.article_id}).exec((err, article) => 
+            {
+                //if database error occured
+                if (err) 
+                {
+                    console.log(colors.brightRed("\n" + err + "\n"));
+
+                    //remove article's avatar if database error occured
+                    fs.unlink(`public/images/articles/${req.file.filename}`, (err) => 
+                    {
+                        if (err) {
+                            console.log(colors.brightRed("\n" + err + "\n"));
+                            console.log(colors.brightRed(`Something went wrong in removing new [article: ${req.params.article_id}]'s avatar`) + "\n");
+                        }
+                    });
+
+                    return res.status(500).send("Something went wrong in finding the article!");
+                }
+
+                
+                //update database if article avatar is default
+                if (article.articleAvatar === "default-article-pic.jpg")
+                {
+                    Article.findByIdAndUpdate(req.params.article_id, {articleAvatar: req.file.filename}, (err) =>
+                    {
+                        //if database error occured
+                        if (err) 
+                        {
+                            console.log(colors.brightRed("\n" + err + "\n"));
+
+                            //remove article's avatar if could not update database
+                            fs.unlink(`public/images/articles/${req.file.filename}`, (err) => 
+                            {
+                                if (err) {
+                                    console.log(colors.brightRed("\n" + err + "\n"));
+                                    console.log(colors.brightRed(`Something went wrong in removing new [article: ${req.params.article_id}]'s avatar`) + "\n");
+                                }
+                            });
+
+                            return res.status(500).send("Something went wrong in updating or finding the article!");
+                        }
+
+                        return res.send("Article's avatar updated sucessfully.");
+                    });
+                }
 
 
-            return res.sendStatus(200);
+                else 
+                {
+                    //no need to update database for new avatar (if not default)
+                    //and no change in its name occures because new one replaces previous one
+
+                    return res.send("Article's avatar updated sucessfully.");
+                }
+            });
         });
+    }
+
+    catch (err) {
+        console.log(colors.brightRed("\n" + err + "\n"));
+        res.status(500).send("Something went wrong! Try again.");
+    }
+});
+
+
+
+//******************************************************************************** */
+//                              Delete Article Avatar
+//******************************************************************************** */
+
+router.delete('/avatar/:article_id', async (req, res) => 
+{
+    try
+    {
+        //************************************************************** */
+        //                  Mongo ObjectID Validation
+        //************************************************************** */
+
+        //ckeck 'article_id' to be a valid mongo ObjectID
+        let article_id_val = VALIDATOR.ObjectID_val(req.params.article_id)
+
+        //invalid 'article_id'
+        if (article_id_val !== true) {
+            return res.status(400).send(article_id_val);
+        }
+
+
+        //************************************************************** */
+        //            chcek 'article_id' to be user's own article 
+        //************************************************************** */
+
+        let article_check_result = await CHECKER.has_article(req.params.article_id, req.session.user._id);
+
+        if (article_check_result !== "No Conflict") {
+            return res.status(400).send(article_check_result);
+        }
+
+
+        //************************************************************** */
+        //                  check avatar not to be default
+        //************************************************************** */
+
+        await Article.findOne({_id: req.params.article_id}).exec((err, article) => 
+        {
+            //if database error occured
+            if (err) {
+                console.log(colors.brightRed("\n" + err + "\n"));
+                return res.status(500).send("Something went wrong in finding the article!");
+            }
+
+
+            //************************************************************** */
+            //              delete article avatar id not default
+            //************************************************************** */
+
+            if (article.articleAvatar !== "default-article-pic.jpg")
+            {     
+                //remove article's avatar
+                fs.unlink(`public/images/articles/${article.articleAvatar}`, (err) => 
+                {
+                    if (err) {
+                        console.log(colors.brightRed("\n" + err + "\n"));
+                        console.log(colors.brightRed(`Something went wrong in removing new [article: ${req.params.article_id}]'s avatar`) + "\n");
+                    }
+
+
+                    Article.findByIdAndUpdate(req.params.article_id, {articleAvatar: "default-article-pic.jpg"}, (err, article) =>
+                    {
+                        //if database error occured
+                        if (err) 
+                        {
+                            console.log(colors.brightRed("\n" + err + "\n"));
+                            console.log(colors.brightRed(`Something went wrong in removing new [article: ${req.params.article_id}]'s avatar`) + "\n");
+    
+                            return res.status(500).send("Something went wrong in deleting or finding the article!");
+                        }
+
+                        return res.send("Article's avatar deleted sucessfully.");
+                    });
+                });
+            }
+
+            //if article's avatar is default
+            else {
+                return res.status(400).send("Default avatar can Not be removed.");
+            }
+        });
+
+        
     }
 
     catch (err) {

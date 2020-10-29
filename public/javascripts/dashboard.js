@@ -344,63 +344,54 @@ function change_avatar ()
 
 $("#remove-photo").on("click", function () 
 {  
-    if (confirm("Are you sure to remove your avatar?")) {
-        remove_avatar();
+    if (confirm("Are you sure to remove your avatar?")) 
+    {
+        changes_for_photo_change("is-loading");
+        
+        
+        //send remove avatar request to the server
+        $.ajax({
+            type: "DELETE",
+            url: "/user/avatar",
+        
+            success: function (result, status, xhr) 
+            {
+                //change the avatar photo in dashboard to the default
+                $("#avatar").attr("src", "/images/profiles/default-profile-pic.jpg");
+        
+                changes_for_photo_change("not-loading");
+        
+                //close the change photo panel
+                $(".photo-close-btns").trigger("click");
+        
+                //changes were successful
+                alert("Photo removed successfully.");
+            },
+        
+            //show error in alert-box
+            error: function (xhr, status, error) 
+            {
+                //session timed out
+                if (xhr.status === 403) {
+                    alert("You should sign-in again.")
+                    window.location.assign('/signin');
+                }
+        
+                //default avatar error
+                if (xhr.status === 400) {
+                    changes_for_photo_change("not-loading");
+                    alert("Default avatar can Not be removed.")
+                }
+        
+                //server error
+                else if (xhr.status === 500) {
+                    changes_for_photo_change("not-loading");
+                    alert("Something went wrong in removing photo!");
+                }
+            }
+        }); 
     }
 });
-
-
-// *****************************************************
-//                 remove user's avatar
-// *****************************************************
-
-function remove_avatar () 
-{  
-    changes_for_photo_change("is-loading");
-
-  
-    //send remove avatar request to the server
-    $.ajax({
-        type: "DELETE",
-        url: "/user/avatar",
-
-        success: function (result, status, xhr) 
-        {
-            //change the avatar photo in dashboard to the default
-            $("#avatar").attr("src", "/images/default-profile-pic.jpg");
-
-            changes_for_photo_change("not-loading");
-
-            //close the change photo panel
-            $(".photo-close-btns").trigger("click");
-
-            //changes were successful
-            alert("Photo removed successfully.");
-        },
-
-        //show error in alert-box
-        error: function (xhr, status, error) 
-        {
-            //session timed out
-            if (xhr.status === 403) {
-                alert("You should sign-in again.")
-                window.location.assign('/signin');
-            }
-
-            //default avatar error
-            if (xhr.status === 400) {
-                changes_for_photo_change("not-loading");
-                alert("Default avatar can Not be removed.")
-            }
-
-            //server error
-            else if (xhr.status === 500) {
-                changes_for_photo_change("not-loading");
-                alert("Something went wrong in removing photo!");
-            }
-        }
-    }); 
-}
 
 
 

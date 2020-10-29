@@ -167,6 +167,7 @@ $("#title-edit-btn").on("click", function (event)
 });
 
 
+
 // *****************************************************
 //                    Edit Summary
 // *****************************************************
@@ -327,10 +328,153 @@ $("#content-edit-btn").on("click", function (event)
             }
         });
     }
+});
 
 
 
+
+
+// *****************************************************
+//                   Edit Article Avatar
+// *****************************************************
+
+
+//*** some operations are in 'VALIDATOR' module ***
+
+
+//open 'Change Photo' panel when cliked on 'Change Photo' area
+$("#add-photo").on("click", function () {  
+    document.getElementById("file-input-container").reset()
+    $("#article-photo-modal-btn").trigger("click");
+});
+
+//Apply button (in profile-photo panel)
+$("#apply-photo-change").on("click", function () 
+{  
+    if (VALIDATOR.avatar_change() === true) {
+        add_avatar_to_article();
+    }
+});
+
+
+function add_avatar_to_article() 
+{  
+    changes_for_article_photo_change("is-loading");
+
+
+    //make a form data for sending image to ther server
+    let form_data = new FormData();
+
+    let avatar = document.getElementById("file-input").files[0];
+    form_data.append('avatar', avatar);
+
+    let article_id = $("#article_id_for_edit_article").text();
     
+    $.ajax({
+        type: "PUT",
+        url: `/article/avatar/${article_id}`,
+        data: form_data,
+        contentType: false,
+        processData: false,
+
+        success: function (result, status, xhr) 
+        {
+            //changes were successful
+            alert("Article avatar changed successfully.");
+
+            //change the avatar photo in dashboard to the new one
+            //(use preview-image src)
+            $("#avatar").attr("src", `${$("#preview").attr("src")}`);
+
+            changes_for_article_photo_change("not-loading");
+
+            //close the change photo panel
+            $(".article-photo-close-btns").trigger("click");   
+        },
+
+        //show error in alert-box
+        error: function (xhr, status, error) 
+        {
+            //session timed out
+            if (xhr.status === 403) {
+                alert("You should sign-in again.")
+                window.location.assign('/signin');
+            }
+
+            //article_id error
+            else if (xhr.status === 400) 
+            {
+                $("#error-alert-photo").html(xhr.responseText);
+                $("#error-alert-photo").show();
+
+                changes_for_article_photo_change("not-loading");
+            }
+
+            //server error
+            else if (xhr.status === 500) {
+                changes_for_article_photo_change("not-loading");
+                alert("Something went wrong in saving avatar! Try again.");
+            }
+        }
+    }); 
+}
+
+
+
+// *****************************************************
+//                 remove user's avatar
+// *****************************************************
+
+$("#remove-article-photo").on("click", function () 
+{  
+    if (confirm("Are you sure to remove the avatar of your article?")) 
+    {
+        changes_for_article_photo_change("is-loading");
+
+        let article_id = $("#article_id_for_edit_article").text();
+
+        //send remove avatar request to the server
+        $.ajax({
+            type: "DELETE",
+            url: `/article/avatar/${article_id}`,
+
+            success: function (result, status, xhr) 
+            {
+                //change the avatar photo in dashboard to the default
+                $("#avatar").attr("src", "/images/articles/default-article-pic.jpg");
+
+                changes_for_article_photo_change("not-loading");
+
+                //close the change photo panel
+                $(".article-photo-close-btns").trigger("click");
+
+                //changes were successful
+                alert("Photo removed successfully.");
+            },
+
+            //show error in alert-box
+            error: function (xhr, status, error) 
+            {
+                //session timed out
+                if (xhr.status === 403) {
+                    alert("You should sign-in again.")
+                    window.location.assign('/signin');
+                }
+
+                //default avatar error
+                if (xhr.status === 400) {
+                    changes_for_article_photo_change("not-loading");
+                    alert("Default avatar can Not be removed.")
+                }
+
+                //server error
+                else if (xhr.status === 500) {
+                    changes_for_article_photo_change("not-loading");
+                    alert("Something went wrong in removing photo!");
+                }
+            }
+        }); 
+    }
 });
 
 
@@ -492,12 +636,6 @@ function save_article()
             $(".summary-close-btns").trigger("click");
 
             window.location.assign('/article/user');
-
-            // //open the add photo panel
-            // $("#article-photo-modal-btn").trigger("click");
-
-            // //diselect chosen photo
-            // document.getElementById("file-input-container").reset()
         },
 
         error: function (xhr, status, error) 
@@ -516,78 +654,6 @@ function save_article()
     });
 }
 
-
-// *********************************************************************************
-//                              Add Avatar to Article
-// *********************************************************************************
-
-//*** some operations are in 'VALIDATOR' module ***
-
-
-$("#skip-btn").on("click", function () 
-{ 
-    
-    window.location.assign('/user');
-});
-
-//Finish button (in profile-photo panel)
-$("#finish-btn").on("click", function () 
-{  
-    if (VALIDATOR.avatar_change() === true) {
-        add_avatar_to_article();
-    }
-});
-
-
-function add_avatar_to_article() 
-{  
-    //make a form data for sending image to ther server
-    let form_data = new FormData();
-
-    let article_title = $("#article-title").val();
-    form_data.append('article_title', article_title);
-
-    let avatar = document.getElementById("file-input").files[0];
-    form_data.append('avatar', avatar);
-
-    
-    $.ajax({
-        type: "PUT",
-        url: "/article/avatar",
-        data: form_data,
-        contentType: false,
-        processData: false,
-
-        success: function (result, status, xhr) 
-        {
-            //changes were successful
-            alert("Article avatar changed successfully.");
-
-            changes_for_article_avatar("not-loading");
-
-            //close the change photo panel
-            $(".photo-close-btns").trigger("click");   
-
-            window.location.assign('/article/user');
-        },
-
-        //show error in alert-box
-        error: function (xhr, status, error) 
-        {
-            //session timed out
-            if (xhr.status === 403) {
-                alert("You should sign-in again.")
-                window.location.assign('/signin');
-            }
-
-            //server error
-            else if (xhr.status === 500) {
-                changes_for_photo_change("not-loading");
-                alert("Something went wrong in saving avatar! Try again.");
-            }
-        }
-    }); 
-}
 
 
 // *********************************************************************************
@@ -736,5 +802,44 @@ function changes_for_article_content_edit (status)
                     
         //show buttons
         $("#content-edit-btn").show();
+    }
+}
+
+
+
+// *****************************************************
+//                 for article avatar change
+// *****************************************************
+
+//hiding and showing buttons and boxes when 'apply' or 'cancel' button is clicked
+function changes_for_article_photo_change (status) 
+{
+    if (status === "is-loading")
+    {
+        //hide error box and buttons
+        $("#error-alert-photo").hide();      
+        $(".article-photo-close-btns").hide();
+        $("#apply-photo-change").hide();
+        $("#remove-article-photo").hide();
+
+        //hide choose file
+        $("#file-input-container").hide();
+
+        //show loading
+        $("#loading-article-photo").show();
+    }
+
+    else if ("not-loading")
+    {
+        //hide loading
+        $("#loading-article-photo").hide();
+
+        //show choose file
+        $("#file-input-container").show();
+                    
+        //show buttons
+        $(".article-photo-close-btns").show();
+        $("#apply-photo-change").show();
+        $("#remove-article-photo").show();
     }
 }

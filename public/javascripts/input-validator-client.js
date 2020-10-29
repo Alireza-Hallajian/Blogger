@@ -370,21 +370,6 @@ $("#file-input").on("change", function ()
     //if photo deselected
     else 
     {
-        // *****************************************************
-        //                     Article Photo
-        // *****************************************************
-
-        //hide 'Finish' button
-        $("#finish-btn").hide();
-
-        //change preview image to the default
-        $("#preview-article-photo").attr("src", "/images/articles/default-article-pic.png");
-        
-
-        // *****************************************************
-        //                     Profile Photo
-        // *****************************************************
-    
         //remove preview image if deselected
         $("#preview").attr("src", "").css("display", "none");
 
@@ -398,10 +383,6 @@ $("#file-input").on("change", function ()
 //clear preview-image when close button clicked and close the panel
 $(".photo-close-btns").on("click", function () 
 {  
-    // *****************************************************
-    //                     Profile Photo
-    // *****************************************************
-
     //diselect chosen photo
     document.getElementById("file-input-container").reset()
 
