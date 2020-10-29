@@ -119,7 +119,38 @@
     <!-- Content Edit Section -->
     <section id="article-content-edit" class="article-box">
     
-    
+
+        <textarea id="article-sheet" name="article" placeholder="Write your article..."><%= content %></textarea>
+      
+        <!-- Loading Animation -->
+        <div id="loading-article" class="sk-chase">
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+        </div>
+
+
+        <div id="content-edit-process">
+
+            <div id="content-edit-btn">Apply Content Edit</div>
+
+            <!-- Loading Animation -->
+            <div id="loading-content-edit" class="sk-chase">
+                <div class="sk-chase-dot"></div>
+                <div class="sk-chase-dot"></div>
+                <div class="sk-chase-dot"></div>
+                <div class="sk-chase-dot"></div>
+                <div class="sk-chase-dot"></div>
+                <div class="sk-chase-dot"></div>
+            </div>
+
+            
+            <div id="error-alert-content-edit" class="alert alert-danger alert-box" role="alert"></div>
+        
+        </div>
     
     </section>
     

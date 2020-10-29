@@ -56,7 +56,7 @@
 
   #loading-edit, #loading-password, #loading-photo, 
   #loading-article, #loading-article-show, #loading-summary, 
-  #loading-title-edit, #loading-summary-edit {
+  #loading-title-edit, #loading-summary-edit, #loading-content-edit {
     display: none;
     margin: auto;
   }

@@ -85,7 +85,7 @@
     display: none;
 }
 
-#error-alert-summary-edit {
+#error-alert-summary-edit, #error-alert-content-edit {
     text-align: center;
     width: 60%;
     margin: auto;
@@ -327,7 +327,8 @@
 }
 
 
-#summary-edit-process {
+#summary-edit-process, #content-edit-process {
+    margin-top: 20px;
     display: flex;
     justify-content: space-between;
 }
@@ -343,7 +344,7 @@
     word-wrap: break-word;
 }
 
-#summary-edit-btn {
+#summary-edit-btn, #content-edit-btn {
     background-color: #1d71c0;
     color: white;
     text-align: center;
@@ -351,4 +352,9 @@
     padding: 10px;
     border-radius: 7px;
     cursor: pointer;
+    display: none;
+}
+
+#content-edit-btn {
+    margin: auto;
 }

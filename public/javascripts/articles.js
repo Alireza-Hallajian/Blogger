@@ -20,6 +20,7 @@ tinymce.init({
 
     init_instance_callback: function () {  
         $("#loading-article").css("display", "none");
+        $("#content-edit-btn").css("display", "block");
         $("#article-container form").css("display", "block");
     },
 
@@ -231,15 +232,6 @@ $("#summary-edit-btn").on("click", function (event)
                     changes_for_article_summary_edit("not-loading");
                 }
 
-                //conflict error
-                else if (xhr.status === 409) 
-                {
-                    $("#error-alert-summary-edit").html(xhr.responseText);
-                    $("#error-alert-summary-edit").show();
-
-                    changes_for_article_summary_edit("not-loading");
-                }
-
                 //server error
                 else if (xhr.status === 500) {
                     changes_for_article_summary_edit("not-loading");
@@ -248,6 +240,97 @@ $("#summary-edit-btn").on("click", function (event)
             }
         });
     }
+});
+
+
+// *****************************************************
+//                    Edit Content
+// *****************************************************
+
+$("#content-edit-btn").on("click", function (event) 
+{ 
+    // *****************************************************
+    //                  Character Limit
+    // *****************************************************
+
+    //if characters of the article are less than 500
+    if (get_stats('article-sheet').chars < 500){
+        $("#error-alert-content-edit").show();
+        $("html").scrollTop(500);
+        return $("#error-alert-content-edit").html("<b>Min</b> characters allowed is <b>500</b>");
+    }
+    else {
+        $("#error-alert-content-edit").hide();
+    }
+
+    //if characters of the article are more than 10000
+    if (get_stats('article-sheet').chars > 10000){
+        $("#error-alert-content-edit").show();
+        $("html").scrollTop(500);
+        return $("#error-alert-content-edit").html("<b>Max</b> characters allowed is <b>10000</b>");
+    }
+
+    else 
+    {
+        $("#error-alert-content-edit").hide();
+
+        let new_content = $("#article-sheet").val();
+          
+        changes_for_article_content_edit("is-loading");
+    
+        let article_id = $("#article_id_for_edit_article").text();
+
+    
+        $.ajax(
+        {
+            type: "PUT",
+            url: `/article/edit/content/${article_id}`,
+            data: {new_content},
+    
+            success: function (result, status, xhr) 
+            {
+                alert("Article content updated successfully.");
+    
+                changes_for_article_content_edit("not-loading");
+            },
+    
+            error: function (xhr, status, error) 
+            {
+                //session timed out
+                if (xhr.status === 403) {
+                    window.location.assign('/signin');
+                }
+    
+                //article_id error
+                else if (xhr.status === 400) 
+                {
+                    $("#error-alert-content-edit").html(xhr.responseText);
+                    $("#error-alert-content-edit").show();
+    
+                    changes_for_article_content_edit("not-loading");
+                }
+                
+                //length error
+                else if (xhr.status === 406) 
+                {
+                    $("#error-alert-content-edit").html(xhr.responseText);
+                    $("#error-alert-content-edit").show();
+    
+                    changes_for_article_content_edit("not-loading");
+                }
+    
+                //server error
+                else if (xhr.status === 500) {
+                    changes_for_article_content_edit("not-loading");
+                    alert("Something went wrong in updating or finding the article!");
+                }
+            }
+        });
+    }
+
+
+
+    
 });
 
 
@@ -624,5 +707,34 @@ function changes_for_article_summary_edit (status)
                     
         //show buttons
         $("#summary-edit-btn").show();
+    }
+}
+
+
+
+// *****************************************************
+//                 for article content-edit
+// *****************************************************
+
+//hiding and showing buttons and boxes when 'finish' button is clicked
+function changes_for_article_content_edit (status) 
+{
+    if (status === "is-loading")
+    {
+        //hide error box and buttons
+        $("#error-alert-content-edit").hide();    
+        $("#content-edit-btn").hide();  
+
+        //show loading
+        $("#loading-content-edit").show();
+    }
+
+    else if ("not-loading")
+    {
+        //hide loading
+        $("#loading-content-edit").hide();
+                    
+        //show buttons
+        $("#content-edit-btn").show();
     }
 }
