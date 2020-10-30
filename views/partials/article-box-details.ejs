@@ -1,0 +1,92 @@
+<section class="article-box" id="<%= articles_info[i].id %>">
+
+    <div id="header">
+
+        <div id="author-info">
+
+            <!------------------- author's avatar ------------------->
+
+            <!-- all-articles mode -->
+            <% if (articles_for === "all") { %>
+
+                <img id="author-avatar" src="/images/profiles/<%= authors_info[i].avatar -%>" alt="Author">
+    
+            <%} %>
+    
+            <!-- user-articles mode -->
+            <% if (articles_for === "user") { %>
+    
+                <img id="author-avatar" src="/images/profiles/<%= authors_info.avatar -%>" alt="Author">
+    
+            <%} %>
+
+
+            <div>
+
+                <!------------------- author's name ------------------->
+
+                <!-- all-articles mode -->
+                <% if (articles_for === "all") { %>
+
+                    <p><%= authors_info[i].fname -%> <%= authors_info[i].lname -%></p>
+
+                <%} %>
+
+                <!-- user-articles mode -->
+                <% if (articles_for === "user") { %>
+
+                    <p><%= authors_info.fname -%> <%= authors_info.lname -%></p>
+
+                <%} %>
+
+
+                <!------------------- articles' dates ------------------->
+
+                <p> - <%= articles_info[i].createdAt -%></p>
+
+            </div>
+
+        </div>
+
+
+        <!-- user-articles mode -->
+        <% if (articles_for === "user") { %>
+
+            <!----------------- edit article buttons ----------------->
+            <div>
+                <i class="fas fa-edit edit-article-btn" title="Edit Article"></i>
+                <i class="fas fa-trash-alt delete-article-btn" title="Delete Article"></i>
+            </div>
+
+        <%} %>
+       
+    </div>        
+
+    <hr>
+
+    <!------------------- articles' titles' ------------------->
+
+    <div id="article-title-container">
+        <h3 id="article-title"><b><%= articles_info[i].title -%></b></h3>
+    </div>
+
+    <div id="body">
+
+        <img id="article-avatar" src="/images/articles/<%= articles_info[i].avatar %>" alt="Article">
+
+        <div id="summary">
+            <p><%= articles_info[i].summary -%></p>
+        </div>
+
+    </div>
+    
+    
+    <!------------------- articles' summaries' ------------------->
+
+    <div id="footer">
+
+        <a href="/article/<%= articles_info[i].id %>" id="read-more">Read More</a>
+
+    </div>
+
+</section>

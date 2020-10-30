@@ -82,7 +82,7 @@ $("#apply-btn").on("click", async function ()
     }
 
     //if there is no length error or warning
-    if (VALIDATOR.edit(inputs_data) === true)
+    if (VALIDATOR.profile_edit(inputs_data) === true)
     {
         try {
             //if no duplicate
@@ -101,170 +101,6 @@ $("#apply-btn").on("click", async function ()
     }
 });
 
-
-// *********************************************************************************
-//                                Change Password
-// *********************************************************************************
-
-//Change Password button
-$("#change-password").on('click', function () {  
-    $("#password-modal-btn").trigger("click");
-});
-
-
-//close buttons
-$(".password-close-btns").on('click', function () 
-{  
-    //clear fields (for security)
-    $("#old-p-box").val('');
-    $("#new-p-box").val('');
-    $("#repeat-p-box").val('');
-
-    //hide alerts
-    $("#old-password-length-warning").css("visibility", "hidden");
-    $("#new-password-length-warning").css("visibility", "hidden");
-    $("#repeat-password-length-warning").css("visibility", "hidden");
-    $("#error-alert-password").hide();
-
-    changes_for_password_change("not-loading");
-});
-
-
-//Apply button (in change password page)
-$("#apply-password-change").on('click', function () 
-{  
-    //values of password boxes
-    let passwords = {
-        old: $("#old-p-box").val(),
-        new: $("#new-p-box").val(),
-        repeat: $("#repeat-p-box").val()
-    }
-
-    if (VALIDATOR.p_change(passwords) === true) 
-    {
-        changes_for_password_change("is-loading");
- 
-        change_password(passwords);
-    }
-});
-
-
-// *********************************************************************************
-//                              Change Profile Photo
-// *********************************************************************************
-
-//open 'Change Photo' panel when cliked on 'Change Photo' area
-$("#add-photo").on("click", function () {  
-    $("#photo-modal-btn").trigger("click");
-});
-
-
-//FileReader API
-let reader = new FileReader();
-
-//show image preview when loaded (FileReader API)
-reader.onload = function(e) {
-    $('#preview').attr('src', e.target.result);
-    $('#preview').css('display', "block");
-}
-
-//preview selected image
-$("#file-input").on("change", function () 
-{   
-    //if a file selected
-    if (this.files[0]) 
-    {  
-        //hide 'No photo' phrase from preview box
-        $("#preview-container p").css("display", "none");
-
-        //read the file(photo) for fetching information (like file path)
-        reader.readAsDataURL(this.files[0]); // convert to base64 string
-    }
-
-    else 
-    {
-        //remove preview image if deselected
-        $("#preview").attr("src", "").css("display", "none");
-
-        //show 'No photo' phrase in preview box
-        $("#preview-container p").css("display", "block");
-    }
-});
-
-
-//clear preview-image when close button clicked and close the panel
-$(".photo-close-btns").on("click", function () 
-{  
-    //diselect chosen photo
-    document.getElementById("file-input-container").reset()
-
-    //remove preview
-    $('#preview').attr('src', "");
-    $('#preview').css('display', "none");
-
-    //hide alert box
-    $("#error-alert-photo").hide();
-
-    //show 'No photo' phrase in preview box
-    $("#preview-container p").css("display", "block");
-});
-
-
-
-//file-input
-let file = document.getElementById("file-input");
-
-//accepted formats for profile photo
-let valid_image_formats = ["image/jpg" , "image/jpeg", "image/png"]
-
-
-//Apply button (in photo change page)
-$("#apply-photo-change").on("click", function () 
-{  
-    console.log(file.files.length);
-    //send photo to server if chosen
-    if (file.files[0]) 
-    {
-        //if selected file was OK
-        if (valid_image_formats.includes(file.files[0].type))
-        {
-            //hide error box
-            $("#error-alert-photo").hide();
-
-            change_avatar();
-        }
-        
-        //if selected file was NOT in accepted formats
-        else
-        {
-            $("#error-alert-photo").html("Just <b>JPEG, JPG</b> or <b>PNG</b> files are accepted.");
-            $("#error-alert-photo").show()
-        }
-    }
-
-    //if no photo chosen
-    else {
-        $("#error-alert-photo").html("You should choose a photo.");
-        $("#error-alert-photo").show()
-    }
-});
-
-
-// *****************************************************
-//                 remove user's avatar
-// *****************************************************
-
-$("#remove-photo").on("click", function () 
-{  
-    if (confirm("Are you sure to remove your avatar?")) {
-        remove_avatar();
-    }
-});
-
-
-// *********************************************************************************
-//                                   Data Base
-// *********************************************************************************
 
 // *****************************************************
 //           save user-info changes to database
@@ -317,6 +153,55 @@ function save_profile_changes (user_info)
         }
     }); 
 }
+
+
+
+// *********************************************************************************
+//                                Change Password
+// *********************************************************************************
+
+//Change Password button
+$("#change-password").on('click', function () {  
+    //open change password panel
+    $("#password-modal-btn").trigger("click");
+});
+
+
+//close buttons
+$(".password-close-btns").on('click', function () 
+{  
+    //clear fields (for security)
+    $("#old-p-box").val('');
+    $("#new-p-box").val('');
+    $("#repeat-p-box").val('');
+
+    //hide alerts
+    $("#old-password-length-warning").css("visibility", "hidden");
+    $("#new-password-length-warning").css("visibility", "hidden");
+    $("#repeat-password-length-warning").css("visibility", "hidden");
+    $("#error-alert-password").hide();
+
+    changes_for_password_change("not-loading");
+});
+
+
+//Apply button (in change password page)
+$("#apply-password-change").on('click', function () 
+{  
+    //values of password boxes
+    let passwords = {
+        old: $("#old-p-box").val(),
+        new: $("#new-p-box").val(),
+        repeat: $("#repeat-p-box").val()
+    }
+
+    if (VALIDATOR.password_change(passwords) === true) 
+    {
+        changes_for_password_change("is-loading");
+ 
+        change_password(passwords);
+    }
+});
 
 
 // *****************************************************
@@ -374,6 +259,29 @@ function change_password (passwords)
 }
 
 
+
+// *********************************************************************************
+//                              Change Profile Photo
+// *********************************************************************************
+
+//*** some operations are in 'VALIDATOR' module ***
+
+
+//open 'Change Photo' panel when cliked on 'Change Photo' area
+$("#add-photo").on("click", function () {  
+    $("#photo-modal-btn").trigger("click");
+});
+
+//Apply button (in profile-photo panel)
+$("#apply-photo-change").on("click", function () 
+{  
+    if (VALIDATOR.avatar_change() === true) {
+        change_avatar();
+    }
+});
+
+
+
 // *****************************************************
 //           save user's new avatar to database
 // *****************************************************
@@ -398,6 +306,9 @@ function change_avatar ()
 
         success: function (result, status, xhr) 
         {
+            //changes were successful
+            alert("Photo changed successfully.");
+            
             //change the avatar photo in dashboard to the new one
             //(use preview-image src)
             $("#avatar").attr("src", `${$("#preview").attr("src")}`);
@@ -406,9 +317,6 @@ function change_avatar ()
 
             //close the change photo panel
             $(".photo-close-btns").trigger("click");
-
-            //changes were successful
-            alert("Photo changed successfully.");
         },
 
         //show error in alert-box
@@ -434,53 +342,57 @@ function change_avatar ()
 //                 remove user's avatar
 // *****************************************************
 
-function remove_avatar () 
+$("#remove-photo").on("click", function () 
 {  
-    changes_for_photo_change("is-loading");
-
-  
-    //send remove avatar request to the server
-    $.ajax({
-        type: "DELETE",
-        url: "/user/avatar",
-
-        success: function (result, status, xhr) 
-        {
-            //change the avatar photo in dashboard to the default
-            $("#avatar").attr("src", "/images/profiles/default-pic.jpg");
-
-            changes_for_photo_change("not-loading");
-
-            //close the change photo panel
-            $(".photo-close-btns").trigger("click");
-
-            //changes were successful
-            alert("Photo removed successfully.");
-        },
-
-        //show error in alert-box
-        error: function (xhr, status, error) 
-        {
-            //session timed out
-            if (xhr.status === 403) {
-                alert("You should sign-in again.")
-                window.location.assign('/signin');
-            }
-
-            //default avatar error
-            if (xhr.status === 400) {
+    if (confirm("Are you sure to remove your avatar?")) 
+    {
+        changes_for_photo_change("is-loading");
+        
+        
+        //send remove avatar request to the server
+        $.ajax({
+            type: "DELETE",
+            url: "/user/avatar",
+        
+            success: function (result, status, xhr) 
+            {
+                //change the avatar photo in dashboard to the default
+                $("#avatar").attr("src", "/images/profiles/default-profile-pic.jpg");
+        
                 changes_for_photo_change("not-loading");
-                alert("Default avatar can Not be removed.")
+        
+                //close the change photo panel
+                $(".photo-close-btns").trigger("click");
+        
+                //changes were successful
+                alert("Photo removed successfully.");
+            },
+        
+            //show error in alert-box
+            error: function (xhr, status, error) 
+            {
+                //session timed out
+                if (xhr.status === 403) {
+                    alert("You should sign-in again.")
+                    window.location.assign('/signin');
+                }
+        
+                //default avatar error
+                if (xhr.status === 400) {
+                    changes_for_photo_change("not-loading");
+                    alert("Default avatar can Not be removed.")
+                }
+        
+                //server error
+                else if (xhr.status === 500) {
+                    changes_for_photo_change("not-loading");
+                    alert("Something went wrong in removing photo!");
+                }
             }
+        }); 
+    }
+});
 
-            //server error
-            else if (xhr.status === 500) {
-                changes_for_photo_change("not-loading");
-                alert("Something went wrong in removing photo!");
-            }
-        }
-    }); 
-}
 
 
 // *********************************************************************************
@@ -548,37 +460,6 @@ function duplicate_check (username, mobile)
     });
 }
 
-
-// *********************************************************************************
-//                                  Log Out
-// *********************************************************************************
-
-$("#logout-btn").on("click", function ()
-{
-    //send log-out request to the server
-    $.ajax({
-        type: "DELETE",
-        url: "/user",
-
-        success: function (result,status,xhr) {
-            window.location.assign(result);
-        },
-
-        //show error ine alert-box
-        error: function (xhr, status, error) 
-        {
-            //forbidden error (when server restarts and sessions are cleared)
-            if (xhr.status === 403) {
-                window.location.assign("/");
-            }
-
-            //server error
-            if (xhr.status === 500) {
-                alert("Something went wrong logging out! Try again.");
-            }
-        }
-    });
-});
 
 
 // *********************************************************************************

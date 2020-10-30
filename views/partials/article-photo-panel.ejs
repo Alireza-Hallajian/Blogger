@@ -1,0 +1,71 @@
+<!-- Button trigger modal -->
+<button type="button" id="article-photo-modal-btn" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop-article-photo"
+    style="display: none;">
+    Launch static backdrop modal
+</button>
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop-article-photo" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="staticBackdropLabel">
+                    <b>Add a photo for your article</b>
+                </h5>
+
+                <button type="button" class="close article-photo-close-btns" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <div id="preview-container">
+
+                    <p><b>No Photo</b></p>
+                    <img id="preview" src="/images/default-profile-pic.jpg">
+                    
+                </div>
+
+                <form id="file-input-container">
+                    <input id="file-input" type="file" accept="image/jpg, image/jpeg, image/png">
+                </form>
+
+
+                <div id="error-alert-photo" class="alert alert-danger alert-box" role="alert"></div>
+
+            </div>
+
+
+            <div class="modal-footer" id="article-photo-footer">      
+                
+                <a href="#" id="remove-article-photo">Remove Photo</a>
+                
+
+                <button type="button" class="btn btn-secondary article-photo-close-btns"
+                    data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="apply-photo-change">Apply</button>
+
+
+                <!-- Loading Animation -->
+                <div id="loading-article-photo" class="sk-chase">
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

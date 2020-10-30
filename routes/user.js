@@ -1,43 +1,19 @@
 //node_modules
 const express = require('express');
-const session = require('express-session');
-const router = express.Router();
 const colors = require('colors');
+const multer = require('multer');
 const fs = require('fs');
+
+const router = express.Router();
 
 //models
 const User = require('../models/user.js');
 
 //tools
 const INPUT_VALIDATOR = require('../tools/input-validator-server.js');
-const CHECKER = require('../tools/checker.js');
 const multer_config = require('../tools/multer-config.js');
-const multer = require('multer');
+const CHECKER = require('../tools/checker.js');
 
-
-//******************************************************************************** */
-//                                   Authentication
-//******************************************************************************** */
-
-// *****************************************************
-//                        Check Session
-// *****************************************************
-
-//check if user is logged-in to access non-permitted sections for non-registered users
-const check_session = function (req, res, next) 
-{  
-    //for requests wtih method GET
-    if (!req.session.user && req.method === "GET") {     
-        return res.redirect('/signin');
-    }
-
-    //for AJAX requests with methods rather than GET
-    else if (!req.session.user) {
-        return res.sendStatus(403);
-    }
-
-    next();
-}
 
 
 //******************************************************************************** */
@@ -50,7 +26,7 @@ router.get('/', (req, res) => {
 });
 
 
-router.get('/dashboard', check_session, (req, res) =>
+router.get('/dashboard', (req, res) =>
 {
     //user dashboard
     if (req.session.user)
@@ -83,7 +59,7 @@ router.get('/dashboard', check_session, (req, res) =>
 //             duplicate username' and 'mobile' check  
 //************************************************************** */
 
-router.post('/edit', check_session, async (req, res) => 
+router.post('/edit', async (req, res) => 
 {
     try 
     {
@@ -92,7 +68,7 @@ router.post('/edit', check_session, async (req, res) =>
         //************************************************************** */
 
         //result of input-validation --> 'true' if there is no error
-        let duplicate_validation_result = INPUT_VALIDATOR.duplicate(req.body);
+        let duplicate_validation_result = INPUT_VALIDATOR.profile_duplicate(req.body);
     
         //if sign-in data has any errors
         if (duplicate_validation_result !== true) {
@@ -127,7 +103,7 @@ router.post('/edit', check_session, async (req, res) =>
 //                        update profile
 //************************************************************** */
 
-router.put('/edit', check_session, async (req, res) => 
+router.put('/edit', async (req, res) => 
 {
     try
     {
@@ -178,15 +154,16 @@ router.put('/edit', check_session, async (req, res) =>
 });
 
 
+
 //******************************************************************************** */
 //                                  Change Avatar
 //******************************************************************************** */
 
-router.put('/avatar', check_session, (req, res) =>
+router.put('/avatar', (req, res) =>
 {
     try
     {
-        const upload = multer_config.single('avatar');
+        const upload = multer_config.Profile.single('avatar');
 
 
         //replace new avatar
@@ -196,47 +173,85 @@ router.put('/avatar', check_session, (req, res) =>
             {
                 //multiple file error (just one file/field is accepted)
                 if (err instanceof multer.MulterError && err.message === "Unexpected field") {
-                    return res.status(400).send("Only one field/file is accepted.");
+                    return res.status(400).send(err.message);
                 }
 
                 //if NON-acceptable file recieved
                 return res.status(400).send(err);
             }
 
+            
+            //if no file recieved
+            if (!req.file) {
+                return res.status(400).send("Empty field error.");
+            }
 
-            //update user's avatar
-            await User.findByIdAndUpdate(req.session.user._id, {avatar: req.file.filename}, {new: false}, (err, user) => 
+
+            // *** user avatar updated ***
+            
+            // previous user avatar is removed automatically
+            // because of duplicate filename and extension
+
+
+            //update database if user avatar is default
+            await User.findOne({_id: req.session.user._id}).exec((err, user) => 
             {
+                //if database error occured
                 if (err) 
                 {
-                    //remove new photo if could not save in database
-                    fs.unlink(`public/images/profiles/${req.file.filename}`, function (err) {
+                    console.log(colors.brightRed("\n" + err + "\n"));
+
+                    //remove user's avatar if database error occured
+                    fs.unlink(`public/images/users/${req.file.filename}`, (err) => 
+                    {
                         if (err) {
-                            console.log(colors.bgRed("\n" + `Something went wrong in removing new ${req.session.user.username}'s avatar!` + "\n"));
-                            console.log(colors.brightRed(err + "\n"));
+                            console.log(colors.brightRed("\n" + err + "\n"));
+                            console.log(colors.brightRed(`Something went wrong in removing new [user: ${req.session.user._id}]'s avatar`) + "\n");
                         }
                     });
 
-                    return res.status(500).send("Something went wrong in finding user!");
+                    return res.status(500).send("Something went wrong in finding the user!");
+                }
+
+                
+                //update database if article avatar is default
+                if (user.avatar === "default-profile-pic.jpg")
+                {
+                    User.findByIdAndUpdate(req.session.user._id, {avatar: req.file.filename}, (err) =>
+                    {
+                        //if database error occured
+                        if (err) 
+                        {
+                            console.log(colors.brightRed("\n" + err + "\n"));
+
+                            //remove user's avatar if could not update database
+                            fs.unlink(`public/images/users/${req.file.filename}`, (err) => 
+                            {
+                                if (err) {
+                                    console.log(colors.brightRed("\n" + err + "\n"));
+                                    console.log(colors.brightRed(`Something went wrong in removing new [user: ${req.session.user._id}]'s avatar`) + "\n");
+                                }
+                            });
+
+                            return res.status(500).send("Something went wrong in updating or finding the user!");
+                        }
+                    });
+
+
+                    //update user's session for new avatar (needed when user reloads dashboard)
+                    req.session.user.avatar = req.file.filename;
+
+                    return res.send("Your avatar updated sucessfully.");
                 }
 
 
-                //remove previous avatar if is not default
-                if (req.session.user.avatar !== "default-pic.jpg") 
+                else
                 {
-                    fs.unlink(`public/images/profiles/${user.avatar}`, function (err) {
-                        if (err) {
-                            console.log(colors.brightRed("\n" + `Something went wrong in removing privious " ${req.session.user.username} " avatar!` + "\n"));
-                            console.log(colors.brightRed(err + "\n\n"));
-                        }
-                    });
-                }       
+                    //no need to update database for new avatar (if not default)
+                    //and no change in its name occures because new one replaces previous one
 
-                //update user's session for new avatar
-                req.session.user.avatar = req.file.filename;
-
-                //user avatar updated
-                return res.sendStatus(200);
+                    return res.send("Your avatar updated sucessfully.");
+                }
             });
         });
     }
@@ -248,14 +263,15 @@ router.put('/avatar', check_session, (req, res) =>
 });
 
 
+
 //******************************************************************************** */
 //                                  Remove Avatar
 //******************************************************************************** */
 
-router.delete('/avatar', check_session, (req, res, next) =>
+router.delete('/avatar', (req, res, next) =>
 {
     //if user's avatar is NOT default
-    if (req.session.user.avatar !== "default-pic.jpg") 
+    if (req.session.user.avatar !== "default-profile-pic.jpg") 
     {
         //remove user's avatar
         fs.unlink(`public/images/profiles/${req.session.user.avatar}`, function (err) 
@@ -269,9 +285,9 @@ router.delete('/avatar', check_session, (req, res, next) =>
 
 
             //update user's avatar in database (change to default)
-            User.findByIdAndUpdate(req.session.user._id, { avatar: "default-pic.jpg" }, (err, user) => 
+            User.findByIdAndUpdate(req.session.user._id, { avatar: "default-profile-pic.jpg" }, (err, user) => 
             {
-                //if database error encountered
+                //if database error occured
                 if (err) {
                     console.log(colors.brightRed("\n" + err + "\n"));
 
@@ -280,9 +296,9 @@ router.delete('/avatar', check_session, (req, res, next) =>
 
 
                 //change user's avatar to default
-                req.session.user.avatar = "default-pic.jpg";
+                req.session.user.avatar = "default-profile-pic.jpg";
 
-                return res.send("User' avatar removed sucessfully");
+                return res.send("User's avatar removed sucessfully");
             });
         });
     }
@@ -295,11 +311,12 @@ router.delete('/avatar', check_session, (req, res, next) =>
 });
 
 
+
 //******************************************************************************** */
 //                                 Change Password
 //******************************************************************************** */
 
-router.put('/password', check_session, async (req, res) => 
+router.put('/password', async (req, res) => 
 {
     try
     {
@@ -365,12 +382,13 @@ router.put('/password', check_session, async (req, res) =>
 });
 
 
+
 //******************************************************************************** */
 //                                      Log Out
 //******************************************************************************** */
 
 //destroy user session and clear cookie
-router.delete('/', (req, res) =>
+router.get('/logout', (req, res) =>
 {  
     req.session.destroy((err) => 
     {
@@ -380,7 +398,7 @@ router.delete('/', (req, res) =>
         }
 
         res.clearCookie("user_sid");
-        res.send('/signin');
+        res.redirect("/signin");
     });
 });
 

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <%- include('./partials/APIs&CDNs/bootstrap-css.ejs') -%>
+
+    <link rel="stylesheet" href="/stylesheets/main.css">
+    <link rel="stylesheet" href="/stylesheets/navbar.css">
+    <link rel="stylesheet" href="/stylesheets/sidebar.css">
+
+    <link rel="stylesheet" href="/stylesheets/article.css">
+    <link rel="stylesheet" href="/stylesheets/loading1.css">
+
+    <title>Edit Article</title>
+
+</head>
+
+<body>
+
+    <%- include('./partials/bars/navbar.ejs') -%>
+
+    <%# blogger sidebar %>
+    <% if (role === "blogger") { %>
+        <%- include('./partials/bars/sidebar-blogger.ejs') -%>
+    <%} %>
+
+    <%# admin sidebar %>
+    <% if (role === "admin") { %>
+        <%- include('./partials/bars/sidebar-admin.ejs') -%>
+    <%} %>
+    
+
+    <!-- Article_ID Container -->
+    <p id="article_id_for_edit_article" style="display: none;"><%= article_id %></p>
+
+
+    <!-- Title Edit Section -->
+    <section class="article-box">
+    
+        <div id="article-title-edit">
+
+            <div id="title-edit-section">
+                <h4><b>Title: </b></h4>
+                <input id="edit-title-input" type="text" value="<%= title %>">
+            </div>
+    
+
+            <div id="title-edit-process">
+
+                <div id="title-edit-btn">Apply Title Edit</div>
+
+                <!-- Loading Animation -->
+                <div id="loading-title-edit" class="sk-chase">
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div id="error-alert-title-edit" class="alert alert-danger alert-box" role="alert"></div>
+    
+    </section>
+
+
+
+    <!-- Summary and Avatar Edit Section -->
+    <section id="article-avatar-and-summary-edit" class="article-box">
+
+        <div id="avatar-edit">
+
+            <%# default avatar %>
+            <% if (avatar === "default-article-pic.jpg") { %>
+                <img id="avatar" src="/images/articles/default-article-pic.jpg" alt="default-pic">
+            <%} %>
+
+            <%# article avatar %>
+            <% if (avatar !== "default-article-pic.jpg") { %>
+                <img id="avatar" src="/images/articles/<%= avatar -%>" alt="avatar">
+            <%} %>
+
+
+            <div id="add-photo">
+
+                <i class="fas fa-camera"></i>
+                <p>Change Photo</p>
+
+            </div>
+
+        </div>
+        
+
+        <div id="summary-edit">
+
+            <div id="summary-edit-section">
+                <h4><b>Summary: </b></h4>
+                <textarea id="summary-edit-input" cols="30" rows="10" wrap="hard"><%= summary %></textarea>
+            </div>
+
+
+            <div id="summary-edit-process">
+
+                <div id="summary-edit-btn">Apply Summary Edit</div>
+
+                <!-- Loading Animation -->
+                <div id="loading-summary-edit" class="sk-chase">
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                </div>
+
+                
+                <div id="error-alert-summary-edit" class="alert alert-danger alert-box" role="alert"></div>
+            
+            </div>
+
+        </div>
+
+    </section>
+
+    
+    
+    <!-- Content Edit Section -->
+    <section id="article-content-edit" class="article-box">
+    
+
+        <textarea id="article-sheet" name="article" placeholder="Write your article..."><%= content %></textarea>
+      
+        <!-- Loading Animation -->
+        <div id="loading-article" class="sk-chase">
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+        </div>
+
+
+        <div id="content-edit-process">
+
+            <div id="content-edit-btn">Apply Content Edit</div>
+
+            <!-- Loading Animation -->
+            <div id="loading-content-edit" class="sk-chase">
+                <div class="sk-chase-dot"></div>
+                <div class="sk-chase-dot"></div>
+                <div class="sk-chase-dot"></div>
+                <div class="sk-chase-dot"></div>
+                <div class="sk-chase-dot"></div>
+                <div class="sk-chase-dot"></div>
+            </div>
+
+            
+            <div id="error-alert-content-edit" class="alert alert-danger alert-box" role="alert"></div>
+        
+        </div>
+    
+    </section>
+    
+
+
+
+      
+    <%- include('./partials/article-photo-panel.ejs', {avatar}) -%>  
+
+
+
+    <%- include('./partials/APIs&CDNs/fontawsome-js.ejs') -%>
+    <%- include('./partials/APIs&CDNs/bootstrap-js.ejs') -%>
+    
+    <%- include('./partials/APIs&CDNs/tiny-cloud.ejs') -%>
+
+
+    <script src="/javascripts/jQuery-Uncompressed.v3.4.1.js"></script>
+    <script src="/javascripts/articles.js" type="module"></script>
+
+</body>
+
+</html>

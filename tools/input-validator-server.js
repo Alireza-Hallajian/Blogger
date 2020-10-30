@@ -1,9 +1,11 @@
 const VALIDATOR = {
     signin: signin_validator,
     signup: signup_validator,
-    duplicate: duplicate_validator,
+    profile_duplicate: profile_duplicate_validator,
     edit: edit_validator,
-    p_change: change_password
+    p_change: change_password,
+    article: article_characters_count,
+    ObjectID_val: mongo_objectID_validator
 };
 
 
@@ -115,7 +117,7 @@ function signup_validator(data)
 // *********************************************************************************
 
 //duplicate username' and 'mobile' check
-function duplicate_validator (data) 
+function profile_duplicate_validator (data) 
 {  
     // empty field check
     if (!data.username || !data.mobile) {
@@ -186,7 +188,6 @@ function edit_validator(data)
         return mobile_check_result;
     }
 
-
     
     //no errors in data input
     return true;
@@ -252,6 +253,93 @@ function warning_checker (mobile)
     }
 
     return true;
+}
+
+
+// *********************************************************************************
+//                             Article Characters Count
+// *********************************************************************************
+
+function article_characters_count(data, part)
+{
+    if (part === "all")
+    {
+        //Title length check
+        if (data.title.trim().length < 2 || data.title.trim().length > 70) {
+            return ("*Title must long at least 2 and at last 70");
+        }
+    
+        //Summary length check
+        if (data.summary.trim().length < 100 || data.summary.trim().length > 400) {
+            return ("*Summary must long at least 100 and at last 400");
+        }
+    
+        //Content length check
+        if (data.content.trim().length < 500 || data.content.trim().length > 15000) {
+            return ("*Content must long at least 500 and at last 10000");
+        }
+
+
+        //no errors in data input
+        return true;
+    }
+
+
+    else 
+    {
+        //Title length check
+        if (part === "title")
+        {
+            if (data.trim().length < 2 || data.trim().length > 70) {
+                return ("*Title MUST long at least 2 and at last 70");
+            }
+        }
+
+        //Summary length check
+        else if (part === "summary")
+        {
+            if (data.trim().length < 100 || data.trim().length > 400) {
+                return ("*Summary must long at least 100 and at last 400");
+            }
+        }
+
+        //Content length check
+        else if (part === "content")
+        {
+            if (data.trim().length < 500 || data.trim().length > 15000) {
+                return ("*Content must long at least 500 and at last 10000");
+            }
+        }
+
+
+        //no errors in data input
+        return true;
+    }
+}
+
+
+// *********************************************************************************
+//                             Mongo ObjectID Validator
+// *********************************************************************************
+
+//node modules
+const ObjectID = require('mongoose').Types.ObjectId;
+
+
+function mongo_objectID_validator(id) 
+{  
+    //valid Mongo ObjectID
+    if (ObjectID.isValid(id) && new ObjectID(id) == id) 
+    {
+        //typeof(ObjectID(id)) is not equal to typeof((id))
+        //so double '=' is used instead of triple
+        return true;
+    }
+
+    //invalid Mongo ObjectID
+    else {
+        return ("Invalid article id");
+    }
 }
 
 

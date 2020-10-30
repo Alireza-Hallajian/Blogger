@@ -75,7 +75,7 @@ const UserShema = new Schema(
 
     avatar: {
         type: String,
-        default: "default-pic.jpg"
+        default: "default-profile-pic.jpg"
     }
 });
 

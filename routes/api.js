@@ -9,6 +9,7 @@ const article_router = require('./article.js');
 
 //models
 const User = require('../models/user.js');
+const Article = require('../models/article.js');
 
 //tools
 const INPUT_VALIDATOR = require('../tools/input-validator-server.js');
@@ -47,7 +48,7 @@ const check_session = function (req, res, next)
 // *****************************************************
 
 router.use('/user', check_session , user_router);
-router.use('/article', article_router);
+router.use('/article', check_session, article_router);
 // router.use('/comment', check_session, user_router);
 
 
@@ -70,6 +71,89 @@ const is_login = function (req, res, next)
     
     next();
 }
+
+
+
+//******************************************************************************** */
+//                                 Show All Articles
+//******************************************************************************** */
+
+router.get('/', async (req, res) => 
+{
+    try
+    {
+        //find all articles sorted by 'createdAt' descended
+        await Article.find({}).sort({createdAt: -1}).populate("author").exec((err, articles) => 
+        {
+            //if database error occured
+            if (err) {
+                console.log(colors.brightRed("\n" + err + "\n"));
+                return res.status(500).send("Something went wrong in finding articles!");
+            }
+
+
+            //define role for ejs file to render correct sidebar
+            let role;
+            if (req.session.user) {
+                role = req.session.user.role;
+            }
+            else {
+                role = "guest"
+            }
+
+
+            //if no article found
+            if (articles.length === 0) 
+            {
+                return res.render("user-articles.ejs", {
+                    role,
+                    status: "no-Article"
+                });
+            }
+
+            //article(s) found
+            else 
+            {
+                let authors_info = [];
+                let articles_info = [];
+                
+                //put all articles inside an array (with needed info)
+                for (let i = 0, len = articles.length; i < len; i++)
+                {
+                    authors_info[i] = {
+                        fname: articles[i].author.firstName,
+                        lname: articles[i].author.lastName,
+                        avatar: articles[i].author.avatar
+                    }
+
+                    articles_info[i] = {
+                        id: articles[i]._id,
+                        createdAt: articles[i].createdAt,
+                        avatar: articles[i].articleAvatar,
+                        title: articles[i].title,
+                        summary: articles[i].summary
+                    }
+                }
+
+                //send NEEDED-author_info and articles to the client
+                return res.render("user-articles.ejs", {
+                    role,
+                    authors_info,
+                    articles_info,
+                    status: "has-Article",
+                    articles_for: "all"
+                });
+            }
+        });
+    }
+
+    catch (err) {
+        console.log(colors.brightRed("\n" + err + "\n"));
+        res.status(500).send("Something went wrong! Try again.");
+    }
+});
+
+
 
 //******************************************************************************** */
 //                                     Sign-in
@@ -144,6 +228,7 @@ router.post('/signin', is_login, async (req, res) =>
 });
 
 
+
 //******************************************************************************** */
 //                                     Sign-Up
 //******************************************************************************** */
@@ -191,7 +276,6 @@ router.post('/signup', is_login, async (req, res) =>
         //                  save new user to data base  
         //************************************************************** */
 
-
         const new_blogger = new User({
             firstName: req.body.fname,
             lastName: req.body.lname,
@@ -211,7 +295,7 @@ router.post('/signup', is_login, async (req, res) =>
         });
     }
 
-    catch(err) {
+    catch (err) {
         console.log(colors.brightRed("\n" + err + "\n"));
     }
 });

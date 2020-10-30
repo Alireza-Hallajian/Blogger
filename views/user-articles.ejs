@@ -14,13 +14,18 @@
     <link rel="stylesheet" href="/stylesheets/article.css">
     <link rel="stylesheet" href="/stylesheets/loading1.css">
 
-    <title>New Article</title>
+    <title>Articles</title>
 
 </head>
 
 <body>
 
     <%- include('./partials/bars/navbar.ejs') -%>
+
+    <%# guest sidebar %>
+    <% if (role === "guest") { %>
+        <%- include('./partials/bars/sidebar-guest.ejs') -%>
+    <%} %>
 
     <%# blogger sidebar %>
     <% if (role === "blogger") { %>
@@ -34,44 +39,42 @@
     
 
 
-    <section id="article-container">
+    <!-- if user has no articles -->
+    <% if (status === "no-Article") { %>
 
-        <form>
+        <section class="article-box" style="text-align: center;">
+            <h1 style="margin-bottom: 0;"><b>There is no article!</b></h1>
+        </section>
 
-            <textarea id="article-sheet" name="article" placeholder="Write your article..."></textarea>
-      
-            <button id="publish-btn"><p>Publish</p></button>
+    <%} %>
 
-        </form>
-
-
-        <div id="error-alert-article" class="alert alert-danger alert-box" role="alert"></div>
         
+    <!-- load articles if any -->
+    <% if (status === "has-Article") { %>
+        
+        <% for (let i = 0; i < articles_info.length; i++) { %>
+            <%- include('./partials/article-box-details.ejs', {articles_for, i}) -%>
+        <%} %>
 
-        <!-- Loading Animation -->
-        <div id="loading-article" class="sk-chase">
-            <div class="sk-chase-dot"></div>
-            <div class="sk-chase-dot"></div>
-            <div class="sk-chase-dot"></div>
-            <div class="sk-chase-dot"></div>
-            <div class="sk-chase-dot"></div>
-            <div class="sk-chase-dot"></div>
-        </div>
-
-    </section>
+    <%} %>
 
 
+    <!-- show a specific article -->
+    <% if (status === "show-Article") { %>
+        
+        <%- include('./partials/article-box-text.ejs') -%>
 
-    <%- include('./partials/article-summary-panel.ejs') -%>  
-    <%- include('./partials/article-photo-panel.ejs') -%>  
+    <%} %>
 
 
+
+    <!-- Needed to avoid ancountering errors in HTML pages that don't have TinyMCE API -->
+    <!-- Because TinyMCE config is in 'articles.js' file -->
+    <%- include('./partials/APIs&CDNs/tiny-cloud.ejs') -%>
 
     <%- include('./partials/APIs&CDNs/fontawsome-js.ejs') -%>
     <%- include('./partials/APIs&CDNs/bootstrap-js.ejs') -%>
     
-    <%- include('./partials/APIs&CDNs/tiny-cloud.ejs') -%>
-
 
     <script src="/javascripts/jQuery-Uncompressed.v3.4.1.js"></script>
     <script src="/javascripts/articles.js" type="module"></script>
