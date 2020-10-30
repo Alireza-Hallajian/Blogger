@@ -25,6 +25,12 @@ const CommentShema = new Schema(
         type: String,
         required: true,
         maxlength: 1000
+    },
+
+    createdAt: {
+        type: Date,
+        required: true,
+        default: Date.now
     }
 });
 
