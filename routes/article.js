@@ -10,10 +10,9 @@ const router = express.Router();
 const Article = require('../models/article.js');
 
 //tools
-const INPUT_VALIDATOR = require('../tools/input-validator-server.js');
+const VALIDATOR = require('../tools/input-validator-server.js');
 const multer_config = require('../tools/multer-config.js');
 const CHECKER = require('../tools/checker.js');
-const VALIDATOR = require('../tools/input-validator-server.js');
 
 
 
@@ -197,7 +196,7 @@ router.post('/', async (req, res) =>
         //************************************************************** */
 
         //result of input-validation --> 'true' if there is no error
-        let char_cout_validation_result = INPUT_VALIDATOR.article(req.body, "all");
+        let char_cout_validation_result = VALIDATOR.article(req.body, "all");
     
         //if characters count have any errors
         if (char_cout_validation_result !== true) {
@@ -379,7 +378,7 @@ router.put('/edit/title/:article_id', async (req, res) =>
         }
 
         //result of input-validation --> 'true' if there is no error
-        let char_cout_validation_result = INPUT_VALIDATOR.article(req.body.new_title, "title");
+        let char_cout_validation_result = VALIDATOR.article(req.body.new_title, "title");
     
         //if characters count have any errors
         if (char_cout_validation_result !== true) {
@@ -465,7 +464,7 @@ router.put('/edit/summary/:article_id', async (req, res) =>
         }
 
         //result of input-validation --> 'true' if there is no error
-        let char_cout_validation_result = INPUT_VALIDATOR.article(req.body.new_summary, "summary");
+        let char_cout_validation_result = VALIDATOR.article(req.body.new_summary, "summary");
     
         //if characters count have any errors
         if (char_cout_validation_result !== true) {
@@ -540,7 +539,7 @@ router.put('/edit/content/:article_id', async (req, res) =>
         }
 
         //result of input-validation --> 'true' if there is no error
-        let char_cout_validation_result = INPUT_VALIDATOR.article(req.body.new_content, "content");
+        let char_cout_validation_result = VALIDATOR.article(req.body.new_content, "content");
     
         //if characters count have any errors
         if (char_cout_validation_result !== true) {
