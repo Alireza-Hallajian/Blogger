@@ -55,7 +55,8 @@ router.get('/user', async (req, res) =>
             {
                 return res.status(404).render("user-articles.ejs", {
                     role: req.session.user.role,
-                    status: "no-Article"
+                    status: "no-Article",
+                    message: "You have no article!"
                 });
             }
 
@@ -141,7 +142,8 @@ router.get('/:article_id', async (req, res) =>
             {
                 return res.render("user-articles.ejs", {
                     role: req.session.user.role,
-                    status: "no-Article"
+                    status: "no-Article",
+                    message: "There is no such article!"
                 });
             }
 
@@ -266,7 +268,8 @@ router.get('/edit/:article_id', async (req, res) =>
         {
             return res.status(400).render("user-articles.ejs", {
                 role: req.session.user.role,
-                status: "no-Article"
+                status: "no-Article",
+                message: "Article ID is not valid"
             });
         }
 
@@ -281,7 +284,8 @@ router.get('/edit/:article_id', async (req, res) =>
         {
             return res.status(400).render("user-articles.ejs", {
                 role: req.session.user.role,
-                status: "no-Article"
+                status: "no-Article",
+                message: "You can Not edit this article! Because it's not yours"
             });
         }
 
@@ -304,7 +308,8 @@ router.get('/edit/:article_id', async (req, res) =>
             {
                 return res.render("user-articles.ejs", {
                     role: req.session.user.role,
-                    status: "no-Article"
+                    status: "no-Article",
+                    message: "There is no such article!"
                 });
             }
 
