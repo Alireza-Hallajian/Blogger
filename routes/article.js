@@ -857,13 +857,16 @@ router.delete('/:article_id', async (req, res) =>
 
 
         //************************************************************** */
-        //            chcek 'article_id' to be user's own article 
+        //  chcek 'comment_id' to be user's own comment_id if not ADMIN
         //************************************************************** */
 
-        let article_check_result = await CHECKER.has_article(req.params.article_id, req.session.user._id);
+        if (req.session.user.role !== "admin")
+        {
+            let article_check_result = await CHECKER.has_article(req.params.article_id, req.session.user._id);
 
-        if (article_check_result !== true) {
-            return res.status(400).send(article_check_result);
+            if (article_check_result !== true) {
+                return res.status(400).send(article_check_result);
+            }
         }
 
 

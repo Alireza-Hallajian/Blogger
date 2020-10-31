@@ -59,6 +59,17 @@
             </div>
 
         <%} %>
+
+        
+        <!-- allow admin to delete articles -->
+        <% if (role === "admin") { %>
+
+            <!----------------- edit article buttons ----------------->
+            <div>
+                <i class="fas fa-trash-alt delete-article-btn" title="Delete Article"></i>
+            </div>
+
+        <%} %>
        
     </div>        
 
