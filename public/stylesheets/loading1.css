@@ -61,9 +61,13 @@
     margin: auto;
   }
 
-  #loading-article, #loading-article-show {
+  #loading-article, #loading-article-show, #loading-bloggers-list {
     width: 250px;
     height: 250px;
     margin: 100px auto;
     display: block;
+  }
+
+  #loading-bloggers-list {
+    display: none;
   }

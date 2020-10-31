@@ -1,0 +1,90 @@
+#container {
+    background-color: white;
+    
+    width: 76.25%;
+    height: auto;
+    margin: 20px 320px;
+    padding: 30px 20px;
+
+    border-radius: 15px;
+    box-shadow: 2px 3px 10px #111111;
+}
+
+
+/* ************************************************************************* */
+/*                                     Table                                 */
+/* ************************************************************************* */
+
+#main-table {
+    width: 100%;
+    margin: auto;
+    border: none;
+    word-break: break-all;
+}
+
+#main-table tr:nth-of-type(odd) {
+    background-color: #80808044;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+th {
+    text-align: center;
+    background-color: #000000c4;
+    color: white;
+    padding: 7px;
+}
+
+td {
+    text-align: center;
+    width: auto;
+    padding: 10px 7px;
+}
+
+.fname_td, .lname_td {
+    max-width: 170px;
+}
+
+
+/* ************************************************************************* */
+/*                                     Buttons                               */
+/* ************************************************************************* */
+
+#reset-button-col, #delete-button-col {
+    width: 0.5rem;
+    padding: 0;
+    background-color: white;
+    border: none;
+}
+
+.buttons-col {  
+    color: white;
+    width: 4rem;
+    border-radius: 10px;
+    border: none;
+}
+
+.buttons {
+    background-color: white;
+    padding: 0 10px;
+    border: none;
+    cursor: pointer;
+    visibility: hidden;
+}
+
+.delete-user-button {
+    color: red;
+}
+
+.reset-password-button {
+    color: #1755c7;
+}
+
+.delete-user-button i, .reset-password-button i {
+    font-size: 25px;
+    cursor: pointer;
+}

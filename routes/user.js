@@ -11,7 +11,9 @@ const User = require('../models/user.js');
 
 //tools
 const INPUT_VALIDATOR = require('../tools/input-validator-server.js');
+const VALIDATOR = require('../tools/input-validator-server.js');
 const multer_config = require('../tools/multer-config.js');
+const TOOLS = require('../tools/general-tools.js');
 const CHECKER = require('../tools/checker.js');
 
 
@@ -399,6 +401,120 @@ router.get('/logout', (req, res) =>
 
         res.clearCookie("user_sid");
         res.redirect("/signin");
+    });
+});
+
+
+
+//******************************************************************************** */
+//                         Bloggers List - Just for Admin
+//******************************************************************************** */
+
+//************************************************************** */
+//                           Get List  
+//************************************************************** */
+
+router.get('/bloggers', (req, res) =>
+{  
+    //admin check
+    if (req.session.user.role !== "admin") {
+        return res.status(403).redirect("/user/dashboard");
+    }
+
+
+    //find all users EXCEPT ADMIN
+    User.find({ role: {$ne: "admin"} }).sort({createdAt: -1}).exec((err, users) =>
+    {
+        if (err) 
+        {
+            console.log(colors.brightRed("\n" + err + "\n"));
+
+            return res.render("bloggers-list.ejs", {
+                status: "error",
+                message: "Something went wrong in  finding the users!"
+            });
+        }
+
+        
+        //render users info
+        res.render("bloggers-list.ejs", {
+            status: "success",
+            users_info: users,
+            date_format: TOOLS.format_date
+        });
+    });
+});
+
+
+//************************************************************** */
+//                         Delete a User  
+//************************************************************** */
+
+router.delete('/bloggers/:user_id', (req, res) =>
+{  
+    //************************************************************** */
+    //              permission check (just admin is allowed)
+    //************************************************************** */
+
+    if (req.session.user.role !== "admin") {
+        return res.status(403).send("You don't have the permission to do this job.");
+    }
+
+    //************************************************************** */
+    //                  Mongo ObjectID Validation
+    //************************************************************** */
+
+    //ckeck 'user_id' to be a valid mongo ObjectID
+    let user_id_val = VALIDATOR.ObjectID_val(req.params.user_id)
+
+    //invalid 'user_id'
+    if (user_id_val !== true) {
+        return res.status(400).send(user_id_val);
+    }
+
+    //find the user
+    User.findById(req.params.user_id, (err, user) =>
+    {
+        if (err) 
+        {
+            console.log(colors.brightRed("\n" + err + "\n"));
+            return res.status(500).send("Something went wrong in checking the user!");
+        }
+
+
+        //if user found
+        if (user)
+        {
+            //************************************************************** */
+            //          check the user for bieing deleted NOT to be ADMIN
+            //************************************************************** */
+
+            if (user.role === "admin") {
+                return res.status(403).send("Admin user can NOT be deleted.")
+            }
+    
+    
+            //************************************************************** */
+            //                      Delete the User
+            //************************************************************** */
+        
+            //find the user and delete
+            User.findByIdAndDelete(req.params.user_id, (err, user) =>
+            {
+                if (err) 
+                {
+                    console.log(colors.brightRed("\n" + err + "\n"));
+                    return res.status(500).send("Something went wrong in finding or deleting the user!");
+                }
+        
+                return res.send("User deleted successfully.")
+            });
+        }
+
+        else {
+            //if user NOT found
+            return res.status(404).send("User not found.");
+        }
     });
 });
 

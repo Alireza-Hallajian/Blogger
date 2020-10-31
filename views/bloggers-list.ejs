@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <%- include('./partials/APIs&CDNs/bootstrap-css.ejs') -%>
+
+    <link rel="stylesheet" href="/stylesheets/main.css">
+    <link rel="stylesheet" href="/stylesheets/navbar.css">
+    <link rel="stylesheet" href="/stylesheets/sidebar.css">
+
+    <link rel="stylesheet" href="/stylesheets/bloggers.css">
+    <link rel="stylesheet" href="/stylesheets/loading1.css">
+
+    <title>Bloggers List</title>
+
+</head>
+
+<body>
+
+    <%- include('./partials/bars/navbar.ejs') -%>
+
+    <%# admin sidebar %>
+    <%- include('./partials/bars/sidebar-admin.ejs') -%>
+    
+    
+    <div id="container">
+
+        <% if (status === "error") {%>
+            <p><%= message %></p>
+        <%} %>
+
+
+        <% if (status === "success") {%>
+
+            <!-- ******************* main table ******************** -->
+
+            <table id="main-table">
+
+                <tr>
+                            
+                    <!-- reset-button column -->
+                    <th id="reset-button-col" class="buttons-col"></th>
+        
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Gender</th>   
+                    <th>Mobile</th>   
+                    <th>Regiser Date</th>   
+
+                    <!-- delete-button column -->
+                    <th id="delete-button-col" class="buttons-col delete-button"></th>
+
+                </tr>
+
+
+                <% for (let i = 0, len = users_info.length; i < len; i++) { %>
+                    <tr>
+                        <td class="reset-password-button buttons"><i class="fas fa-redo-alt"></i></td>  
+        
+                        <td class="id_td"><%= users_info[i]._id %></td>
+                        <td class="uname_td"><%= users_info[i].username %></td>
+                        <td class="fname_td"><%= users_info[i].firstName %></td>
+                        <td class="lname_td"><%= users_info[i].lastName %></td>
+                        <td class="gender_td"><%= users_info[i].sex %></td>   
+                        <td class="mobile_td"><%= users_info[i].mobile %></td>   
+                        <td class="date_td"><%= date_format(users_info[i].createdAt) %></td>  
+        
+                        <td class="delete-user-button buttons"><i class="fas fa-trash-alt" title="Delete User"></i></td>
+                    </tr>
+                <%} %>
+
+            </table>
+
+
+            <!-- Loading Animation -->
+            <div id="loading-bloggers-list" class="sk-chase">
+                <div class="sk-chase-dot"></div>
+                <div class="sk-chase-dot"></div>
+                <div class="sk-chase-dot"></div>
+                <div class="sk-chase-dot"></div>
+                <div class="sk-chase-dot"></div>
+                <div class="sk-chase-dot"></div>
+            </div>
+
+        <%} %>
+
+        
+        
+    </div>
+
+    
+
+    <%- include('./partials/APIs&CDNs/fontawsome-js.ejs') -%>
+    <%- include('./partials/APIs&CDNs/bootstrap-js.ejs') -%>
+    
+
+    <script src="/javascripts/jQuery-Uncompressed.v3.4.1.js"></script>
+    <script src="/javascripts/users-list.js"></script>
+
+</body>
+
+</html>
