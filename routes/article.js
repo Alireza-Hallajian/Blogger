@@ -8,11 +8,13 @@ const router = express.Router();
 
 //models
 const Article = require('../models/article.js');
+const Comment = require('../models/comment.js');
 
 //tools
 const VALIDATOR = require('../tools/input-validator-server.js');
 const multer_config = require('../tools/multer-config.js');
 const CHECKER = require('../tools/checker.js');
+const comment = require('../models/comment.js');
 
 
 
@@ -128,7 +130,7 @@ router.get('/:article_id', async (req, res) =>
         //                  find the article and its info
         //************************************************************** */        
 
-        await Article.findOne({_id: req.params.article_id}).populate("author").exec((err, article) => 
+        await Article.findOne({_id: req.params.article_id}).populate("author").exec(async (err, article) => 
         {
             //if database error occured
             if (err) {
@@ -150,27 +152,59 @@ router.get('/:article_id', async (req, res) =>
             //article found
             else 
             {
-                let authors_info = {
-                    fname: article.author.firstName,
-                    lname: article.author.lastName,
-                    avatar: article.author.avatar
-                }
-           
-                let articles_info = {
-                    id: article._id,
-                    createdAt: article.createdAt,
-                    avatar: article.articleAvatar,
-                    title: article.title,
-                    content: article.content
-                }
-                
+                //find comments of this article
+                await Comment.find({article_id: req.params.article_id}).sort({createdAt: -1}).populate("author_id").exec((err, comments) =>
+                {
+                    //if database error occured
+                    if (err) {
+                        console.log(colors.brightRed("\n" + err + "\n"));
+                        return res.status(500).send("Something went wrong in finding comments!");
+                    }
+                    
 
-                //send NEEDED-author_info and articles to the client
-                return res.render("user-articles.ejs", {
-                    role: req.session.user.role,
-                    status: "show-Article",
-                    authors_info,
-                    articles_info,
+                    let comments_info = [];
+
+                    //put all comments inside an array (with needed info)
+                    for (let i = 0, len = comments.length; i < len; i++)
+                    {
+                        comments_info[i] = {
+                            id: comments[i]._id,
+                            createdAt: comments[i].createdAt,
+                            content: comments[i].content,
+                            
+
+                            author_id: comments[i].author_id.id,
+                            author_fname: comments[i].author_id.firstName,
+                            author_lname: comments[i].author_id.lastName,
+                            author_avatar: comments[i].author_id.avatar
+                        };
+                    }
+
+
+                    let authors_info = {
+                        fname: article.author.firstName,
+                        lname: article.author.lastName,
+                        avatar: article.author.avatar
+                    }
+               
+                    let articles_info = {
+                        id: article._id,
+                        createdAt: article.createdAt,
+                        avatar: article.articleAvatar,
+                        title: article.title,
+                        content: article.content
+                    }
+                    
+    
+                    //send NEEDED-author_info and articles to the client
+                    return res.render("user-articles.ejs", {
+                        user_id: req.session.user._id,
+                        role: req.session.user.role,
+                        status: "show-Article",
+                        authors_info,
+                        articles_info,
+                        comments_info
+                    });
                 });
             }
         });
@@ -280,9 +314,9 @@ router.get('/edit/:article_id', async (req, res) =>
 
         let article_check_result = await CHECKER.has_article(req.params.article_id, req.session.user._id);
 
-        if (article_check_result !== "No Conflict") 
+        if (article_check_result !== true) 
         {
-            return res.status(400).render("user-articles.ejs", {
+            return res.status(403).render("user-articles.ejs", {
                 role: req.session.user.role,
                 status: "no-Article",
                 message: "You can Not edit this article! Because it's not yours"
@@ -368,7 +402,7 @@ router.put('/edit/title/:article_id', async (req, res) =>
 
         let article_check_result = await CHECKER.has_article(req.params.article_id, req.session.user._id);
 
-        if (article_check_result !== "No Conflict") {
+        if (article_check_result !== true) {
             return res.status(400).send(article_check_result);
         }
 
@@ -454,7 +488,7 @@ router.put('/edit/summary/:article_id', async (req, res) =>
 
         let article_check_result = await CHECKER.has_article(req.params.article_id, req.session.user._id);
 
-        if (article_check_result !== "No Conflict") {
+        if (article_check_result !== true) {
             return res.status(400).send(article_check_result);
         }
 
@@ -529,7 +563,7 @@ router.put('/edit/content/:article_id', async (req, res) =>
 
         let article_check_result = await CHECKER.has_article(req.params.article_id, req.session.user._id);
 
-        if (article_check_result !== "No Conflict") {
+        if (article_check_result !== true) {
             return res.status(400).send(article_check_result);
         }
 
@@ -603,7 +637,7 @@ router.put('/avatar/:article_id', async (req, res) =>
 
         let article_check_result = await CHECKER.has_article(req.params.article_id, req.session.user._id);
 
-        if (article_check_result !== "No Conflict") {
+        if (article_check_result !== true) {
             return res.status(400).send(article_check_result);
         }
 
@@ -735,7 +769,7 @@ router.delete('/avatar/:article_id', async (req, res) =>
 
         let article_check_result = await CHECKER.has_article(req.params.article_id, req.session.user._id);
 
-        if (article_check_result !== "No Conflict") {
+        if (article_check_result !== true) {
             return res.status(400).send(article_check_result);
         }
 
@@ -828,7 +862,7 @@ router.delete('/:article_id', async (req, res) =>
 
         let article_check_result = await CHECKER.has_article(req.params.article_id, req.session.user._id);
 
-        if (article_check_result !== "No Conflict") {
+        if (article_check_result !== true) {
             return res.status(400).send(article_check_result);
         }
 

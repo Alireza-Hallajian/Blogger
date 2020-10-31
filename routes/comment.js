@@ -15,7 +15,7 @@ const CHECKER = require('../tools/checker.js');
 
 
 //******************************************************************************** */
-//                                  Recieve Comment
+//                                    Save Comment
 //******************************************************************************** */
 
 router.post('/:article_id', async (req, res) =>
@@ -92,6 +92,85 @@ router.post('/:article_id', async (req, res) =>
 
             else {
                 return res.status(404).send("Article NOT found");
+            }
+        });
+    }
+
+    catch (err) {
+        console.log(colors.brightRed("\n" + err + "\n"));
+        res.status(500).send("Something went wrong! Try again.");
+    }
+});
+
+
+
+//******************************************************************************** */
+//                                  Delete Comment
+//******************************************************************************** */
+
+router.delete('/:comment_id', async (req, res) =>
+{
+    try
+    {
+        //************************************************************** */
+        //                  Mongo ObjectID Validation
+        //************************************************************** */
+
+        //ckeck 'comment_id' to be a valid mongo ObjectID
+        let comment_id_val = VALIDATOR.ObjectID_val(req.params.comment_id)
+
+        //invalid 'comment_id'
+        if (comment_id_val !== true) {
+            return res.status(400).send(comment_id_val);
+        }
+
+
+        //************************************************************** */
+        //  chcek 'comment_id' to be user's own comment_id if not ADMIN
+        //************************************************************** */
+
+        if (req.session.user.role !== "admin")
+        {
+            let comment_check_result = await CHECKER.has_comment(req.params.comment_id, req.session.user._id);
+
+            if (comment_check_result !== true) 
+            {
+                return res.status(403).send(comment_check_result);
+            }
+        }
+
+
+        //************************************************************** */
+        //                  find the comment and delete
+        //************************************************************** */
+        
+        //check if the comment exists
+        await Comment.findOne({_id: req.params.comment_id}, (err, comment) => 
+        {
+            //if database error occured
+            if (err) {
+                console.log(colors.brightRed("\n" + err + "\n"));
+                return res.status(500).send("Something went wrong in finding the comment!");
+            }
+
+            //if comment found
+            if (comment) 
+            {
+                //delete the comment
+                Comment.findByIdAndDelete(req.params.comment_id, (err, comment) =>
+                {
+                    if (err)
+                    {
+                        console.log(colors.brightRed("\n" + err + "\n"));
+                        return res.status(500).send("Something went wrong in deleting the comment! Try again.");
+                    }
+
+                    return res.sendStatus(200);
+                });
+            }
+
+            else {
+                return res.status(404).send("Comment NOT found");
             }
         });
     }

@@ -408,6 +408,18 @@
     padding: 10px;
     border-radius: 7px;
     cursor: pointer;
+}
+
+
+/* ************************************************* */
+/*                  Content Section                  */
+/* ************************************************* */
+
+#article-sheet {
+    display: none;
+}
+
+#content-edit-btn {
     display: none;
 }
 

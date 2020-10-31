@@ -2,9 +2,10 @@ export const VALIDATOR = {
     signin: signin_validator,
     signup: signup_validator,
     profile_edit: profile_edit_validator,
-    password_change: change_password,
-    avatar_change: change_avatar,
-    edit_article
+    password_change,
+    avatar_change,
+    edit_article,
+    add_comment
 };
 
 
@@ -247,7 +248,7 @@ function profile_edit_validator(data)
 //                                 Change Password
 // *********************************************************************************
 
-function change_password(data) 
+function password_change(data) 
 {
     // empty field check
     if (!data.old || !data.new || !data.repeat) 
@@ -398,7 +399,7 @@ $(".photo-close-btns").on("click", function ()
 });
 
 
-function change_avatar() 
+function avatar_change() 
 {  
     //file-input
     let file = document.getElementById("file-input");
@@ -476,4 +477,26 @@ function edit_article(part, value)
 
     //no errors in data input
     return true;
+}
+
+
+
+// *********************************************************************************
+//                                      Add Comment
+// *********************************************************************************
+
+function add_comment(comment)
+{
+    //hide error alert
+    $("#error-alert-comment").hide();
+    
+    if (comment.length === 0 || comment.length > 1000) {
+        $("#error-alert-comment").html("*Comment MUST long at least <b>1</b> and at last <b>1000</b>");
+        return $("#error-alert-comment").show();
+    }
+
+    else {
+        //no errors in data input
+        return true;
+    }
 }
