@@ -13,9 +13,8 @@ const Comment = require('../models/comment.js');
 //tools
 const VALIDATOR = require('../tools/input-validator-server.js');
 const multer_config = require('../tools/multer-config.js');
+const TOOLS = require('../tools/general-tools.js');
 const CHECKER = require('../tools/checker.js');
-const comment = require('../models/comment.js');
-
 
 
 router.get('/', (req, res) => {
@@ -92,7 +91,8 @@ router.get('/user', async (req, res) =>
                     authors_info,
                     articles_info,
                     status: "has-Article",
-                    articles_for: "user"
+                    articles_for: "user",
+                    date_format: TOOLS.format_date
                 });
             }
         });
@@ -203,7 +203,8 @@ router.get('/:article_id', async (req, res) =>
                         status: "show-Article",
                         authors_info,
                         articles_info,
-                        comments_info
+                        comments_info,
+                        date_format: TOOLS.format_date
                     });
                 });
             }

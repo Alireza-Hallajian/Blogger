@@ -396,6 +396,7 @@
 #summary-edit-input {
     width: 100%;
     height: 120px;
+    padding: 5px 10px;
     word-wrap: break-word;
 }
 

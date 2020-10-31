@@ -14,6 +14,7 @@ const Article = require('../models/article.js');
 
 //tools
 const INPUT_VALIDATOR = require('../tools/input-validator-server.js');
+const TOOLS = require('../tools/general-tools.js');
 const CHECKER = require('../tools/checker.js');
 
 
@@ -142,7 +143,8 @@ router.get('/', async (req, res) =>
                     authors_info,
                     articles_info,
                     status: "has-Article",
-                    articles_for: "all"
+                    articles_for: "all",
+                    date_format: TOOLS.format_date
                 });
             }
         });
