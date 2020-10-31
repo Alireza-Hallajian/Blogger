@@ -20,7 +20,6 @@ tinymce.init({
 
     init_instance_callback: function () {  
         $("#loading-article").css("display", "none");
-        $("#article-sheet").css("display", "block");
         $("#content-edit-btn").css("display", "block");
         $("#article-container form").css("display", "block");
     },
