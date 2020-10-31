@@ -1,4 +1,4 @@
-<section class="article-box" id="<%= articles_info[i].id %>">
+<section  class="article-box" id="<%= articles_info[i].id %>">
 
     <div id="header">
 
@@ -55,6 +55,17 @@
             <!----------------- edit article buttons ----------------->
             <div>
                 <i class="fas fa-edit edit-article-btn" title="Edit Article"></i>
+                <i class="fas fa-trash-alt delete-article-btn" title="Delete Article"></i>
+            </div>
+
+        <%} %>
+
+        
+        <!-- allow admin to delete articles -->
+        <% if (role === "admin") { %>
+
+            <!----------------- edit article buttons ----------------->
+            <div>
                 <i class="fas fa-trash-alt delete-article-btn" title="Delete Article"></i>
             </div>
 

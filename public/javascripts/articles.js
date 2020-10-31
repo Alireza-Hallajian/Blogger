@@ -103,66 +103,69 @@ $("#title-edit-btn").on("click", function (event)
 
     else 
     {
-        $("#error-alert-title-edit").hide();
-
-        changes_for_article_title_edit("is-loading");
-
-        let article_id = $("#article_id_for_edit_article").text();
-
-        $.ajax(
+        if (confirm("Are you sure to change the title of your article?"))
         {
-            type: "PUT",
-            url: `/article/edit/title/${article_id}`,
-            data: {new_title},
+            $("#error-alert-title-edit").hide();
 
-            success: function (result, status, xhr) 
+            changes_for_article_title_edit("is-loading");
+
+            let article_id = $("#article_id_for_edit_article").text();
+
+            $.ajax(
             {
-                alert("Article title updated successfully.");
+                type: "PUT",
+                url: `/article/edit/title/${article_id}`,
+                data: {new_title},
 
-                changes_for_article_title_edit("not-loading");
-            },
-
-            error: function (xhr, status, error) 
-            {
-                //session timed out
-                if (xhr.status === 403) {
-                    window.location.assign('/signin');
-                }
-
-                //article_id error
-                else if (xhr.status === 400) 
+                success: function (result, status, xhr) 
                 {
-                    $("#error-alert-title-edit").html(xhr.responseText);
-                    $("#error-alert-title-edit").show();
+                    alert("Article title updated successfully.");
 
                     changes_for_article_title_edit("not-loading");
-                }
-                
-                //length error
-                else if (xhr.status === 406) 
+                },
+
+                error: function (xhr, status, error) 
                 {
-                    $("#error-alert-title-edit").html(xhr.responseText);
-                    $("#error-alert-title-edit").show();
+                    //session timed out
+                    if (xhr.status === 403) {
+                        window.location.assign('/signin');
+                    }
 
-                    changes_for_article_title_edit("not-loading");
+                    //article_id error
+                    else if (xhr.status === 400) 
+                    {
+                        $("#error-alert-title-edit").html(xhr.responseText);
+                        $("#error-alert-title-edit").show();
+
+                        changes_for_article_title_edit("not-loading");
+                    }
+                    
+                    //length error
+                    else if (xhr.status === 406) 
+                    {
+                        $("#error-alert-title-edit").html(xhr.responseText);
+                        $("#error-alert-title-edit").show();
+
+                        changes_for_article_title_edit("not-loading");
+                    }
+
+                    //conflict error
+                    else if (xhr.status === 409) 
+                    {
+                        $("#error-alert-title-edit").html(xhr.responseText);
+                        $("#error-alert-title-edit").show();
+
+                        changes_for_article_title_edit("not-loading");
+                    }
+
+                    //server error
+                    else if (xhr.status === 500) {
+                        changes_for_article_title_edit("not-loading");
+                        alert("Something went wrong in updating or finding the article!");
+                    }
                 }
-
-                //conflict error
-                else if (xhr.status === 409) 
-                {
-                    $("#error-alert-title-edit").html(xhr.responseText);
-                    $("#error-alert-title-edit").show();
-
-                    changes_for_article_title_edit("not-loading");
-                }
-
-                //server error
-                else if (xhr.status === 500) {
-                    changes_for_article_title_edit("not-loading");
-                    alert("Something went wrong in updating or finding the article!");
-                }
-            }
-        });
+            });
+        }
     }
 });
 
@@ -174,7 +177,7 @@ $("#title-edit-btn").on("click", function (event)
 
 $("#summary-edit-btn").on("click", function (event) 
 { 
-    let new_summary = $("#summary-title-input").val();
+    let new_summary = $("#summary-edit-input").val();
 
 
     //check new title to have valid length
@@ -189,57 +192,60 @@ $("#summary-edit-btn").on("click", function (event)
 
     else 
     {
-        $("#error-alert-summary-edit").hide();
-
-        changes_for_article_summary_edit("is-loading");
-
-        let article_id = $("#article_id_for_edit_article").text();
-
-        $.ajax(
+        if (confirm("Are you sure to change the summary of your article?"))
         {
-            type: "PUT",
-            url: `/article/edit/summary/${article_id}`,
-            data: {new_summary},
-
-            success: function (result, status, xhr) 
+            $("#error-alert-summary-edit").hide();
+    
+            changes_for_article_summary_edit("is-loading");
+    
+            let article_id = $("#article_id_for_edit_article").text();
+    
+            $.ajax(
             {
-                alert("Article summary updated successfully.");
-
-                changes_for_article_summary_edit("not-loading");
-            },
-
-            error: function (xhr, status, error) 
-            {
-                //session timed out
-                if (xhr.status === 403) {
-                    window.location.assign('/signin');
-                }
-
-                //article_id error
-                else if (xhr.status === 400) 
+                type: "PUT",
+                url: `/article/edit/summary/${article_id}`,
+                data: {new_summary},
+    
+                success: function (result, status, xhr) 
                 {
-                    $("#error-alert-summary-edit").html(xhr.responseText);
-                    $("#error-alert-summary-edit").show();
-
+                    alert("Article summary updated successfully.");
+    
                     changes_for_article_summary_edit("not-loading");
-                }
-                
-                //length error
-                else if (xhr.status === 406) 
+                },
+    
+                error: function (xhr, status, error) 
                 {
-                    $("#error-alert-summary-edit").html(xhr.responseText);
-                    $("#error-alert-summary-edit").show();
-
-                    changes_for_article_summary_edit("not-loading");
+                    //session timed out
+                    if (xhr.status === 403) {
+                        window.location.assign('/signin');
+                    }
+    
+                    //article_id error
+                    else if (xhr.status === 400) 
+                    {
+                        $("#error-alert-summary-edit").html(xhr.responseText);
+                        $("#error-alert-summary-edit").show();
+    
+                        changes_for_article_summary_edit("not-loading");
+                    }
+                    
+                    //length error
+                    else if (xhr.status === 406) 
+                    {
+                        $("#error-alert-summary-edit").html(xhr.responseText);
+                        $("#error-alert-summary-edit").show();
+    
+                        changes_for_article_summary_edit("not-loading");
+                    }
+    
+                    //server error
+                    else if (xhr.status === 500) {
+                        changes_for_article_summary_edit("not-loading");
+                        alert("Something went wrong in updating or finding the article!");
+                    }
                 }
-
-                //server error
-                else if (xhr.status === 500) {
-                    changes_for_article_summary_edit("not-loading");
-                    alert("Something went wrong in updating or finding the article!");
-                }
-            }
-        });
+            });
+        }
     }
 });
 
@@ -273,60 +279,63 @@ $("#content-edit-btn").on("click", function (event)
 
     else 
     {
-        $("#error-alert-content-edit").hide();
-
-        let new_content = $("#article-sheet").val();
-          
-        changes_for_article_content_edit("is-loading");
-    
-        let article_id = $("#article_id_for_edit_article").text();
-
-    
-        $.ajax(
+        if (confirm("Are you sure to change the content of your article?"))
         {
-            type: "PUT",
-            url: `/article/edit/content/${article_id}`,
-            data: {new_content},
+            $("#error-alert-content-edit").hide();
     
-            success: function (result, status, xhr) 
+            let new_content = $("#article-sheet").val();
+              
+            changes_for_article_content_edit("is-loading");
+        
+            let article_id = $("#article_id_for_edit_article").text();
+    
+        
+            $.ajax(
             {
-                alert("Article content updated successfully.");
-    
-                changes_for_article_content_edit("not-loading");
-            },
-    
-            error: function (xhr, status, error) 
-            {
-                //session timed out
-                if (xhr.status === 403) {
-                    window.location.assign('/signin');
-                }
-    
-                //article_id error
-                else if (xhr.status === 400) 
+                type: "PUT",
+                url: `/article/edit/content/${article_id}`,
+                data: {new_content},
+        
+                success: function (result, status, xhr) 
                 {
-                    $("#error-alert-content-edit").html(xhr.responseText);
-                    $("#error-alert-content-edit").show();
-    
+                    alert("Article content updated successfully.");
+        
                     changes_for_article_content_edit("not-loading");
-                }
-                
-                //length error
-                else if (xhr.status === 406) 
+                },
+        
+                error: function (xhr, status, error) 
                 {
-                    $("#error-alert-content-edit").html(xhr.responseText);
-                    $("#error-alert-content-edit").show();
-    
-                    changes_for_article_content_edit("not-loading");
+                    //session timed out
+                    if (xhr.status === 403) {
+                        window.location.assign('/signin');
+                    }
+        
+                    //article_id error
+                    else if (xhr.status === 400) 
+                    {
+                        $("#error-alert-content-edit").html(xhr.responseText);
+                        $("#error-alert-content-edit").show();
+        
+                        changes_for_article_content_edit("not-loading");
+                    }
+                    
+                    //length error
+                    else if (xhr.status === 406) 
+                    {
+                        $("#error-alert-content-edit").html(xhr.responseText);
+                        $("#error-alert-content-edit").show();
+        
+                        changes_for_article_content_edit("not-loading");
+                    }
+        
+                    //server error
+                    else if (xhr.status === 500) {
+                        changes_for_article_content_edit("not-loading");
+                        alert("Something went wrong in updating or finding the article!");
+                    }
                 }
-    
-                //server error
-                else if (xhr.status === 500) {
-                    changes_for_article_content_edit("not-loading");
-                    alert("Something went wrong in updating or finding the article!");
-                }
-            }
-        });
+            });
+        }
     }
 });
 
@@ -520,6 +529,9 @@ $(".delete-article-btn").on("click", function (event)
         });
     }
 });
+
+
+
 // *********************************************************************************
 //                              save article to database
 // *********************************************************************************

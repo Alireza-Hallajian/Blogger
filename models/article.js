@@ -22,7 +22,8 @@ const ArticleShema = new Schema(
 
     author: {
         type: Schema.Types.ObjectId,
-        ref: "User"
+        ref: "User",
+        required: true
     },
 
     content: {
@@ -50,54 +51,12 @@ const ArticleShema = new Schema(
         type: Date,
         required: true,
         default: Date.now
-    },
+    }
 
     // viewsNum: {
     //     type: String,
     // },
 });
-
-
-//******************************************************************************** */
-//                                     Methods
-//******************************************************************************** */
-
-// UserShema.method(
-// {
-//     compare_password: function (candidate_password, callback) 
-//     {
-//         bcrypt.compare(candidate_password, this.password, function (err, is_match) 
-//         {
-//             if (err) return callback(err);
-
-//             callback(null, is_match);
-//         });
-//     }
-// });
-
-
-//******************************************************************************** */
-//                               Password Encryption
-//******************************************************************************** */
-
-// UserShema.pre('save', function (next)
-// {
-//     const user = this;
-
-//     // only hash the password if it has been modified (or is new)
-//     if (!user.isModified('password')) return next();
-    
-
-//     // hash the password along with salt(10)
-//     bcrypt.hash(user.password, 10, (err, hash) => 
-//     {
-//         if (err) return next(err);
-
-//         // override the cleartext password with the hashed one
-//         user.password = hash;
-//         next();
-//     });
-// });
 
 
 

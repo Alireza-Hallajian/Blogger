@@ -58,3 +58,21 @@
     </div>
 
 </section>
+
+
+<!-- show 'add comment' box for signed-in users -->
+<% if (role === "admin" || role === "blogger") { %>
+    <%- include('./add-comment.ejs') -%> 
+<%} %>
+
+
+<section class="comment-box-container">
+
+    <h1>Comments</h1><br>
+
+    <!-- comments box -->
+    <% for (let i = 0; i < comments_info.length; i++) { %>
+        <%- include('./comment-box.ejs', {i}) -%> 
+    <%} %>
+
+</section>

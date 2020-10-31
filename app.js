@@ -11,7 +11,6 @@ const app = express();
 
 //routers
 const api_router = require('./routes/api.js');
-const user_router = require('./routes/user.js');
 
 
 //connect to Mongoose Data-Base

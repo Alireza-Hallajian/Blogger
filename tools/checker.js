@@ -2,12 +2,14 @@ const CHECKER = {
     duplicate_signup: duplicate_signup_validator,
     duplicate_edit: duplicate_edit_validator,
     duplicate_title: duplicate_title_validator,
-    has_article
+    has_article,
+    has_comment
 };
 
 //models
 const User = require('../models/user.js');
 const Article = require('../models/article.js');
+const Comment = require('../models/comment.js');
 
 
 //******************************************************************************** */
@@ -104,6 +106,7 @@ async function duplicate_title_validator(title)
 }
 
 
+
 //************************************************************** */
 //            chcek 'article_id' to be user's own article 
 //************************************************************** */
@@ -128,7 +131,37 @@ async function has_article(article_id, user_id)
     }
 
 
-    return ("No Conflict");
+    return true;
+}
+
+
+
+//************************************************************** */
+//            chcek 'comment_id' to be user's own comment 
+//************************************************************** */
+
+async function has_comment(comment_id, user_id) 
+{  
+    //find comment
+    let comment_author = await Comment.findById(comment_id, (err) => {
+        if (err) new Error(err);
+    });
+
+    if (!comment_author) {
+        return ("Comment not found");
+    }
+    else {
+        comment_author.populate("author");
+    }
+
+
+    //check if the user tries to delete other people's comment
+    if (comment_author.author_id._id != user_id) {
+        return ("You can NOT delete other people's comment.")
+    }
+
+
+    return true;
 }
 
 

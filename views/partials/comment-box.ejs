@@ -1,0 +1,43 @@
+<section class="comment-box" id="<%= comments_info[i].id %>">
+
+    <div id="author-info">
+
+        <!------------------- author's avatar ------------------->
+        <img id="author-avatar" src="/images/profiles/<%= comments_info[i].author_avatar -%>" alt="Author Avatar">
+
+
+        <div>
+
+            <!------------------- author's name ------------------->
+
+            <p><%= comments_info[i].author_fname -%> <%= comments_info[i].author_lname -%></p>
+
+
+            <!------------------- comment's date ------------------->
+
+            <p> - <%= comments_info[i].createdAt -%></p>
+
+        </div>
+
+
+        <!-- delete button for admin or owner of the comment -->
+        <% if (role === "admin" || user_id === comments_info[i].author_id) { %>
+
+            <!----------------- delete comment button ----------------->
+            <div>
+                <i class="fas fa-trash-alt delete-comment-btn" title="Delete Comment"></i>
+            </div>
+
+        <%} %>
+
+    </div>
+
+    <hr>
+
+    <div id="body">
+
+        <p><%= comments_info[i].content %></p>
+
+    </div>
+
+</section>

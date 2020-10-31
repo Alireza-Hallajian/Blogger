@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="/stylesheets/sidebar.css">
 
     <link rel="stylesheet" href="/stylesheets/article.css">
+    <link rel="stylesheet" href="/stylesheets/comment.css">
     <link rel="stylesheet" href="/stylesheets/loading1.css">
 
     <title>Articles</title>
@@ -43,7 +44,7 @@
     <% if (status === "no-Article") { %>
 
         <section class="article-box" style="text-align: center;">
-            <h1 style="margin-bottom: 0;"><b>There is no article!</b></h1>
+            <h1 style="margin-bottom: 0;"><b><%= message %></b></h1>
         </section>
 
     <%} %>
@@ -53,7 +54,7 @@
     <% if (status === "has-Article") { %>
         
         <% for (let i = 0; i < articles_info.length; i++) { %>
-            <%- include('./partials/article-box-details.ejs', {articles_for, i}) -%>
+            <%- include('./partials/article-box-details.ejs', {i}) -%>
         <%} %>
 
     <%} %>
@@ -61,9 +62,7 @@
 
     <!-- show a specific article -->
     <% if (status === "show-Article") { %>
-        
         <%- include('./partials/article-box-text.ejs') -%>
-
     <%} %>
 
 
@@ -78,6 +77,7 @@
 
     <script src="/javascripts/jQuery-Uncompressed.v3.4.1.js"></script>
     <script src="/javascripts/articles.js" type="module"></script>
+    <script src="/javascripts/comments.js" type="module"></script>
 
 </body>
 

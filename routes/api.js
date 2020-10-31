@@ -6,6 +6,7 @@ const colors = require('colors');
 //routers
 const user_router = require('./user.js');
 const article_router = require('./article.js');
+const comment_router = require('./comment.js');
 
 //models
 const User = require('../models/user.js');
@@ -49,7 +50,7 @@ const check_session = function (req, res, next)
 
 router.use('/user', check_session , user_router);
 router.use('/article', check_session, article_router);
-// router.use('/comment', check_session, user_router);
+router.use('/comment', check_session, comment_router);
 
 
 // *****************************************************
