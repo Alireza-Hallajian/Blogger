@@ -40,8 +40,6 @@ const UserShema = new Schema(
 
     password: {
         type: String,
-        minlength: 6,
-        maxlength: 12,   //how does not have problem with hashed 60-character password ???
         required: true
     },
 
