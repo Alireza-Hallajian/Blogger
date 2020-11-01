@@ -1,6 +1,5 @@
 //node modules
 const multer = require('multer');
-const fs = require('fs');
 
 //MIME_TYPES
 const MIME_TYPES = {
@@ -87,8 +86,6 @@ const article_avatar_storage = multer.diskStorage(
             return callback("Only JPEG, JPG or PNG files are allowed");
         }
     });
-
-
 
 
 

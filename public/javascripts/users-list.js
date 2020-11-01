@@ -133,7 +133,7 @@ $("tr td").mouseenter(function () {
 });
 
 $("tr td").mouseleave(function () { 
-    $(this).parent().css({"background-color": "white", "color": "black"}); 
+    $(this).parent().removeAttr("style"); 
 });
 
 

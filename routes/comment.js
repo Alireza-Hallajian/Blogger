@@ -82,9 +82,6 @@ router.post('/:article_id', async (req, res) =>
                         return res.status(500).send("Something went wrong in saving comment! Try again.");
                     }
 
-
-                    console.log(`${colors.bgYellow.black('\nNew Comment added.')} ` + "\n");
-
                     return res.sendStatus(200);
                 });
 

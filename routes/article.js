@@ -270,7 +270,6 @@ router.post('/', async (req, res) =>
                 return res.status(500).send("Something went wrong in saving article! Try again.");
             }
 
-            console.log(`${colors.bgYellow.black('\nNew Article added.')} ` + "\n");
             return res.sendStatus(200);
         });
     }

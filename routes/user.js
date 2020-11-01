@@ -33,16 +33,26 @@ router.get('/dashboard', (req, res) =>
     //user dashboard
     if (req.session.user)
     {
-        return res.render("dashboard.ejs", 
+        User.findById(req.session.user._id, (err, user) =>
         {
-            fname: req.session.user.firstName,
-            lname: req.session.user.lastName,
-            uname: req.session.user.username,
-            gender: req.session.user.sex,
-            mobile: req.session.user.mobile,
-            role: req.session.user.role,
-            avatar: req.session.user.avatar
+            if (err) 
+            {
+                console.log(colors.brightRed("\n" + err + "\n"));
+                return res.status(500).send("Something went wrong in finding the user");
+            }
+
+            return res.render("dashboard.ejs", 
+            {
+                fname: user.firstName,
+                lname: user.lastName,
+                uname: user.username,
+                gender: user.sex,
+                mobile: user.mobile,
+                role: user.role,
+                avatar: user.avatar
+            });
         });
+
     }
 
     else {
@@ -609,7 +619,7 @@ router.put('/bloggers/:user_id', (req, res) =>
                     if (err) 
                     {
                         console.log(colors.brightRed("\n" + err + "\n"));
-                        return res.status(500).send("Something went wrong in resettinf user's password");
+                        return res.status(500).send("Something went wrong in resetting user's password");
                     }
             
                     return res.send("User password reset successfully.")

@@ -292,7 +292,6 @@ router.post('/signup', is_login, async (req, res) =>
         {
             if (err) return res.status(500).send("Something went wrong! Try again.");
 
-            console.log(`${colors.bgYellow.black('\nNew User:')} ` + new_blogger + "\n");
             // res.write("Sign-Up was successful.")
             return res.send("/signin");
         });

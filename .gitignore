@@ -1,4 +1,3 @@
 node_modules
-public/images
-request.http
-database backup
+public/images/articles
+public/images/profiles
