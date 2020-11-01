@@ -7,6 +7,8 @@ const fs = require('fs');
 const router = express.Router();
 
 //models
+const Article = require('../models/article.js');
+const Comment = require('../models/comment.js');
 const User = require('../models/user.js');
 
 //tools
@@ -465,7 +467,7 @@ router.get('/bloggers', (req, res) =>
 
 
 //************************************************************** */
-//                         Delete a User  
+//                delete a user and its articles
 //************************************************************** */
 
 router.delete('/bloggers/:user_id', (req, res) =>
@@ -514,22 +516,52 @@ router.delete('/bloggers/:user_id', (req, res) =>
                     return res.status(403).send("Admin user can NOT be deleted.")
                 }
         
-        
+
                 //************************************************************** */
-                //                      Delete the User
+                //                     Delete User's Comments
                 //************************************************************** */
-            
-                //find the user and delete
-                User.findByIdAndDelete(req.params.user_id, (err, user) =>
+
+                Comment.deleteMany({author_id: req.params.user_id}, (err, comments) =>
                 {
                     if (err) 
                     {
                         console.log(colors.brightRed("\n" + err + "\n"));
-                        return res.status(500).send("Something went wrong in finding or deleting the user!");
+                        return res.status(500).send("Something went wrong in finding or deleting users comments!");
                     }
-            
-                    return res.send("User deleted successfully.")
+
+
+                    //************************************************************** */
+                    //                     Delete User's Articles
+                    //************************************************************** */
+    
+                    Article.deleteMany({author: req.params.user_id}, (err, articles) =>
+                    {
+                        if (err) 
+                        {
+                            console.log(colors.brightRed("\n" + err + "\n"));
+                            return res.status(500).send("Something went wrong in finding or deleting users articles!");
+                        }
+    
+
+                        //************************************************************** */
+                        //                          Delete the User
+                        //************************************************************** */
+                    
+                        //find the user and delete
+                        User.findByIdAndDelete(req.params.user_id, (err, user) =>
+                        {
+                            if (err) 
+                            {
+                                console.log(colors.brightRed("\n" + err + "\n"));
+                                return res.status(500).send("Something went wrong in finding or deleting the user!");
+                            }
+                    
+                            return res.send("User and his/her articles and comments deleted successfully.")
+                        });
+                    });
                 });
+
+        
             }
     
             else {

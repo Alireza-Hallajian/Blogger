@@ -8,7 +8,7 @@ $(".delete-user-button").on("click", function ()
     let parent_row = $(this).parent();
 
 
-    if (confirm(`You are aboute to DELETE a user with username: ' ${username} '.\nAre you sure?!`))
+    if (confirm(`You are aboute to DELETE a user with username: ' ${username} ' and all of his/her aricles.\nAre you sure?!`))
     {
         changes_for_bloggers_list("is-loading");
 
