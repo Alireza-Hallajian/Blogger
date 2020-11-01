@@ -8,7 +8,7 @@ $(".delete-user-button").on("click", function ()
     let parent_row = $(this).parent();
 
 
-    if (confirm(`You are aboute to DELETE a user with username: ' ${username} ' .\nAre you sure?!`))
+    if (confirm(`You are aboute to DELETE a user with username: ' ${username} '.\nAre you sure?!`))
     {
         changes_for_bloggers_list("is-loading");
 
@@ -23,6 +23,59 @@ $(".delete-user-button").on("click", function ()
                 {
                     alert(`User: ' ${username} ' deleted successfully.`);
                     $(parent_row).remove();
+    
+                    changes_for_bloggers_list("not-loading");
+                },
+    
+                error: function (xhr, status, error) 
+                {
+                    //session timed out
+                    if (xhr.status === 403) {
+                        window.location.assign('/signin');
+                    }
+    
+                    //user_id error or user not found
+                    else if (xhr.status === 400 || xhr.status === 404) 
+                    {
+                        changes_for_bloggers_list("not-loading");
+                        alert(xhr.responseText);
+                    }
+    
+                    //server error
+                    else if (xhr.status === 500) {
+                        changes_for_bloggers_list("not-loading");
+                        alert("Something went wrong in finding or deleting the user!");
+                    }
+                }
+            });
+    }
+});
+
+
+
+// *********************************************************************************
+//                             'reset password' button
+// *********************************************************************************
+
+$(".reset-password-button").on("click", function () 
+{  
+    let username = $(this).parent().find("td.uname_td").text();
+
+
+    if (confirm(`You are aboute to reset a user's password with username: ' ${username} '.\nAre you sure?!`))
+    {
+        changes_for_bloggers_list("is-loading");
+
+        let user_id = $(this).parent().find("td.id_td").text();
+    
+        $.ajax(
+            {
+                type: "PUT",
+                url: `/user/bloggers/${user_id}`,
+    
+                success: function (result, status, xhr) 
+                {
+                    alert(`User: ' ${username} 's password reset successfully.`);
     
                     changes_for_bloggers_list("not-loading");
                 },

@@ -416,33 +416,41 @@ router.get('/logout', (req, res) =>
 
 router.get('/bloggers', (req, res) =>
 {  
-    //admin check
-    if (req.session.user.role !== "admin") {
-        return res.status(403).redirect("/user/dashboard");
+    try
+    {
+        //admin check
+        if (req.session.user.role !== "admin") {
+            return res.status(403).redirect("/user/dashboard");
+        }
+    
+    
+        //find all users EXCEPT ADMIN
+        User.find({ role: {$ne: "admin"} }).sort({createdAt: -1}).exec((err, users) =>
+        {
+            if (err) 
+            {
+                console.log(colors.brightRed("\n" + err + "\n"));
+    
+                return res.render("bloggers-list.ejs", {
+                    status: "error",
+                    message: "Something went wrong in  finding the users!"
+                });
+            }
+    
+            
+            //render users info
+            res.render("bloggers-list.ejs", {
+                status: "success",
+                users_info: users,
+                date_format: TOOLS.format_date
+            });
+        });
     }
 
-
-    //find all users EXCEPT ADMIN
-    User.find({ role: {$ne: "admin"} }).sort({createdAt: -1}).exec((err, users) =>
-    {
-        if (err) 
-        {
-            console.log(colors.brightRed("\n" + err + "\n"));
-
-            return res.render("bloggers-list.ejs", {
-                status: "error",
-                message: "Something went wrong in  finding the users!"
-            });
-        }
-
-        
-        //render users info
-        res.render("bloggers-list.ejs", {
-            status: "success",
-            users_info: users,
-            date_format: TOOLS.format_date
-        });
-    });
+    catch (err) {
+        console.log(colors.brightRed("\n" + err + "\n"));
+        res.status(500).send("Something went wrong! Try again.");
+    }
 });
 
 
@@ -452,70 +460,173 @@ router.get('/bloggers', (req, res) =>
 
 router.delete('/bloggers/:user_id', (req, res) =>
 {  
-    //************************************************************** */
-    //              permission check (just admin is allowed)
-    //************************************************************** */
-
-    if (req.session.user.role !== "admin") {
-        return res.status(403).send("You don't have the permission to do this job.");
-    }
-
-    //************************************************************** */
-    //                  Mongo ObjectID Validation
-    //************************************************************** */
-
-    //ckeck 'user_id' to be a valid mongo ObjectID
-    let user_id_val = VALIDATOR.ObjectID_val(req.params.user_id)
-
-    //invalid 'user_id'
-    if (user_id_val !== true) {
-        return res.status(400).send(user_id_val);
-    }
-
-    //find the user
-    User.findById(req.params.user_id, (err, user) =>
+    try
     {
-        if (err) 
-        {
-            console.log(colors.brightRed("\n" + err + "\n"));
-            return res.status(500).send("Something went wrong in checking the user!");
+        //************************************************************** */
+        //              permission check (just admin is allowed)
+        //************************************************************** */
+    
+        if (req.session.user.role !== "admin") {
+            return res.status(403).send("You don't have the permission to do this job.");
         }
-
-
-        //if user found
-        if (user)
+    
+        //************************************************************** */
+        //                  Mongo ObjectID Validation
+        //************************************************************** */
+    
+        //ckeck 'user_id' to be a valid mongo ObjectID
+        let user_id_val = VALIDATOR.ObjectID_val(req.params.user_id)
+    
+        //invalid 'user_id'
+        if (user_id_val !== true) {
+            return res.status(400).send(user_id_val);
+        }
+    
+        
+        //find the user
+        User.findById(req.params.user_id, (err, user) =>
         {
-            //************************************************************** */
-            //          check the user for bieing deleted NOT to be ADMIN
-            //************************************************************** */
-
-            if (user.role === "admin") {
-                return res.status(403).send("Admin user can NOT be deleted.")
+            if (err) 
+            {
+                console.log(colors.brightRed("\n" + err + "\n"));
+                return res.status(500).send("Something went wrong in checking the user!");
             }
     
     
-            //************************************************************** */
-            //                      Delete the User
-            //************************************************************** */
-        
-            //find the user and delete
-            User.findByIdAndDelete(req.params.user_id, (err, user) =>
+            //if user found
+            if (user)
             {
-                if (err) 
-                {
-                    console.log(colors.brightRed("\n" + err + "\n"));
-                    return res.status(500).send("Something went wrong in finding or deleting the user!");
+                //************************************************************** */
+                //          check the user for bieing deleted NOT to be ADMIN
+                //************************************************************** */
+    
+                if (user.role === "admin") {
+                    return res.status(403).send("Admin user can NOT be deleted.")
                 }
         
-                return res.send("User deleted successfully.")
-            });
-        }
+        
+                //************************************************************** */
+                //                      Delete the User
+                //************************************************************** */
+            
+                //find the user and delete
+                User.findByIdAndDelete(req.params.user_id, (err, user) =>
+                {
+                    if (err) 
+                    {
+                        console.log(colors.brightRed("\n" + err + "\n"));
+                        return res.status(500).send("Something went wrong in finding or deleting the user!");
+                    }
+            
+                    return res.send("User deleted successfully.")
+                });
+            }
+    
+            else {
+                //if user NOT found
+                return res.status(404).send("User not found.");
+            }
+        });
+    }
 
-        else {
-            //if user NOT found
-            return res.status(404).send("User not found.");
+    catch (err) {
+        console.log(colors.brightRed("\n" + err + "\n"));
+        res.status(500).send("Something went wrong! Try again.");
+    }
+});
+
+
+
+//************************************************************** */
+//                     Reset a User's Paaword 
+//************************************************************** */
+
+router.put('/bloggers/:user_id', (req, res) =>
+{  
+    try
+    {
+        //************************************************************** */
+        //              permission check (just admin is allowed)
+        //************************************************************** */
+    
+        if (req.session.user.role !== "admin") {
+            return res.status(403).send("You don't have the permission to do this job.");
         }
-    });
+    
+        //************************************************************** */
+        //                  Mongo ObjectID Validation
+        //************************************************************** */
+    
+        //ckeck 'user_id' to be a valid mongo ObjectID
+        let user_id_val = VALIDATOR.ObjectID_val(req.params.user_id)
+    
+        //invalid 'user_id'
+        if (user_id_val !== true) {
+            return res.status(400).send(user_id_val);
+        }
+    
+
+        //find the user
+        User.findById(req.params.user_id, async (err, user) =>
+        {
+            if (err) 
+            {
+                console.log(colors.brightRed("\n" + err + "\n"));
+                return res.status(500).send("Something went wrong in checking the user!");
+            }
+    
+            
+            //if user found
+            if (user)
+            {
+                //************************************************************** */
+                //       check the user for password-reset NOT to be ADMIN
+                //************************************************************** */
+                
+                if (user.role === "admin") {
+                    return res.status(403).send("You can NOT reset admin's password.")
+                }
+                
+                //************************************************************** */
+                //        genarate a hashed password with user's 'mobile'
+                //************************************************************** */
+        
+                let new_password;
+    
+                await TOOLS.encrypt(user.mobile).then(hashed_password => {
+                    new_password = hashed_password;
+                }, err => {
+                    return new Error(err);
+                });
+    
+                
+                //************************************************************** */
+                //             reset user's password to its 'mobile'
+                //************************************************************** */
+            
+                User.findByIdAndUpdate(req.params.user_id, {password: new_password}, (err, user) =>
+                {
+                    if (err) 
+                    {
+                        console.log(colors.brightRed("\n" + err + "\n"));
+                        return res.status(500).send("Something went wrong in resettinf user's password");
+                    }
+            
+                    return res.send("User password reset successfully.")
+                });
+            }
+    
+            else {
+                //if user NOT found
+                return res.status(404).send("User not found.");
+            }
+        });
+    }
+
+    catch (err) {
+        console.log(colors.brightRed("\n" + err + "\n"));
+        res.status(500).send("Something went wrong! Try again.");
+    }
 });
 
 
