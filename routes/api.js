@@ -11,9 +11,11 @@ const comment_router = require('./comment.js');
 //models
 const User = require('../models/user.js');
 const Article = require('../models/article.js');
+const Comment = require('../models/comment.js');
 
 //tools
 const INPUT_VALIDATOR = require('../tools/input-validator-server.js');
+const VALIDATOR = require('../tools/input-validator-server.js');
 const TOOLS = require('../tools/general-tools.js');
 const CHECKER = require('../tools/checker.js');
 
@@ -149,6 +151,134 @@ router.get('/', async (req, res) =>
             }
         });
     }
+
+    catch (err) {
+        console.log(colors.brightRed("\n" + err + "\n"));
+        res.status(500).send("Something went wrong! Try again.");
+    }
+});
+
+
+
+//******************************************************************************** */
+//                              Show a Specific Article
+//******************************************************************************** */
+
+router.get('/article_id/:article_id', async (req, res) => 
+{
+    try
+    {
+        //************************************************************** */
+        //                  Mongo ObjectID Validation
+        //************************************************************** */
+
+        //ckeck 'article_id' to be a valid mongo ObjectID
+        let article_id_val = VALIDATOR.ObjectID_val(req.params.article_id)
+
+        //invalid 'article_id'
+        if (article_id_val !== true) {
+            return res.status(400).send(article_id_val);
+        }
+
+        //************************************************************** */
+        //                  find the article and its info
+        //************************************************************** */        
+
+        await Article.findOne({_id: req.params.article_id}).populate("author").exec(async (err, article) => 
+        {
+            //if database error occured
+            if (err) {
+                console.log(colors.brightRed("\n" + err + "\n"));
+                return res.status(500).send("Something went wrong in finding the article!");
+            }
+
+
+            //if article not found
+            if (!article) 
+            {
+                return res.render("user-articles.ejs", {
+                    role: req.session.user.role,
+                    status: "no-Article",
+                    message: "There is no such article!"
+                });
+            }
+
+            //article found
+            else 
+            {
+                //find comments of this article
+                await Comment.find({article_id: req.params.article_id}).sort({createdAt: -1}).populate("author_id").exec((err, comments) =>
+                {
+                    //if database error occured
+                    if (err) {
+                        console.log(colors.brightRed("\n" + err + "\n"));
+                        return res.status(500).send("Something went wrong in finding comments!");
+                    }
+                    
+
+                    let comments_info = [];
+
+                    //put all comments inside an array (with needed info)
+                    for (let i = 0, len = comments.length; i < len; i++)
+                    {
+                        comments_info[i] = {
+                            id: comments[i]._id,
+                            createdAt: comments[i].createdAt,
+                            content: comments[i].content,
+                            
+
+                            author_id: comments[i].author_id.id,
+                            author_fname: comments[i].author_id.firstName,
+                            author_lname: comments[i].author_id.lastName,
+                            author_avatar: comments[i].author_id.avatar
+                        };
+                    }
+
+
+                    let authors_info = {
+                        fname: article.author.firstName,
+                        lname: article.author.lastName,
+                        avatar: article.author.avatar
+                    }
+               
+                    let articles_info = {
+                        id: article._id,
+                        createdAt: article.createdAt,
+                        avatar: article.articleAvatar,
+                        title: article.title,
+                        content: article.content
+                    }
+                    
+
+                    //define 'role' for ejs file to render correct sidebar
+                    //define 'user_id' for ejs file to render correct buttons
+                    let role, user_id;
+
+                    if (req.session.user) {
+                        role = req.session.user.role;
+                        user_id = req.session.user._id;
+                    }
+                    else {
+                        role = "guest",
+                        user_id = null;
+                    }
+
+    
+                    //send NEEDED-author_info and articles to the client
+                    return res.render("user-articles.ejs", {
+                        role,
+                        user_id,
+                        status: "show-Article",
+                        authors_info,
+                        articles_info,
+                        comments_info,
+                        date_format: TOOLS.format_date
+                    });
+                });
+            }
+        });
+    }
+
 
     catch (err) {
         console.log(colors.brightRed("\n" + err + "\n"));

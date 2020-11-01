@@ -21,7 +21,7 @@
 
 
         <!-- delete button for admin or owner of the comment -->
-        <% if (role === "admin" || user_id === comments_info[i].author_id) { %>
+        <% if (role === "admin" || (user_id !== null && user_id === comments_info[i].author_id)) { %>
 
             <!----------------- delete comment button ----------------->
             <div>
