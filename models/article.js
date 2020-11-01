@@ -37,7 +37,7 @@ const ArticleShema = new Schema(
     articleAvatar: {
         type: String,
         required: true,
-        default: "default-article-pic.png"
+        default: "default-article-pic.jpg"
     },
 
     summary: {
@@ -51,12 +51,12 @@ const ArticleShema = new Schema(
         type: Date,
         required: true,
         default: Date.now
-    },
+    }
 
-    views: {
-        type: Number,
-        default: 0
-    },
+    // views: {
+    //     type: Number,
+    //     default: 0
+    // },
 });
 
 

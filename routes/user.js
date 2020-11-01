@@ -538,7 +538,7 @@ router.delete('/bloggers/:user_id', (req, res) =>
 
 
 //************************************************************** */
-//                     Reset a User's Paaword 
+//                     Reset a User's Password 
 //************************************************************** */
 
 router.put('/bloggers/:user_id', (req, res) =>

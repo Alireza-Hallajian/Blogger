@@ -62,7 +62,8 @@
 
         
         <!-- allow admin to delete articles -->
-        <% if (role === "admin") { %>
+        <!-- 'articles_for !== "user"' is to prevent showing delete button twice for admin -->
+        <% if (role === "admin" && articles_for !== "user") { %>
 
             <!----------------- edit article buttons ----------------->
             <div>
@@ -85,6 +86,8 @@
 
         <img id="article-avatar" src="/images/articles/<%= articles_info[i].avatar %>" alt="Article">
 
+        <!------------------- articles' summaries' ------------------->
+
         <div id="summary">
             <p><%= articles_info[i].summary -%></p>
         </div>
@@ -92,8 +95,6 @@
     </div>
     
     
-    <!------------------- articles' summaries' ------------------->
-
     <div id="footer">
 
         <a href="/article/<%= articles_info[i].id %>" id="read-more">Read More</a>
