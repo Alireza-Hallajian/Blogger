@@ -51,11 +51,12 @@ const ArticleShema = new Schema(
         type: Date,
         required: true,
         default: Date.now
-    }
+    },
 
-    // viewsNum: {
-    //     type: String,
-    // },
+    views: {
+        type: Number,
+        default: 0
+    },
 });
 
 
