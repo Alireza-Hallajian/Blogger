@@ -1,4 +1,8 @@
+//node_modules
+const bcrypt = require('bcrypt');
+
 const general_tools = {
+    encrypt: encrypt_with_bcrypt,
     format_date
 }
 
@@ -24,6 +28,27 @@ function format_date(date)
     }
         
     return [year, month, day].join('/');
+}
+
+
+//******************************************************************************** */
+//                               Encrypt a String
+//******************************************************************************** */
+
+function encrypt_with_bcrypt(string) 
+{
+    let promise = new Promise(async (resolve, reject) =>
+    {
+        // hash the password along with salt(10)
+        await bcrypt.hash(string, 10, (err, hash) => 
+        {
+            if (err) reject (new Error(err));
+
+            resolve (hash);
+        });
+    });
+
+    return promise;
 }
 
 
