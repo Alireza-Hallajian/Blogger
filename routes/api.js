@@ -111,7 +111,8 @@ router.get('/', async (req, res) =>
             {
                 return res.render("user-articles.ejs", {
                     role,
-                    status: "no-Article"
+                    status: "no-Article",
+                    message: "There is no such article!"
                 });
             }
 
